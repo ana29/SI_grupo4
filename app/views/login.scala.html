@@ -1,0 +1,18 @@
+@(listaDeUsuarios: List[Usuario])
+
+@main("DropBox") {
+    <h1>Login</h1>
+
+    <div>
+        <form method="post" action="@routes.HomeController.logar()">
+            <input type="email" name="email" placeholder="email"><br>
+            <input type="password" name="senha" placeholder="senha"><br>
+            <input name="Submit" type="submit"  class="formobjects" value="Logar">
+        </form>
+    </div>
+
+
+    <div>
+        <h2><a href="@routes.HomeController.index()">Voltar</a></h2>
+    </div>
+}

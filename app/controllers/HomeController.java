@@ -1,8 +1,14 @@
 package controllers;
 
+import models.Usuario;
+import play.data.FormFactory;
 import play.mvc.*;
 
 import views.html.*;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This controller contains an action to handle HTTP requests
@@ -10,14 +16,85 @@ import views.html.*;
  */
 public class HomeController extends Controller {
 
-    /**
-     * An action that renders an HTML page with a welcome message.
-     * The configuration in the <code>routes</code> file means that
-     * this method will be called when the application receives a
-     * <code>GET</code> request with a path of <code>/</code>.
-     */
+    @Inject
+    private FormFactory formFactory;
+
+    private List<Usuario> listaDeUsuarios = new ArrayList<>();
+
+    private Usuario usuarioLogado = null;
+
+
+
+
+    public Result cadastrarUsuario(){
+        Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
+        listaDeUsuarios.add(usuario);
+        return redirect(routes.HomeController.index());
+    }
+
+    public Result logar(){
+
+        Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
+
+        if (validarLogin(usuario.getEmail(), usuario.getSenha())){
+            return redirect(routes.HomeController.menuUsuario());
+        }
+
+        return redirect(routes.HomeController.index());
+    }
+
+    public Result logOut(){
+
+        usuarioLogado = null;
+
+        return redirect(routes.HomeController.index());
+    }
+
+
+
+
+
+
+
+    //Validacao
+    public boolean validarLogin(String email, String senha){
+
+        for (int i = 0; i < listaDeUsuarios.size(); i++){
+            Usuario usuario = listaDeUsuarios.get(i);
+            if (usuario.getEmail().equals(email)){
+                if (usuario.getSenha().equals(senha)){
+                    usuarioLogado = usuario;
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
+    //Renders
     public Result index() {
-        return ok(index.render("Your new application is ready."));
+        return ok(index.render());
+    }
+
+    public Result chamarLogin() {
+        return ok(login.render(listaDeUsuarios));
+    }
+
+    public Result chamarCadastro() {
+        return ok(cadastro.render(listaDeUsuarios));
+    }
+
+    public Result menuUsuario(){
+        return ok(usuario.render(usuarioLogado));
+
+    }
+
+
+    //GETs and SETs
+    public List<Usuario> getListaDeUsuarios() {
+        return listaDeUsuarios;
     }
 
 }
