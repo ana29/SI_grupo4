@@ -34,18 +34,23 @@
     </div>
 
     <div>
-        <table border="1">
 
+        <h2 align="center">
+            ** Usuarios cadastrados **
+        </h2>
+
+        <table border="6" align="center">
             <tr>
                 <th>Nome</th>
+                <th>Email</th>
             </tr>
 
             @for(usuario <- listaDeUsuarios){
                 <tr>
                     <td>@usuario.getNome()</td>
+                    <td>@usuario.getEmail()</td>
                 </tr>
             }
         </table>
     </div>
-
 }

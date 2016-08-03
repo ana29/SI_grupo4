@@ -18,12 +18,8 @@ public class HomeController extends Controller {
 
     @Inject
     private FormFactory formFactory;
-
     private List<Usuario> listaDeUsuarios = new ArrayList<>();
-
     private Usuario usuarioLogado = null;
-
-
 
 
     public Result cadastrarUsuario(){
@@ -39,22 +35,13 @@ public class HomeController extends Controller {
         if (validarLogin(usuario.getEmail(), usuario.getSenha())){
             return redirect(routes.HomeController.menuUsuario());
         }
-
         return redirect(routes.HomeController.index());
     }
 
     public Result logOut(){
-
         usuarioLogado = null;
-
         return redirect(routes.HomeController.index());
     }
-
-
-
-
-
-
 
     //Validacao
     public boolean validarLogin(String email, String senha){
@@ -88,9 +75,7 @@ public class HomeController extends Controller {
 
     public Result menuUsuario(){
         return ok(usuario.render(usuarioLogado));
-
     }
-
 
     //GETs and SETs
     public List<Usuario> getListaDeUsuarios() {
