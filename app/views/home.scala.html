@@ -1,0 +1,51 @@
+@(usuario: Usuario)
+
+@main("SIBox"){
+<head>
+    <meta charset="UTF-8">
+    <title>SIBox - home</title>
+
+    <link href="@routes.Assets.at("stylesheets/pastas.css")" rel="stylesheet">
+    <link href='@routes.Assets.at("stylesheets/fonte-home.css")' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/normalize-home.css")">
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/home.css")">
+</head>
+
+    <body>
+        <header>
+            <h1>Essa é a sua Home, @usuario.getNome</h1>
+            <span></span>
+            <div class="actions">
+                <i class="material-icons">add</i>
+                <i class="material-icons">more_vert</i>
+                <i class="material-icons">menu</i>
+            </div>
+        </header>
+
+        <main id="main">
+        <!--    ISSO EH UMA PASTA, FAZER UM FOR DAS PASTAS
+
+            <div class="thumbnail">
+                <i class="material-icons">folder
+                    <span>0 folders / 0 files</span>
+                </i>
+                <h1>Documents</h1>
+            </div>
+        !-->
+
+        <!-- ISSO EH UM ARQUIVO, FAZER UM FOR DOS ARQUIVOS
+
+            <div class="thumbnail file">
+                <i class="material-icons">insert_drive_file</i>
+                <h1>File Name</h1>
+            </div>
+
+        !-->
+
+        </main>
+        <script src="@routes.Assets.at("javascripts/jquery.min.js")"></script>
+        <script src="@routes.Assets.at("javascripts/home.js")"></script>
+
+    </body>
+}

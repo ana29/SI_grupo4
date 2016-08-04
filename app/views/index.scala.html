@@ -1,17 +1,88 @@
-@main("DropBox") {
+@main("SIBox") {
+    <head>
+        <meta charset="UTF-8">
+        <title>SIBox</title>
+      <!--  <link href='@routes.Assets.at("stylesheets/fonte-login.css")' rel='stylesheet' type='text/css'> !-->
 
-    <div>
-        <h1> Seja Bem-vindo ao DropBox</h1>
-    </div>
+        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/normalize-index.css")">
+        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/index.css")">
 
-    <div>
-        <h2><a href="@routes.HomeController.chamarLogin()">Sing In</a></h2>
-    </div>
+    </head>
 
-    <div>
-        <h2><a href="@routes.HomeController.chamarCadastro()">Sing Up</a></h2>
+    <body>
+        <div class="form">
 
-    </div>
+            <ul class="tab-group">
+                <li class="tab active"><a href="#cadastrar">Cadastrar</a></li>
+                <li class="tab"><a href="#entrar">Entrar</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="cadastrar">
+                    <h1>Cadastre-se no SIBox!</h1>
+
+                    <form method="post" action="@routes.HomeController.cadastrarUsuario()">
+
+                        <div class="field-wrap">
+                            <label>
+                                Usuário<span class="req">*</span>
+                            </label>
+                            <input type="text" name="nome" required autocomplete="off" minlength="3" maxlength="20" />
+                        </div>
+
+
+                        <div class="field-wrap">
+                            <label>
+                                Email<span class="req">*</span>
+                            </label>
+                            <input type="email" name="email" required autocomplete="off"/>
+                        </div>
+
+                        <div class="field-wrap">
+                            <label>
+                                Senha<span class="req">*</span>
+                            </label>
+                            <input type="password" name="senha" minlength="8" required autocomplete="off"/>
+                        </div>
+
+                        <button name="Submit" type="submit" class="button button-block">Cadastre-se!</button>
+
+                    </form>
+
+                </div>
+
+                <div id="entrar">
+                    <h1>Esse é o SIBox!</h1>
+
+                    <form method="post" action="@routes.HomeController.logar()">
+
+                        <div class="field-wrap">
+                            <label>
+                               Usuário/Email<span class="req">*</span>
+                            </label>
+                            <input type="email"required autocomplete="off"/>
+                        </div>
+
+                        <div class="field-wrap">
+                            <label>
+                                Senha<span class="req">*</span>
+                            </label>
+                            <input type="password"required autocomplete="off"/>
+                        </div>
+
+                        <p class="forgot"><a href="#">Esqueceu a senha?</a></p>
+
+                        <button class="button button-block">Entrar</button>
+
+                    </form>
+                </div>
+            </div><!-- tab-content -->
+        </div> <!-- /form -->
+
+        <script src="@routes.Assets.at("javascripts/jquery.min.js")"></script>
+        <script src="@routes.Assets.at("javascripts/index.js")"></script>
+
+    </body>
 
 
 }

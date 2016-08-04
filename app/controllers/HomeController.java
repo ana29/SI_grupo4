@@ -29,6 +29,10 @@ public class HomeController extends Controller {
     public Result cadastrarUsuario(){
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
         listaDeUsuarios.add(usuario);
+
+        if (validarLogin(usuario.getEmail(), usuario.getSenha())){
+            return redirect(routes.HomeController.chamarHome());
+        }
         return redirect(routes.HomeController.index());
     }
 
@@ -37,7 +41,7 @@ public class HomeController extends Controller {
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
 
         if (validarLogin(usuario.getEmail(), usuario.getSenha())){
-            return redirect(routes.HomeController.menuUsuario());
+            return redirect(routes.HomeController.chamarHome());
         }
 
         return redirect(routes.HomeController.index());
@@ -90,7 +94,9 @@ public class HomeController extends Controller {
         return ok(usuario.render(usuarioLogado));
 
     }
-
+    public Result chamarHome() {
+        return ok(home.render(usuarioLogado));
+    }
 
     //GETs and SETs
     public List<Usuario> getListaDeUsuarios() {
