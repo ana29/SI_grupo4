@@ -6,7 +6,7 @@
     <title>SIBox - home</title>
 
     <link href="@routes.Assets.at("stylesheets/pastas.css")" rel="stylesheet">
-    <link href='@routes.Assets.at("stylesheets/fonte-home.css")' rel='stylesheet' type='text/css'>
+    <link href='@routes.Assets.at("stylesheets/fonte-login.css")' rel='stylesheet' type='text/css'>
 
     <link rel="stylesheet" href="@routes.Assets.at("stylesheets/normalize-home.css")">
     <link rel="stylesheet" href="@routes.Assets.at("stylesheets/home.css")">
@@ -14,27 +14,34 @@
 
     <body>
         <header>
-            <h1>Essa é a sua Home, @usuario.getNome</h1>
+            <script src="@routes.Assets.at("javascripts/jquery.min.js")"></script>
+            <script src="@routes.Assets.at("javascripts/home.js")"></script>
+
+            <i style="font-size: 60px" class="material-icons">face</i><h1>@usuario.getNome, <br> Essa é a sua Home</h1>
             <span></span>
             <div class="actions">
-                <i class="material-icons">add</i>
-                <i class="material-icons">more_vert</i>
-                <i class="material-icons">menu</i>
+                <!-- Aqui, para criar uma nova pasta ou um novo arquivo, basta colocar como eu fiz no ultimo:
+                    <a href=" routes.HomeController.metodoquefazaatividade()"> !-->
+                <i style="margin-right: 8px" class="material-icons">create_new_folder</i>
+                <i style="margin-right: 8px" class="material-icons">note_add</i>
+                <i style="margin-right: 15px"></i>
+                <a href="@routes.HomeController.logOut()"><i class="material-icons">power_settings_new</i></a>
             </div>
         </header>
 
         <main id="main">
-        <!--    ISSO EH UMA PASTA, FAZER UM FOR DAS PASTAS
+         <!--   ISSO EH UMA PASTA, FAZER UM FOR DAS PASTAS
 
             <div class="thumbnail">
                 <i class="material-icons">folder
                     <span>0 folders / 0 files</span>
                 </i>
-                <h1>Documents</h1>
+                <h1>Folder name</h1>
             </div>
-        !-->
+         !-->
 
-        <!-- ISSO EH UM ARQUIVO, FAZER UM FOR DOS ARQUIVOS
+         <!--
+             ISSO EH UM ARQUIVO, FAZER UM FOR DOS ARQUIVOS
 
             <div class="thumbnail file">
                 <i class="material-icons">insert_drive_file</i>
@@ -44,8 +51,6 @@
         !-->
 
         </main>
-        <script src="@routes.Assets.at("javascripts/jquery.min.js")"></script>
-        <script src="@routes.Assets.at("javascripts/home.js")"></script>
 
     </body>
 }

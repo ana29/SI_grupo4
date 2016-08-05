@@ -42,8 +42,8 @@ header {
 }
 
 body.scrolled header {
-  padding-bottom: 10px;
-  height: 50px;
+  padding-bottom: 20px;
+  height: 100px;
 }
 
 header h1 {

@@ -2,7 +2,7 @@
     <head>
         <meta charset="UTF-8">
         <title>SIBox</title>
-      <!--  <link href='@routes.Assets.at("stylesheets/fonte-login.css")' rel='stylesheet' type='text/css'> !-->
+         <link href='@routes.Assets.at("stylesheets/fonte-login.css")' rel='stylesheet' type='text/css'>
 
         <link rel="stylesheet" href="@routes.Assets.at("stylesheets/normalize-index.css")">
         <link rel="stylesheet" href="@routes.Assets.at("stylesheets/index.css")">
@@ -13,11 +13,37 @@
         <div class="form">
 
             <ul class="tab-group">
-                <li class="tab active"><a href="#cadastrar">Cadastrar</a></li>
-                <li class="tab"><a href="#entrar">Entrar</a></li>
+                <li class="tab active"><a href="#entrar">Entrar</a></li>
+                <li class="tab"><a href="#cadastrar">Cadastrar</a></li>
             </ul>
 
             <div class="tab-content">
+                <div id="entrar">
+                    <h1>Esse é o SIBox!</h1>
+
+                    <form method="post" action="@routes.HomeController.logar()">
+
+                        <div class="field-wrap">
+                            <label>
+                              Email<span class="req">*</span>
+                            </label>
+                            <input type="email" name="email" required autocomplete="off"/>
+                        </div>
+
+                        <div class="field-wrap">
+                            <label>
+                                Senha<span class="req">*</span>
+                            </label>
+                            <input type="password" name="senha" required autocomplete="off"/>
+                        </div>
+
+                        <p class="forgot"><a href="#">Esqueceu a senha?</a></p>
+
+                        <button name="Submit" type="submit"  class="button button-block">Entrar</button>
+
+                    </form>
+                </div>
+
                 <div id="cadastrar">
                     <h1>Cadastre-se no SIBox!</h1>
 
@@ -51,31 +77,6 @@
 
                 </div>
 
-                <div id="entrar">
-                    <h1>Esse é o SIBox!</h1>
-
-                    <form method="post" action="@routes.HomeController.logar()">
-
-                        <div class="field-wrap">
-                            <label>
-                               Usuário/Email<span class="req">*</span>
-                            </label>
-                            <input type="email"required autocomplete="off"/>
-                        </div>
-
-                        <div class="field-wrap">
-                            <label>
-                                Senha<span class="req">*</span>
-                            </label>
-                            <input type="password"required autocomplete="off"/>
-                        </div>
-
-                        <p class="forgot"><a href="#">Esqueceu a senha?</a></p>
-
-                        <button class="button button-block">Entrar</button>
-
-                    </form>
-                </div>
             </div><!-- tab-content -->
         </div> <!-- /form -->
 
