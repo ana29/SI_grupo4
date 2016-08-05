@@ -23,9 +23,6 @@ public class HomeController extends Controller {
 
     private Usuario usuarioLogado = null;
 
-
-
-
     public Result cadastrarUsuario(){
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
         listaDeUsuarios.add(usuario);
