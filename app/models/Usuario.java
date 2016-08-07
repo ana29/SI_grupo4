@@ -8,7 +8,7 @@ public class Usuario {
     public Diretorio pastaPessoal;
 
     public Usuario(){
-
+        this.pastaPessoal = new Diretorio("root");
     }
 
     public Usuario(String nome, String email, String senha){

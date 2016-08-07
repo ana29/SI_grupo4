@@ -51,12 +51,6 @@ public class HomeController extends Controller {
         return redirect(routes.HomeController.index());
     }
 
-
-
-
-
-
-
     //Validacao
     public boolean validarLogin(String email, String senha){
 
@@ -92,6 +86,12 @@ public class HomeController extends Controller {
 
     }
     public Result chamarHome() {
+        return ok(home.render(usuarioLogado));
+    }
+
+    public Result criaPasta(){
+        //nome temporário, apenas para teste
+        usuarioLogado.criaSubDiretorio("pastaCriada");
         return ok(home.render(usuarioLogado));
     }
 

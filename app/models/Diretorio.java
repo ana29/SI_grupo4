@@ -27,7 +27,7 @@ public class Diretorio {
     public boolean equals(Object o){
         if (o instanceof Diretorio){
             Diretorio obj = (Diretorio) o;
-            return obj.getNome().equals(this.getNome());
+            return this.nome.equals(obj.getNome());
         }
         return false;
     }
