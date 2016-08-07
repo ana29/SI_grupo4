@@ -22,24 +22,26 @@
             <div class="actions">
                 <!-- Aqui, para criar uma nova pasta ou um novo arquivo, basta colocar como eu fiz no ultimo:
                     <a href=" routes.HomeController.metodoquefazaatividade()"> !-->
-                <i style="margin-right: 8px" class="material-icons">create_new_folder</i>
-                <i style="margin-right: 8px" class="material-icons" a href="texto.html">note_add</a> </i>
+                <a href="@routes.HomeController.criaPasta()"> <i style="margin-right: 8px" class="material-icons">create_new_folder</i></a>
+                <i style="margin-right: 8px" class="material-icons" a href="texto.html">note_add </a> </i>
                 <i style="margin-right: 15px"></i>
                 <a href="@routes.HomeController.logOut()"><i class="material-icons">power_settings_new</i></a>
             </div>
         </header>
 
         <main id="main">
+            @for(pasta <- usuario.getPastaPessoal.getSubDiretorios) {
+                <div class="thumbnail">
+                    <i class="material-icons">folder
+                        <span>@pasta.getArquivos.size() folders / @pasta.getSubDiretorios.size() files</span>
+                    </i>
+                    <h1>@pasta.getNome()</h1>
+                </div>
+            }
 
-            <!--
-            <div class="thumbnail">
-                <i class="material-icons">folder
-                    <span>0 folders / 0 files</span>
-                </i>
-                <h1>@usuario.getPastaPessoal().getNome()</h1>
-            </div>
 
-        !-->
+
+
          <!--
              ISSO EH UM ARQUIVO, FAZER UM FOR DOS ARQUIVOS
 
