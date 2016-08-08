@@ -33,6 +33,15 @@ public class HomeController extends Controller {
         return redirect(routes.HomeController.index());
     }
 
+    public Result escreverTexto(){
+        Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
+        listaDeUsuarios.add(usuario);
+
+        if (validarLogin(usuario.getEmail(), usuario.getSenha())){
+            return redirect(routes.HomeController.chamarHome());
+        }
+        return redirect(routes.HomeController.index());
+    }
     public Result logar(){
 
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
