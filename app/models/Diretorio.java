@@ -9,7 +9,8 @@ import java.util.List;
 public class Diretorio {
     private String nome;
     private List<Diretorio> subDiretorios;
-    private List<Diretorio> arquivos;
+    private List<ArquivoTxt> arquivos;
+
 
     public Diretorio(String nome){
         this.nome = nome;
@@ -36,7 +37,7 @@ public class Diretorio {
         return this.subDiretorios;
     }
 
-    public List<Diretorio> getArquivos() {
+    public List<ArquivoTxt> getArquivos() {
         return arquivos;
     }
 

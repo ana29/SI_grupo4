@@ -1,14 +1,18 @@
 package controllers;
 
 import models.Usuario;
+import models.Arquivo;
+import models.ArquivoTxt;
 import play.data.FormFactory;
 import play.mvc.*;
+
 
 import views.html.*;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * This controller contains an action to handle HTTP requests
@@ -20,6 +24,7 @@ public class HomeController extends Controller {
     private FormFactory formFactory;
 
     private List<Usuario> listaDeUsuarios = new ArrayList<>();
+    private List<ArquivoTxt> listaDeArquivos = new ArrayList<>();
 
     private Usuario usuarioLogado = null;
 
@@ -98,15 +103,36 @@ public class HomeController extends Controller {
         return ok(home.render(usuarioLogado));
     }
 
+
+    public Result chamaTexto(){return ok(texto.render(listaDeArquivos));}
+
+
+    /*public  Result salvaArquivo(){
+
+        Arquivo arquivo = formFactory.form(ArquivoTxt.class).bindFromRequest().get();
+        listaDeArquivos.add(arquivo);
+
+        return redirect(routes.HomeController.chamarHome());}
+*/
     public Result criaPasta(){
         //nome temporário, apenas para teste
         usuarioLogado.criaSubDiretorio("pastaCriada");
         return ok(home.render(usuarioLogado));
     }
 
+    public Result criaArquivos(){
+        ArquivoTxt arquivo = formFactory.form(ArquivoTxt.class).bindFromRequest().get();
+        listaDeArquivos.add(arquivo);
+
+        usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getconteudoFile());
+        return ok(home.render(usuarioLogado));
+    }
     //GETs and SETs
     public List<Usuario> getListaDeUsuarios() {
         return listaDeUsuarios;
+    }
+    public List<ArquivoTxt> getListaDeArquivos() {
+        return listaDeArquivos;
     }
 
 }

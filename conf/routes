@@ -24,3 +24,9 @@ GET /Cadastro                       controllers.HomeController.chamarCadastro()
 GET /usuario                        controllers.HomeController.menuUsuario()
 GET /logOut                         controllers.HomeController.logOut()
 GET /criaPasta                      controllers.HomeController.criaPasta()
+
+
+#POST /salvaArquivo                  controllers.HomeController.salvaArquivo()
+
+POST /criaArquivos                   controllers.HomeController.criaArquivos()
+GET /chamaTexto                     controllers.HomeController.chamaTexto()
