@@ -2,14 +2,18 @@ package controllers;
 
 import models.Diretorio;
 import models.Usuario;
+import models.Arquivo;
+import models.ArquivoTxt;
 import play.data.FormFactory;
 import play.mvc.*;
+
 
 import views.html.*;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * This controller contains an action to handle HTTP requests
@@ -20,6 +24,7 @@ public class HomeController extends Controller {
     @Inject
     private FormFactory formFactory;
     private List<Usuario> listaDeUsuarios = new ArrayList<>();
+    private List<ArquivoTxt> listaDeArquivos = new ArrayList<>();
     private Usuario usuarioLogado = null;
 
 
@@ -33,6 +38,15 @@ public class HomeController extends Controller {
         return redirect(routes.HomeController.index());
     }
 
+    public Result escreverTexto(){
+        Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
+        listaDeUsuarios.add(usuario);
+
+        if (validarLogin(usuario.getEmail(), usuario.getSenha())){
+            return redirect(routes.HomeController.chamarHome());
+        }
+        return redirect(routes.HomeController.index());
+    }
     public Result logar(){
 
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
@@ -87,15 +101,36 @@ public class HomeController extends Controller {
         return ok(home.render(usuarioLogado));
     }
 
+
+    public Result chamaTexto(){return ok(texto.render(listaDeArquivos));}
+
+
+    /*public  Result salvaArquivo(){
+
+        Arquivo arquivo = formFactory.form(ArquivoTxt.class).bindFromRequest().get();
+        listaDeArquivos.add(arquivo);
+
+        return redirect(routes.HomeController.chamarHome());}
+*/
     public Result criaPasta(){
         Diretorio dir = formFactory.form(Diretorio.class).bindFromRequest().get();
         usuarioLogado.criaSubDiretorio(dir.getNome());
         return ok(home.render(usuarioLogado));
     }
 
+    public Result criaArquivos(){
+        ArquivoTxt arquivo = formFactory.form(ArquivoTxt.class).bindFromRequest().get();
+        listaDeArquivos.add(arquivo);
+
+        usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getconteudoFile());
+        return ok(home.render(usuarioLogado));
+    }
     //GETs and SETs
     public List<Usuario> getListaDeUsuarios() {
         return listaDeUsuarios;
+    }
+    public List<ArquivoTxt> getListaDeArquivos() {
+        return listaDeArquivos;
     }
 
 }

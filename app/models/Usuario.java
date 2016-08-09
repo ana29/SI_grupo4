@@ -36,6 +36,25 @@ public class Usuario {
             }
         }
     }
+    public  void addArquivo(String nomeArquivo,String conteudoFile){
+        if (!pastaPessoal.getArquivos().contains(new ArquivoTxt(nomeArquivo, conteudoFile))){
+            pastaPessoal.getArquivos().add(new ArquivoTxt(nomeArquivo, conteudoFile));
+        }
+        else{
+            boolean adicionado = false;
+            int count = 1;
+            while (adicionado == false){
+                String novoNome = nomeArquivo + "(" + count + ")";
+                if (!pastaPessoal.getArquivos().contains(new ArquivoTxt(novoNome, conteudoFile))){
+                    pastaPessoal.getArquivos().add(new ArquivoTxt(novoNome, conteudoFile));
+                    adicionado = true;
+                }
+                count ++;
+            }
+        }
+
+
+    }
 
     public void excluirSubDiretorio(String nome){
         for (Diretorio d: pastaPessoal.getSubDiretorios()) {

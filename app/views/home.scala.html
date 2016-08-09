@@ -1,4 +1,4 @@
-@(usuario: Usuario)
+﻿@(usuario: Usuario)
 
 @main("SIBox"){
 <head>
@@ -19,6 +19,10 @@
             <div class="actions">
                 <a id="modalView"><i style="margin-bottom: 8px" class="material-icons">create_new_folder</i></a>
                 <i style="margin-right: 8px" class="material-icons" a href="texto.html">note_add </i>
+                <!-- Aqui, para criar uma nova pasta ou um novo arquivo, basta colocar como eu fiz no ultimo:
+                    <a href=" routes.HomeController.metodoquefazaatividade()"> !-->
+                <a href="@routes.HomeController.criaPasta()"> <i style="margin-right: 8px" class="material-icons">create_new_folder</i></a>
+                <a href="@routes.HomeController.chamaTexto()"><i style="margin-right: 8px" class="material-icons">note_add</i> </a>
                 <i style="margin-right: 15px"></i>
                 <a href="@routes.HomeController.logOut()"><i class="material-icons">power_settings_new</i></a>
             </div>
@@ -33,6 +37,16 @@
                     <h1>@pasta.getNome()</h1>
                 </div>
             }
+            @for(arquivo <- usuario.getPastaPessoal.getArquivos) {
+                <div class="thumbnail">
+                    <i class="material-icons">description
+                        @*<span>@pasta.getArquivos.size() folders / @pasta.getA.size() files</span>*@
+                    </i>
+                    <h1>@arquivo.getNomeArquivo()</h1>
+                </div>
+            }
+
+
 
          <!--
              ISSO EH UM ARQUIVO, FAZER UM FOR DOS ARQUIVOS

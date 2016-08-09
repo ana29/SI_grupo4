@@ -1,0 +1,52 @@
+@(listaDeArquivos: List[ArquivoTxt])
+
+@main("SIBox"){
+    <head>
+        <meta charset="UTF-8">
+
+        <link href="@routes.Assets.at("stylesheets/pastas.css")" rel="stylesheet">
+        <link href='@routes.Assets.at("stylesheets/fonte-login.css")' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/normalize-home.css")">
+        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/home.css")">
+    </head>
+    <body>
+
+        <header>
+            <script src="@routes.Assets.at("javascripts/jquery.min.js")"></script>
+            <script src="@routes.Assets.at("javascripts/home.js")"></script>
+
+            <div class="actions">
+                <a href="@routes.HomeController.chamarHome()"><i style="margin-right: 8px" class="material-icons">assignment_return</i></a>
+
+                <i style="margin-right: 15px"></i>
+                <a href="@routes.HomeController.logOut()"><i class="material-icons">power_settings_new</i></a>
+            </div>
+        </header>
+
+    <div id="texto_com_content">
+    <center>
+        <form method=post action="@routes.HomeController.criaArquivos()">
+            <div class="field-wrap">
+                <label>
+                    Nome do arquivo: <span class="req"></span>
+                </label>
+
+                <input type="text" name="nomeArquivo" class="formbutton" required autocomplete="off"/>
+            </div>
+
+            <textarea name="conteudoFile" class="formbutton"  cols="100" rows="20"></textarea>
+
+            <!--<input type="hidden" name="step" value="2">!-->
+
+            <div id="texto_html_form_buttons">
+                <button name="Submit" type="submit"  class="button button-block">Criar</button>
+                <button name="Reset" type="reset"  class="button button-block">Deletar</button>
+
+
+        </form>
+</div>
+</div>
+    </body>
+
+}
