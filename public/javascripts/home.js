@@ -6,9 +6,6 @@ window.addEventListener('scroll', function() {
 });
 
 
-
-
-
 var addFolder = function(folder) {
   var newFolder = document.createElement('div');
   newFolder.classList.add('folder');
@@ -27,3 +24,16 @@ var addFolder = function(folder) {
   newFolder.appendChild(folderName);
   document.getElementById('main').appendChild(newFolder);
 };
+
+
+$(document).ready(function(){
+  $(".janelaModal, .fundoModal").hide();
+
+  $("#modalView").click(function() {
+    $(".janelaModal, .fundoModal").fadeIn();
+  })
+
+  $("#fechar-Modal").click(function () {
+    $(".janelaModal, .fundoModal").fadeOut();
+  })
+});

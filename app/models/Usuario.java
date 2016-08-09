@@ -20,15 +20,15 @@ public class Usuario {
     }
 
     public void criaSubDiretorio(String nome){
-        if (!pastaPessoal.getSubDiretorios().contains(nome)){
+        if (!pastaPessoal.getSubDiretorios().contains(new Diretorio(nome))){
             pastaPessoal.getSubDiretorios().add(new Diretorio(nome));
         }
         else{
             boolean adicionado = false;
-            int count = 0;
+            int count = 1;
             while (adicionado == false){
                 String novoNome = nome + "(" + count + ")";
-                if (!pastaPessoal.getSubDiretorios().contains(novoNome)){
+                if (!pastaPessoal.getSubDiretorios().contains(new Diretorio(novoNome))){
                     pastaPessoal.getSubDiretorios().add(new Diretorio(novoNome));
                     adicionado = true;
                 }

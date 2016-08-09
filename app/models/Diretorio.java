@@ -17,6 +17,12 @@ public class Diretorio {
         this.arquivos = new ArrayList<>();
     }
 
+    public Diretorio(){
+
+        this.subDiretorios = new ArrayList<>();
+        this.arquivos = new ArrayList<>();
+    }
+
 
 
     public String getNome(){

@@ -1,5 +1,6 @@
 package controllers;
 
+import models.Diretorio;
 import models.Usuario;
 import play.data.FormFactory;
 import play.mvc.*;
@@ -18,10 +19,9 @@ public class HomeController extends Controller {
 
     @Inject
     private FormFactory formFactory;
-
     private List<Usuario> listaDeUsuarios = new ArrayList<>();
-
     private Usuario usuarioLogado = null;
+
 
     public Result cadastrarUsuario(){
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
@@ -45,9 +45,7 @@ public class HomeController extends Controller {
     }
 
     public Result logOut(){
-
         usuarioLogado = null;
-
         return redirect(routes.HomeController.index());
     }
 
@@ -90,8 +88,8 @@ public class HomeController extends Controller {
     }
 
     public Result criaPasta(){
-        //nome temporário, apenas para teste
-        usuarioLogado.criaSubDiretorio("pastaCriada");
+        Diretorio dir = formFactory.form(Diretorio.class).bindFromRequest().get();
+        usuarioLogado.criaSubDiretorio(dir.getNome());
         return ok(home.render(usuarioLogado));
     }
 

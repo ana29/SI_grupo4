@@ -1,157 +1,211 @@
 * {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 400;
-  -webkit-transition: all .3s;
-  transition: all .3s;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    -webkit-transition: all .3s;
+    transition: all .3s;
 }
 
 body {
-  padding: 100px 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    padding: 100px 0;
     background: #c1bdba;
 }
 
 body.scrolled {
-  padding-top: 50px;
+    padding-top: 50px;
 }
 
 header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-align: end;
-  -webkit-align-items: flex-end;
-      -ms-flex-align: end;
-          align-items: flex-end;
-  height: 100px;
-  padding: 0 20px;
-  padding-bottom: 20px;
-  background: rgba(19, 35, 47, 0.9);
-  color: white;
-  box-sizing: border-box;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-align: end;
+    -webkit-align-items: flex-end;
+    -ms-flex-align: end;
+    align-items: flex-end;
+    height: 100px;
+    padding: 0 20px;
+    padding-bottom: 20px;
+    background: rgba(19, 35, 47, 0.9);
+    color: white;
+    box-sizing: border-box;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
 }
 
 body.scrolled header {
-  padding-bottom: 20px;
-  height: 100px;
+    padding-bottom: 20px;
+    height: 100px;
 }
 
 header h1 {
-  font-size: 24px;
-  margin: 0 16px;
+    font-size: 24px;
+    margin: 0 16px;
 }
 
 header span {
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
 }
 
 header i {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .actions i {
-  margin-left: 10px;
+    margin-left: 10px;
 }
+
 .actions a {
-  text-decoration: none;
-  color: #fff;
+    text-decoration: none;
+    color: #fff;
 }
 
 main {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-wrap: wrap;
-      -ms-flex-wrap: wrap;
-          flex-wrap: wrap;
-  padding: 20px 0 0 70px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding: 20px 0 0 70px;
 }
 
 .thumbnail {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  margin: 0 100px 20px 0;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    margin: 0 100px 20px 0;
 }
 
 .thumbnail i {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  height: 100px;
-  width: 100px;
-  font-size: 100px;
-  color: #263238;
-  cursor: pointer;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    height: 100px;
+    width: 100px;
+    font-size: 100px;
+    color: #263238;
+    cursor: pointer;
 }
 
 .thumbnail i span {
-  position: relative;
-  top: 2px;
-  font-size: 18px;
-  color: white;
-  padding: 7px 30px;
-  background: #212121;
-  border-radius: 3px;
-  opacity: 0;
-  -webkit-transition: opacity .2s, top .3s;
-  transition: opacity .2s, top .3s;
+    position: relative;
+    top: 2px;
+    font-size: 18px;
+    color: white;
+    padding: 7px 30px;
+    background: #212121;
+    border-radius: 3px;
+    opacity: 0;
+    -webkit-transition: opacity .2s, top .3s;
+    transition: opacity .2s, top .3s;
 }
 
 .thumbnail h1 {
-  position: relative;
-  top: -7px;
-  font-size: 20px;
+    position: relative;
+    top: -7px;
+    font-size: 20px;
 }
 
 .thumbnail input {
-  border: none;
-  font-size: 20px;
+    border: none;
+    font-size: 20px;
 }
 
 .thumbnail:hover h1 {
-  opacity: 0;
+    opacity: 0;
 }
 
 .new-folder:hover i {
-  color: #607D8B;
+    color: #607D8B;
 }
 
 .thumbnail:hover span {
-  top: 0;
-  opacity: 1;
+    top: 0;
+    opacity: 1;
+}
+
+.janelaModal {
+    margin-left: -100px;
+    margin-top: 100px;
+    left: 50%;
+    width: 15%;
+    height: 20%;
+    z-index: 1;
+    position: relative;
+    font-family: "Lucida Grande", Verdana, sans-serif;
+}
+
+.janelaModal h3 {
+    z-index: 1;
+    margin: 0;
+    padding: 10px;
+    color: #fff;
+    font-size: 14px;
+    background: -moz-linear-gradient(top, #2e5764, #1e3d47);
+    background: -webkit-gradient(linear,left bottom,left top,color-stop(0, #1e3d47),color-stop(1, #2e5764));
+}
+
+.janelaModal p {
+    padding: 5px 5px;
+    border-bottom: 1px solid #ddd;
+    margin: 0;
+    background: -webkit-gradient(linear,left bottom,left top,color-stop(0, #eee),color-stop(1, #eee));
+}
+
+#botaoConluir {
+    border-radius: 8px;
+    text-align: center;
+}
+
+#fechar-modal{
+    padding-bottom: -20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.fundoModal{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #a0b3b0;
 }
