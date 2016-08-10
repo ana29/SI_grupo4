@@ -24,24 +24,28 @@
         </header>
 
     <div id="texto_com_content">
-    <center>
+        <center>
         <form method=post action="@routes.HomeController.criaArquivos()">
+            <br>
             <div class="field-wrap">
                 <label>
                     Nome do arquivo: <span class="req"></span>
                 </label>
 
-                <input type="text" name="nomeArquivo" class="formbutton" required autocomplete="off"/>
+                <input style="border: solid 1px;" type="text" name="nomeArquivo"  required autocomplete="off"/>
             </div>
+            <br>
 
-            <textarea name="conteudoFile" class="formbutton"  cols="100" rows="20"></textarea>
+            <textarea style="border: solid 1px;" name="conteudoFile"  cols="100" rows="20"></textarea>
 
+            <br>
             <div id="texto_html_form_buttons">
+                <br>
                 <button name="Submit" type="submit"  class="button button-block">Criar</button>
                 <button name="Reset" type="reset"  class="button button-block">Deletar</button>
+            </div>
         </form>
-</div>
-</div>
+        </center>
+    </div>
     </body>
-
 }
