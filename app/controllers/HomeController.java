@@ -1,6 +1,7 @@
 package controllers;
 
 import models.Diretorio;
+import models.EmailValidator;
 import models.Usuario;
 import models.Arquivo;
 import models.ArquivoTxt;
@@ -23,17 +24,17 @@ public class HomeController extends Controller {
 
     @Inject
     private FormFactory formFactory;
+
     private List<Usuario> listaDeUsuarios = new ArrayList<>();
     private List<ArquivoTxt> listaDeArquivos = new ArrayList<>();
+
     private Usuario usuarioLogado = null;
 
 
     public Result cadastrarUsuario(){
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
-        listaDeUsuarios.add(usuario);
-
-        if (validarLogin(usuario.getEmail(), usuario.getSenha())){
-            return redirect(routes.HomeController.chamarHome());
+        if (verificaCredenciais(usuario.getNome(), usuario.getEmail(), usuario.getSenha())) {
+            listaDeUsuarios.add(usuario);
         }
         return redirect(routes.HomeController.index());
     }
@@ -59,7 +60,9 @@ public class HomeController extends Controller {
     }
 
     public Result logOut(){
+
         usuarioLogado = null;
+
         return redirect(routes.HomeController.index());
     }
 
@@ -80,6 +83,12 @@ public class HomeController extends Controller {
         return false;
     }
 
+    private Boolean verificaCredenciais(String nome, String email, String senha){
+        EmailValidator userMail = new EmailValidator();
+        if (nome.length() > 2)
+            if (nome.length() < 21) if (senha.length() > 7) if (userMail.validate(email)) return true;
+        return false;
+    }
     //Renders
     public Result index() {
         return ok(index.render());
