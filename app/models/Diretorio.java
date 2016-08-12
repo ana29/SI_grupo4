@@ -1,5 +1,8 @@
 package models;
 
+import play.data.validation.Constraints;
+
+import javax.validation.Constraint;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,9 +10,11 @@ import java.util.List;
  * Created by marco on 02/08/2016.
  */
 public class Diretorio {
-    private String nome;
-    private List<Diretorio> subDiretorios;
-    private List<ArquivoTxt> arquivos;
+
+    @Constraints.Required
+    public  String nome;
+    public List<Diretorio> subDiretorios;
+    public List<ArquivoTxt> arquivos;
 
 
     public Diretorio(String nome){
@@ -19,24 +24,12 @@ public class Diretorio {
     }
 
     public Diretorio(){
-
         this.subDiretorios = new ArrayList<>();
         this.arquivos = new ArrayList<>();
     }
 
-
-
     public String getNome(){
         return this.nome;
-    }
-
-    @Override
-    public boolean equals(Object o){
-        if (o instanceof Diretorio){
-            Diretorio obj = (Diretorio) o;
-            return this.nome.equals(obj.getNome());
-        }
-        return false;
     }
 
     public List<Diretorio> getSubDiretorios(){
@@ -46,5 +39,4 @@ public class Diretorio {
     public List<ArquivoTxt> getArquivos() {
         return arquivos;
     }
-
 }

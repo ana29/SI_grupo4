@@ -1,11 +1,14 @@
 package models;
 
+import java.util.logging.Logger;
+
 public class Usuario {
 
     public String nome;
     public String email;
     public String senha;
     public Diretorio pastaPessoal;
+    private static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
 
     public Usuario(){
         this.pastaPessoal = new Diretorio("root");
@@ -20,6 +23,7 @@ public class Usuario {
     }
 
     public void criaSubDiretorio(String nome){
+        LOGGER.info("ENTROU NA CRIAÇÃO DO DIRETORIO");
         if (!pastaPessoal.getSubDiretorios().contains(new Diretorio(nome))){
             pastaPessoal.getSubDiretorios().add(new Diretorio(nome));
         }
@@ -36,6 +40,7 @@ public class Usuario {
             }
         }
     }
+
     public  void addArquivo(String nomeArquivo,String conteudoFile){
         if (!pastaPessoal.getArquivos().contains(new ArquivoTxt(nomeArquivo, conteudoFile))){
             pastaPessoal.getArquivos().add(new ArquivoTxt(nomeArquivo, conteudoFile));
@@ -52,8 +57,6 @@ public class Usuario {
                 count ++;
             }
         }
-
-
     }
 
     public void excluirSubDiretorio(String nome){

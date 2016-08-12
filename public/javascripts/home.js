@@ -25,15 +25,44 @@ var addFolder = function(folder) {
   document.getElementById('main').appendChild(newFolder);
 };
 
+$(function(){
+  var $dialog = $('#dialog');
 
-$(document).ready(function(){
-  $(".janelaModal, .fundoModal").hide();
+  var maskHeight = $(document).height();
+  var maskWidth = $(window).width();
 
-  $("#modalView").click(function() {
-    $(".janelaModal, .fundoModal").fadeIn();
-  })
+  $('#mask').css({'width':maskWidth,'height':maskHeight});
 
-  $("#fechar-Modal").click(function () {
-    $(".janelaModal, .fundoModal").fadeOut();
-  })
+  //Get the window height and width
+  var winH = $(window).height();
+  var winW = $(window).width();
+
+  $dialog.css('top',  winH/2-$dialog.height()/2);
+  $dialog.css('left', winW/2-$dialog.width()/2);
+
+  $('.window .close').hide();
+
+  $("#boxes").click(function (e) {
+    e.preventDefault();
+    $('#mask').fadeIn();
+    $('.window').fadeIn();
+    $('.close').fadeIn();
+  });
+
+  $(".close").click(function () {
+    $("#mask").fadeOut();
+    $('.window').fadeOut();
+  });
 });
+
+// $(document).ready(function(){
+//   $(".janelaModal, .fundoModal").hide();
+//
+//   $("#modalView").click(function() {
+//     $(".janelaModal, .fundoModal").fadeIn();
+//   })
+//
+//   $("#fechar-Modal").click(function () {
+//     $(".janelaModal, .fundoModal").fadeOut();
+//   })
+// });

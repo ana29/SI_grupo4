@@ -6,6 +6,8 @@
 }
 
 body {
+    display: block;
+    margin: 0px;
     width: 100%;
     height: 100%;
     position: absolute;
@@ -160,52 +162,74 @@ main {
     opacity: 1;
 }
 
-.janelaModal {
-    margin-left: -100px;
-    margin-top: 100px;
-    left: 50%;
-    width: 15%;
-    height: 20%;
-    z-index: 1;
-    position: relative;
-    font-family: "Lucida Grande", Verdana, sans-serif;
+
+
+/*LUCAS WILKER*/
+
+#mask {
+    position:absolute;
+    left:0;
+    top:0;
+    z-index:9000;
+    opacity: 0.5;
+    display:none;
+    background: #000000;
 }
 
-.janelaModal h3 {
-    z-index: 1;
-    margin: 0;
-    padding: 10px;
-    color: #fff;
-    font-size: 14px;
+
+#boxes .window {
+    border-radius: 10px;
+    position:absolute;
+    left:0;
+    top:0;
+    display:none;
+    z-index:9999;
+    padding:20px;
+    height: 120px;
+}
+
+#boxes #dialog {
+    width:200px;
+    height:120px;
+    padding:0;
+    background-color:#ffffff;
+}
+
+#boxes h3{
+    height: 33px;
+    color: white;
+    margin: 0px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    text-align: center;
     background: -moz-linear-gradient(top, #2e5764, #1e3d47);
     background: -webkit-gradient(linear,left bottom,left top,color-stop(0, #1e3d47),color-stop(1, #2e5764));
 }
 
-.janelaModal p {
-    padding: 5px 5px;
-    border-bottom: 1px solid #ddd;
-    margin: 0;
-    background: -webkit-gradient(linear,left bottom,left top,color-stop(0, #eee),color-stop(1, #eee));
+#boxes p{
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
-#botaoConluir {
-    border-radius: 8px;
-    text-align: center;
+#input{
+    border-radius: 3px;
+    width: 144px;
 }
 
-#fechar-modal{
-    padding-bottom: -20px;
-    border-radius: 8px;
-    text-align: center;
+#buttom{
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    cursor: pointer;
+    margin-top: 18px;
+    margin-left: 38%;
 }
 
-.fundoModal{
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #a0b3b0;
+#boxes #dialog1 {
+    width:375px;
+    height:203px;
+}
+
+#boxes .close{
+    display:block;
+    text-align:right;
 }

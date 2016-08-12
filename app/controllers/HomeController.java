@@ -14,6 +14,7 @@ import views.html.*;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 
 /**
@@ -24,12 +25,10 @@ public class HomeController extends Controller {
 
     @Inject
     private FormFactory formFactory;
-
     private List<Usuario> listaDeUsuarios = new ArrayList<>();
     private List<ArquivoTxt> listaDeArquivos = new ArrayList<>();
-
     private Usuario usuarioLogado = null;
-
+    private static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
 
     public Result cadastrarUsuario(){
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
@@ -55,7 +54,6 @@ public class HomeController extends Controller {
         if (validarLogin(usuario.getEmail(), usuario.getSenha())){
             return redirect(routes.HomeController.chamarHome());
         }
-
         return redirect(routes.HomeController.index());
     }
 
@@ -104,8 +102,8 @@ public class HomeController extends Controller {
 
     public Result menuUsuario(){
         return ok(usuario.render(usuarioLogado));
-
     }
+
     public Result chamarHome() {
         return ok(home.render(usuarioLogado));
     }
@@ -122,15 +120,20 @@ public class HomeController extends Controller {
         return redirect(routes.HomeController.chamarHome());}
 */
     public Result criaPasta(){
+        LOGGER.info("ENTROU NO CONTROLLER");
         Diretorio dir = formFactory.form(Diretorio.class).bindFromRequest().get();
-        usuarioLogado.criaSubDiretorio(dir.getNome());
-        return ok(home.render(usuarioLogado));
+
+        if (dir.getNome() == null || dir.getNome().isEmpty()){
+            return ok(home.render(usuarioLogado));
+        }else {
+            usuarioLogado.criaSubDiretorio(dir.getNome());
+            return ok(home.render(usuarioLogado));
+        }
     }
 
     public Result criaArquivos(){
         ArquivoTxt arquivo = formFactory.form(ArquivoTxt.class).bindFromRequest().get();
         listaDeArquivos.add(arquivo);
-
         usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getconteudoFile());
         return ok(home.render(usuarioLogado));
     }

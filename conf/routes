@@ -26,5 +26,5 @@ GET /criaPasta                      controllers.HomeController.criaPasta()
 
 #POST /salvaArquivo                  controllers.HomeController.salvaArquivo()
 
-POST /criaArquivos                   controllers.HomeController.criaArquivos()
+GET /criaArquivos                   controllers.HomeController.criaArquivos()
 GET /chamaTexto                     controllers.HomeController.chamaTexto()
