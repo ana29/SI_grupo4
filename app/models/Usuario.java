@@ -8,13 +8,16 @@ public class Usuario {
     public String email;
     public String senha;
     public Diretorio pastaPessoal;
+    public CaixaDeNotificacao caixaDeNotificacao;
     private static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
 
     public Usuario(){
         this.pastaPessoal = new Diretorio("root");
+        this.caixaDeNotificacao = new CaixaDeNotificacao();
     }
 
     public Usuario(String nome, String email, String senha){
+        this.caixaDeNotificacao = new CaixaDeNotificacao();
         this.pastaPessoal = new Diretorio("root");
         this.nome = nome;
         this.email = email;
@@ -93,6 +96,10 @@ public class Usuario {
 
     public Diretorio getPastaPessoal() {
         return pastaPessoal;
+    }
+
+    public CaixaDeNotificacao getCaixaDeNotificacao() {
+        return caixaDeNotificacao;
     }
 }
 

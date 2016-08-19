@@ -1,10 +1,6 @@
 package controllers;
 
-import models.Diretorio;
-import models.EmailValidator;
-import models.Usuario;
-import models.Arquivo;
-import models.ArquivoTxt;
+import models.*;
 import play.data.FormFactory;
 import play.mvc.*;
 
@@ -25,6 +21,7 @@ public class HomeController extends Controller {
 
     @Inject
     private FormFactory formFactory;
+    private Util util = new Util();
     private List<Usuario> listaDeUsuarios = new ArrayList<>();
     private List<ArquivoTxt> listaDeArquivos = new ArrayList<>();
     private Usuario usuarioLogado = null;
@@ -82,11 +79,9 @@ public class HomeController extends Controller {
     }
 
     private Boolean verificaCredenciais(String nome, String email, String senha){
-        EmailValidator userMail = new EmailValidator();
-        if (nome.length() > 2)
-            if (nome.length() < 21) if (senha.length() > 7) if (userMail.validate(email)) return true;
-        return false;
+        return util.validaCredenciais(nome, email, senha);
     }
+
     //Renders
     public Result index() {
         return ok(index.render());
@@ -107,6 +102,8 @@ public class HomeController extends Controller {
     public Result chamarHome() {
         return ok(home.render(usuarioLogado));
     }
+
+    public Result chamarCaixa() {return ok(caixaNotificacoes.render(usuarioLogado)); }
 
 
     public Result chamaTexto(){return ok(texto.render(listaDeArquivos));}
