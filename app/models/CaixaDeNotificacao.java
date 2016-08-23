@@ -15,8 +15,12 @@ public class CaixaDeNotificacao {
 
     public CaixaDeNotificacao(){
         this.caixaDeNotificacao = new ArrayList<>();
-        Notificacao not = new Notificacao();
+        Notificacao not = new NotificacaoDeLeitura("Marcos");
+        Notificacao not2 = new NotificacaoDeEdicao("Marcos");
+
+        //Só para testar
         caixaDeNotificacao.add(not);
+        caixaDeNotificacao.add(not2);
 //        caixaDeNotificacao.add("Mensagem 1");
 //        caixaDeNotificacao.add("Mensagem 2");
 
@@ -26,8 +30,4 @@ public class CaixaDeNotificacao {
         return this.caixaDeNotificacao;
     }
 
-    @Override
-    public String toString() {
-        return "Hello";
-    }
 }
