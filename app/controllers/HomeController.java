@@ -24,6 +24,7 @@ public class HomeController extends Controller {
     private Util util = new Util();
     private List<Usuario> listaDeUsuarios = new ArrayList<>();
     private List<ArquivoTxt> listaDeArquivos = new ArrayList<>();
+    //pegar o usuario logado pela sessao e não assim
     private Usuario usuarioLogado = null;
     private static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
 
@@ -31,51 +32,53 @@ public class HomeController extends Controller {
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
         if (verificaCredenciais(usuario.getNome(), usuario.getEmail(), usuario.getSenha())) {
             listaDeUsuarios.add(usuario);
+            flash("sucesso", "Cadastrado com sucesso.");
         }
         return redirect(routes.HomeController.index());
     }
 
-    public Result escreverTexto(){
-        Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
-        listaDeUsuarios.add(usuario);
 
-        if (validarLogin(usuario.getEmail(), usuario.getSenha())){
-            return redirect(routes.HomeController.chamarHome());
-        }
-        return redirect(routes.HomeController.index());
-    }
     public Result logar(){
 
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
 
-        if (validarLogin(usuario.getEmail(), usuario.getSenha())){
-            return redirect(routes.HomeController.chamarHome());
+        try {
+            if (validarLogin(usuario.getEmail(), usuario.getSenha())){
+                return redirect(routes.HomeController.chamarHome());
+            }
+        } catch (Exception e) {
+            flash("erro", e.getMessage());
+            return redirect(routes.HomeController.index());
         }
-        return redirect(routes.HomeController.index());
+
+
+        return null;
     }
 
     public Result logOut(){
 
         usuarioLogado = null;
+        session().clear();
 
         return redirect(routes.HomeController.index());
     }
 
     //Validacao
-    public boolean validarLogin(String email, String senha){
+    public boolean validarLogin(String email, String senha) throws Exception {
 
         for (int i = 0; i < listaDeUsuarios.size(); i++){
             Usuario usuario = listaDeUsuarios.get(i);
             if (usuario.getEmail().equals(email)){
                 if (usuario.getSenha().equals(senha)){
                     usuarioLogado = usuario;
+                    session("login", usuario.getEmail());
                     return true;
                 }else{
-                    return false;
+                    throw new Exception("Login ou senha incorretos.");
                 }
             }
         }
-        return false;
+        throw new Exception("Usuario inesistente");
     }
 
     private Boolean verificaCredenciais(String nome, String email, String senha){
@@ -126,6 +129,22 @@ public class HomeController extends Controller {
             usuarioLogado.criaSubDiretorio(dir.getNome());
             return ok(home.render(usuarioLogado));
         }
+    }
+
+    public Result escreverTexto(){
+        Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
+        listaDeUsuarios.add(usuario);
+
+        try {
+            if (validarLogin(usuario.getEmail(), usuario.getSenha())){
+                return redirect(routes.HomeController.chamarHome());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return redirect(routes.HomeController.index());
+        }
+
+        return null;
     }
 
     public Result criaArquivos(){
