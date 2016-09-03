@@ -12,8 +12,8 @@ import java.util.Formatter;
  */
 public class ArquivoTxt implements Arquivo{
 
-    private String nomeArquivo;
-    private String conteudoFile;
+    public String nomeArquivo;
+    public String conteudoFile;
     public Diretorio pastaPessoal;
 
     public  ArquivoTxt(){
