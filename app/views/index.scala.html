@@ -78,6 +78,13 @@
             </div><!-- tab-content -->
         </div> <!-- /form -->
 
+        @if(flash.contains("erro")) {
+            <p style="color: red;">@flash.get("erro")</p>
+        }
+        @if(flash.contains("sucesso")) {
+            <p style="color: green;">@flash.get("sucesso")</p>
+        }
+
         <script src="@routes.Assets.at("javascripts/jquery.min.js")"></script>
         <script src="@routes.Assets.at("javascripts/index.js")"></script>
 

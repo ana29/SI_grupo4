@@ -24,6 +24,7 @@ public class HomeController extends Controller {
     private Util util = new Util();
     private List<Usuario> listaDeUsuarios = new ArrayList<>();
     private List<ArquivoTxt> listaDeArquivos = new ArrayList<>();
+    //pegar o usuario logado pela sessao e não assim
     private Usuario usuarioLogado = null;
     private static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
 
@@ -35,6 +36,7 @@ public class HomeController extends Controller {
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
         if (verificaCredenciais(usuario.getNome(), usuario.getEmail(), usuario.getSenha())) {
             listaDeUsuarios.add(usuario);
+            flash("sucesso", "Cadastrado com sucesso.");
         }
         return redirect(routes.HomeController.index());
     }
@@ -47,10 +49,17 @@ public class HomeController extends Controller {
 
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
 
-        if (validarLogin(usuario.getEmail(), usuario.getSenha())){
-            return redirect(routes.HomeController.chamarHome());
+        try {
+            if (validarLogin(usuario.getEmail(), usuario.getSenha())){
+                return redirect(routes.HomeController.chamarHome());
+            }
+        } catch (Exception e) {
+            flash("erro", e.getMessage());
+            return redirect(routes.HomeController.index());
         }
-        return redirect(routes.HomeController.index());
+
+
+        return null;
     }
 
     /**
@@ -60,6 +69,7 @@ public class HomeController extends Controller {
     public Result logOut(){
 
         usuarioLogado = null;
+        session().clear();
 
         return redirect(routes.HomeController.index());
     }
@@ -76,13 +86,14 @@ public class HomeController extends Controller {
             if (usuario.getEmail().equals(email)) {
                 if (usuario.getSenha().equals(senha)) {
                     usuarioLogado = usuario;
+                    session("login", usuario.getEmail());
                     return true;
-                } else {
-                    return false;
+                }else{
+                    throw new Exception("Login ou senha incorretos.");
                 }
             }
         }
-        return false;
+        throw new Exception("Usuario inesistente");
     }
 
     /**
@@ -140,18 +151,29 @@ public class HomeController extends Controller {
         }
     }
 
-    /**
-     * Renderiza a página home do usuário após a criação de um arquivo.
-     * @return A página home do usuário após a criação de um usuário.
-     */
+    public Result escreverTexto(){
+        Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
+        listaDeUsuarios.add(usuario);
+
+        try {
+            if (validarLogin(usuario.getEmail(), usuario.getSenha())){
+                return redirect(routes.HomeController.chamarHome());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return redirect(routes.HomeController.index());
+        }
+
+        return null;
+    }
+
     public Result criaArquivos(){
         ArquivoTxt arquivo = formFactory.form(ArquivoTxt.class).bindFromRequest().get();
-        System.out.println("Nome: "+arquivo.getNomeArquivo()+ "Conteudo: "+arquivo.getconteudoFile());
         listaDeArquivos.add(arquivo);
         usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getconteudoFile());
         return ok(home.render(usuarioLogado));
     }
-
+    //GETs and SETs
     public List<Usuario> getListaDeUsuarios() {
         return listaDeUsuarios;
     }
