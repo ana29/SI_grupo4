@@ -30,4 +30,12 @@ public class CaixaDeNotificacao {
         return this.caixaDeNotificacao;
     }
 
+    public void notificaEdicao(String nome){
+        caixaDeNotificacao.add(new NotificacaoDeEdicao(nome));
+    }
+
+    public void notificaLeitura(String nome){
+        caixaDeNotificacao.add(new NotificacaoDeLeitura(nome));
+    }
+
 }

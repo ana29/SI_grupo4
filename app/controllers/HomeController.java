@@ -80,7 +80,7 @@ public class HomeController extends Controller {
      * @param senha Senha do usuário cadastrado.
      * @return Boolean com o resultado da validação.
      */
-    private boolean validarLogin(String email, String senha){
+    private boolean validarLogin(String email, String senha) throws Exception {
 
         for (Usuario usuario : listaDeUsuarios) {
             if (usuario.getEmail().equals(email)) {
