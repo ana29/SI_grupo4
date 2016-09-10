@@ -2,7 +2,6 @@ package models;
 
 import play.data.validation.Constraints;
 
-import javax.validation.Constraint;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,5 +37,14 @@ public class Diretorio {
 
     public List<ArquivoTxt> getArquivos() {
         return arquivos;
+    }
+
+    public boolean contains(String nome){
+        for (Diretorio d: this.subDiretorios){
+            if (d.getNome().equals(nome)){
+                return true;
+            }
+        }
+        return false;
     }
 }
