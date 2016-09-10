@@ -27,7 +27,7 @@ public class Usuario {
 
     public void criaSubDiretorio(String nome){
         LOGGER.info("ENTROU NA CRIAÇÃO DO DIRETORIO");
-        if (!pastaPessoal.getSubDiretorios().contains(new Diretorio(nome))){
+        if (!pastaPessoal.contains(nome)){
             pastaPessoal.getSubDiretorios().add(new Diretorio(nome));
         }
         else{
@@ -35,7 +35,7 @@ public class Usuario {
             int count = 1;
             while (adicionado == false){
                 String novoNome = nome + "(" + count + ")";
-                if (!pastaPessoal.getSubDiretorios().contains(new Diretorio(novoNome))){
+                if (!pastaPessoal.contains(nome)){
                     pastaPessoal.getSubDiretorios().add(new Diretorio(novoNome));
                     adicionado = true;
                 }
