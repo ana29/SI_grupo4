@@ -35,7 +35,7 @@ public class Usuario {
             int count = 1;
             while (adicionado == false){
                 String novoNome = nome + "(" + count + ")";
-                if (!pastaPessoal.contains(nome)){
+                if (!pastaPessoal.contains(novoNome)){
                     pastaPessoal.getSubDiretorios().add(new Diretorio(novoNome));
                     adicionado = true;
                 }
