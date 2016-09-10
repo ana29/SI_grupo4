@@ -35,7 +35,7 @@
             @for(diretorio <- usuario.getPastaPessoal.getSubDiretorios) {
                 <div class="thumbnail">
                     <i class="material-icons">folder
-                        <span>@diretorio.getArquivos.size() folders / @diretorio.getSubDiretorios.size() files</span>
+                        <span><a href="#">botao editar</a> / @diretorio.getArquivos.size() folders / @diretorio.getSubDiretorios.size() files</span>
                     </i>
                     <h1>@diretorio.getNome</h1>
                 </div>

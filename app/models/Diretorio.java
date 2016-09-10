@@ -39,4 +39,8 @@ public class Diretorio {
     public List<ArquivoTxt> getArquivos() {
         return arquivos;
     }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 }
