@@ -1,9 +1,7 @@
 package models;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.Formatter;
 
 
 /**
@@ -12,7 +10,7 @@ import java.util.Formatter;
  */
 public class ArquivoTxt implements Arquivo{
 
-    private String nomeArquivo;
+    public String nomeArquivo;
     private String conteudoFile;
     public Diretorio pastaPessoal;
 
