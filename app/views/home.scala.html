@@ -1,3 +1,8 @@
+@import controllers.routes
+@import controllers.routes
+@import controllers.routes
+@import controllers.routes
+@import controllers.routes
 @(usuario: Usuario)
 
 @main("SIBox"){
@@ -26,6 +31,8 @@
                 <a id="boxes"><i style="margin-bottom: 8px" class="material-icons">create_new_folder</i></a>
                 <a href="@routes.HomeController.chamaTexto()"><i style="margin-right: 8px" class="material-icons">note_add</i> </a>
                 <i style="margin-right: 15px"></i>
+                <a href="@routes.HomeController.chamaTextoMd()"><i style="margin-right: 8px" class="material-icons">note_add</i> </a>
+                <i style="margin-right: 15px"></i>
                 <a href="@routes.HomeController.logOut()"><i class="material-icons">power_settings_new</i></a>
 
             </div>
@@ -44,11 +51,12 @@
             @for(arquivo <- usuario.getPastaPessoal.getArquivos) {
                 <div class="thumbnail">
                     <i class="material-icons">description
-                        @*<span>@pasta.getArquivos.size() folders / @pasta.getA.size() files</span>*@
                     </i>
-                    <h1>@arquivo.getNomeArquivo</h1>
+                    <a href="@routes.HomeController.abreArquivo(arquivo.getNomeArquivo)">@arquivo.getNomeArquivo</a>
+                }
+
                 </div>
-            }
+
         </main>
 
         <div id="boxes">

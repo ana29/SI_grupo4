@@ -24,7 +24,14 @@ GET /logOut                         controllers.HomeController.logOut()
 GET /criaPasta                      controllers.HomeController.criaPasta()
 GET /Caixa                          controllers.HomeController.chamarCaixa()
 
-#POST /salvaArquivo                  controllers.HomeController.salvaArquivo()
-
 GET /criaArquivos                   controllers.HomeController.criaArquivos()
 GET /chamaTexto                     controllers.HomeController.chamaTexto()
+#GET /criaArquivosMd                 controllers.HomeController.criaArquivosMd()
+#GET /chamaTextoMd                   controllers.HomeController.chamaTextoMd()
+
+
+GET /abreArquivo                    controllers.HomeController.abreArquivo(nomeArquivo)
+
+
+
+

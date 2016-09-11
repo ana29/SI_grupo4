@@ -1,8 +1,7 @@
 package models;
 
 import javax.swing.*;
-import java.io.File;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.Formatter;
 
 
@@ -12,8 +11,8 @@ import java.util.Formatter;
  */
 public class ArquivoTxt implements Arquivo{
 
-    private String nomeArquivo;
-    private String conteudoFile;
+    public String nomeArquivo;
+    public String conteudoFile;
     public Diretorio pastaPessoal;
 
     public  ArquivoTxt(){
@@ -29,20 +28,40 @@ public class ArquivoTxt implements Arquivo{
     }
 
     /**
+     * Abre o arquivo pelo nome e retorna uma string com o conteudo;
+     * @param nomeArquivo
+     * @return
+     */
+    public String getConteudoArquivo(String nomeArquivo){
+        String conteudoArquivo = null;
+
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(nomeArquivo));
+            while(br.ready()){
+                String linha = br.readLine();
+                conteudoArquivo+=linha;
+            }
+            br.close();
+        }catch(IOException ioe){
+            ioe.printStackTrace();
+        }
+
+        return conteudoArquivo;
+    }
+    /**
      * Metodo que cria arquivos .txt Retorna um erro casa um dos parametros ou ambos sejam null;
      */
     @Override
     public void criarArquivo() {
 
-
-            File arquivo = new File(nomeArquivo+".txt");
+            File arquivo = new File(nomeArquivo);
             try(FileWriter escrever = new FileWriter(arquivo)){
                 escrever.write((String) conteudoFile);
                 escrever.close();
-                //JOptionPane.showMessageDialog(null,"Arquivo '"+nomeArquivo+"' criado!","Arquivo",1);
+
             }
             catch(Exception erro){
-                //JOptionPane.showMessageDialog(null,"Arquivo nao pode ser gerado!","Erro",0);
+            erro.getCause();
             }
 
         }
