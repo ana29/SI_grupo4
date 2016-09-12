@@ -147,8 +147,9 @@ public class HomeController extends Controller {
 
     //__________________________________________________________
     public Result deletaArquivo(String nomeArquivo){
+        deletFileFromList(nomeArquivo);
 
-        deletFile(nomeArquivo);
+        usuarioLogado.excluirArquivo(nomeArquivo);
 
         return ok(home.render(usuarioLogado));
     }
@@ -163,19 +164,22 @@ public class HomeController extends Controller {
         ArquivoTxt arquivo = formFactory.form(ArquivoTxt.class).bindFromRequest().get();
         listaDeArquivos.add(arquivo);
 
-        deletFile(nomeArquivo);
+        deletFileFromList(nomeArquivo);
         usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), ".txt");
 
         return ok(home.render(usuarioLogado));
 
     }
     //_____________________________________________________
-    public void deletFile(String nameOfFile){
+
+    public void deletFileFromList(String nameOfFile){
+        Arquivo arquivo=null;
         for (int i=0; i< listaDeArquivos.size();i++){
-            if (listaDeArquivos.get(i).getNomeArquivo().equals(nameOfFile))
+            if (nameOfFile.equals(listaDeArquivos.get(i).getNomeComExtensao()))
+                 arquivo = listaDeArquivos.get(i);
                 listaDeArquivos.remove(i);
         }
-
+        arquivo.deletaArquivoSistema(nameOfFile);
     }
 
     public Arquivo findFileFromList(String nomeArquivo){

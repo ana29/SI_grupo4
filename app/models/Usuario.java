@@ -68,6 +68,7 @@ public class Usuario {
         }
         else{
             pastaPessoal.getArquivos().add(new ArquivoMd(nomeArquivo, conteudoFile));
+
         }
     }
 
@@ -77,6 +78,14 @@ public class Usuario {
                 pastaPessoal.getSubDiretorios().remove(d);
             }
         }
+    }
+
+    public void excluirArquivo(String nome){
+        if (pastaPessoal.containsArquivo(nome))
+
+                pastaPessoal.getArquivos().remove(nome);
+
+
     }
 
     public String getNome() {

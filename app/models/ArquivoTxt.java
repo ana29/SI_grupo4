@@ -66,6 +66,11 @@ public class ArquivoTxt implements Arquivo{
 
         }
 
+    public void deletaArquivoSistema(String nomeArquivo){
+        File arquivo = new File(nomeArquivo);
+        arquivo.delete();
+
+    }
     @Override
     public String getNomeArquivo() {return this.nomeArquivo;}
 
