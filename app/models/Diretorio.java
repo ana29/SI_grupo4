@@ -48,9 +48,9 @@ public class Diretorio {
         return false;
     }
 
-    public boolean containsArquivo(String nome){
+    public boolean containsArquivo(String nome, String extensao){
         for (Arquivo a: this.getArquivos()){
-            if (a.getNomeArquivo().equals(nome)){
+            if (a.getNomeArquivo().equals(nome) && a.getExtensao().equals(extensao)){
                 return true;
             }
         }

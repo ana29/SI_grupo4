@@ -7,8 +7,10 @@ import java.io.FileWriter;
  * Created by marco on 10/09/2016.
  */
 public class ArquivoMd implements Arquivo {
+
     public String nomeArquivo;
     private String conteudoFile;
+    private final String EXTENSAO = ".md";
     private Diretorio pastaPessoal;
 
     public ArquivoMd(){}
@@ -37,7 +39,8 @@ public class ArquivoMd implements Arquivo {
     public String getNomeArquivo() {
         return this.nomeArquivo;
     }
-
+    @Override
+    public String getExtensao(){return EXTENSAO;}
     @Override
     public String getconteudoFile() {
         return this.conteudoFile;

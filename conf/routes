@@ -27,6 +27,4 @@ GET /Caixa                          controllers.HomeController.chamarCaixa()
 #POST /salvaArquivo                  controllers.HomeController.salvaArquivo()
 
 GET /criaArquivos                   controllers.HomeController.criaArquivos()
-GET /criaArquivosMd                 controllers.HomeController.criaArquivosMd()
 GET /chamaTexto                     controllers.HomeController.chamaTexto()
-GET /chamaTextoMd                   controllers.HomeController.chamaTextoMd()
