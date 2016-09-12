@@ -12,6 +12,6 @@ public interface Arquivo {
     void criarArquivo();
     String getNomeArquivo();
     String getconteudoFile();
-
+    String getExtensao();
 
 }

@@ -45,15 +45,15 @@ public class Usuario {
     }
 
     public  void addArquivo(String nomeArquivo, String conteudoFile, String extensao){
-        if (!pastaPessoal.containsArquivo(nomeArquivo+extensao)){
-            auxExtensao(nomeArquivo+extensao, conteudoFile, extensao);
+        if (!pastaPessoal.containsArquivo(nomeArquivo, extensao)){
+            auxExtensao(nomeArquivo, conteudoFile, extensao);
         }
         else{
             boolean adicionado = false;
             int count = 1;
             while (adicionado == false){
-                String novoNome = nomeArquivo+ "(" + count + ")" + extensao;
-                if (!pastaPessoal.containsArquivo(novoNome)){
+                String novoNome = nomeArquivo+ "(" + count + ")";
+                if (!pastaPessoal.containsArquivo(novoNome, extensao)){
                     auxExtensao(novoNome, conteudoFile, extensao);
                     adicionado = true;
                 }
@@ -63,7 +63,7 @@ public class Usuario {
     }
 
     private void auxExtensao(String nomeArquivo, String conteudoFile, String extensao) {
-        if (extensao == ".txt"){
+        if (extensao.equals(".txt")){
             pastaPessoal.getArquivos().add(new ArquivoTxt(nomeArquivo, conteudoFile));
         }
         else{

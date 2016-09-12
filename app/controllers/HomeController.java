@@ -1,10 +1,10 @@
 package controllers;
 
 import models.*;
+import play.data.DynamicForm;
 import play.data.FormFactory;
-import play.mvc.*;
-
-
+import play.mvc.Controller;
+import play.mvc.Result;
 import views.html.*;
 
 import javax.inject.Inject;
@@ -107,8 +107,6 @@ public class HomeController extends Controller {
 
 
     public Result chamaTexto(){return ok(texto.render(listaDeArquivos));}
-    public Result chamaTextoMd(){return ok(textoMd.render(listaDeArquivos));}
-
 
     /*public  Result salvaArquivo(){
 
@@ -130,18 +128,24 @@ public class HomeController extends Controller {
     }
 
     public Result criaArquivos(){
-        ArquivoTxt arquivo = formFactory.form(ArquivoTxt.class).bindFromRequest().get();
+        DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
+        String nomeArquivo = (String) form.getData().get("nomeArquivo");
+        String conteudoArquivo = (String) form.getData().get("conteudoFile");
+        String extensao = (String) form.getData().get("extensao");
+
+        Arquivo arquivo;
+        if (extensao.equals(".txt")){
+            arquivo = new ArquivoTxt(nomeArquivo, conteudoArquivo);
+        }
+        else{
+            arquivo = new ArquivoMd(nomeArquivo, conteudoArquivo);
+        }
         listaDeArquivos.add(arquivo);
-        usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getconteudoFile(), ".txt");
+        usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getconteudoFile(), extensao);
         return ok(home.render(usuarioLogado));
     }
 
-    public  Result criaArquivosMd(){
-        ArquivoMd arquivoMd = formFactory.form(ArquivoMd.class).bindFromRequest().get();
-        listaDeArquivos.add(arquivoMd);
-        usuarioLogado.addArquivo(arquivoMd.getNomeArquivo(), arquivoMd.getconteudoFile(), ".md");
-        return ok(home.render(usuarioLogado));
-    }
+
     //GETs and SETs
     public List<Usuario> getListaDeUsuarios() {
         return listaDeUsuarios;
