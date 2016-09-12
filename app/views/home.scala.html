@@ -31,6 +31,7 @@
                 <a id="boxes"><i style="margin-bottom: 8px" class="material-icons">create_new_folder</i></a>
                 <a href="@routes.HomeController.chamaTexto()"><i style="margin-right: 8px" class="material-icons">note_add</i> </a>
                 <i style="margin-right: 15px"></i>
+                <span>@session().get("login")</span>
                 <a href="@routes.HomeController.chamaTextoMd()"><i style="margin-right: 8px" class="material-icons">note_add</i> </a>
                 <i style="margin-right: 15px"></i>
                 <a href="@routes.HomeController.logOut()"><i class="material-icons">power_settings_new</i></a>
