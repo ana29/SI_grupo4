@@ -7,9 +7,9 @@ GET     /                           controllers.HomeController.index
 # An example controller showing how to use dependency injection
 GET     /count                      controllers.CountController.count
 # An example controller showing how to write asynchronous code
-GET     /message                    controllers.AsyncController.message
+GET     /message                    controllers.AsyncController.message()
 
-GET     /home                       controllers.HomeController.chamarHome
+GET /home                       controllers.HomeController.chamarHome()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
@@ -26,12 +26,13 @@ GET /Caixa                          controllers.HomeController.chamarCaixa()
 
 GET /criaArquivos                   controllers.HomeController.criaArquivos()
 GET /chamaTexto                     controllers.HomeController.chamaTexto()
-#GET /criaArquivosMd                 controllers.HomeController.criaArquivosMd()
-#GET /chamaTextoMd                   controllers.HomeController.chamaTextoMd()
+GET /criaArquivosMd                 controllers.HomeController.criaArquivosMd()
+GET /chamaTextoMd                   controllers.HomeController.chamaTextoMd()
 
 
-GET /abreArquivo                    controllers.HomeController.abreArquivo(nomeArquivo)
-
+GET /abreArquivo/:nomeArquivo       controllers.HomeController.abreArquivo(nomeArquivo: String)
+GET /deletaArquivo/:nomeArquivo     controllers.HomeController.deletaArquivo(nomeArquivo: String)
+GET /modificaArquivo/:nomeArquivo   controllers.HomeController.chamaModificaArquivo(nomeArquivo: String)
 
 
 

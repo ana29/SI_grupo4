@@ -54,9 +54,9 @@ public class ArquivoTxt implements Arquivo{
     @Override
     public void criarArquivo() {
 
-            File arquivo = new File(nomeArquivo);
+            File arquivo = new File(getNomeArquivo());
             try(FileWriter escrever = new FileWriter(arquivo)){
-                escrever.write((String) conteudoFile);
+                escrever.write((String) getConteudoArquivo());
                 escrever.close();
 
             }
@@ -66,8 +66,18 @@ public class ArquivoTxt implements Arquivo{
 
         }
 
+    @Override
+    public String getNomeArquivo() {return this.nomeArquivo;}
 
-    public  String getNomeArquivo(){return nomeArquivo;}
-    public  String getconteudoFile(){return conteudoFile;}
+    @Override
+    public String getConteudoArquivo() {return  this.conteudoFile;}
+
+    @Override
+    public String getNomeComExtensao() {
+        return getNomeArquivo()+".txt";
+    }
+
+    @Override
+    public void setConteudoArquivo(String novoConteudo) {this.conteudoFile=novoConteudo;}
 
 }

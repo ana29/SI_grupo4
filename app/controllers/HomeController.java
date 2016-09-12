@@ -27,7 +27,6 @@ public class HomeController extends Controller {
     private Usuario usuarioLogado = null;
     private static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
 
-
     public Result cadastrarUsuario(){
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
 
@@ -106,12 +105,11 @@ public class HomeController extends Controller {
 
     public Result chamarCaixa() {return ok(caixaNotificacoes.render(usuarioLogado)); }
 
-
     public Result chamaTexto(){return ok(texto.render(listaDeArquivos));}
 
-  //  public Result chamaTextoMd(){return ok(textoMd.render(listaDeArquivos));}
+    public Result chamaTextoMd(){return ok(textoMd.render(listaDeArquivos));}
 
-
+    //_____________________________________________________
     public Result criaPasta(){
         LOGGER.info("ENTROU NO CONTROLLER");
         Diretorio dir = formFactory.form(Diretorio.class).bindFromRequest().get();
@@ -127,33 +125,78 @@ public class HomeController extends Controller {
     public Result criaArquivos(){
         ArquivoTxt arquivo = formFactory.form(ArquivoTxt.class).bindFromRequest().get();
         listaDeArquivos.add(arquivo);
-        usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getconteudoFile(), ".txt");
+        usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), ".txt");
         return ok(home.render(usuarioLogado));
     }
-//    public  Result criaArquivosMd(){
-//        ArquivoMd arquivoMd = formFactory.form(ArquivoMd.class).bindFromRequest().get();
-//        listaDeArquivos.add(arquivoMd);
-//        usuarioLogado.addArquivo(arquivoMd.getNomeArquivo(), arquivoMd.getconteudoFile(), ".md");
-//        return ok(home.render(usuarioLogado));
-//
-//    }
+
+    public  Result criaArquivosMd(){
+        ArquivoMd arquivoMd = formFactory.form(ArquivoMd.class).bindFromRequest().get();
+        listaDeArquivos.add(arquivoMd);
+        usuarioLogado.addArquivo(arquivoMd.getNomeArquivo(), arquivoMd.getConteudoArquivo(), ".md");
+        return ok(home.render(usuarioLogado));
+
+    }
 
     public Result abreArquivo(String nomeArquivo){
-        String conteudo = null;
-        ArquivoTxt arquivo = new ArquivoTxt();
+
+        Arquivo arquivo = findFileFromList(nomeArquivo);
+        String conteudo = arquivo.getConteudoArquivo();
+
+        return ok(arquivoConteudo.render(nomeArquivo, conteudo));
+    }
+
+    //__________________________________________________________
+    public Result deletaArquivo(String nomeArquivo){
+
+        deletFile(nomeArquivo);
+
+        return ok(home.render(usuarioLogado));
+    }
+
+    public Result chamaModificaArquivo(String nomeArquivo){
+        Arquivo arquivo=findFileFromList(nomeArquivo);
+
+        return ok(modificaArquivo.render(nomeArquivo, arquivo.getConteudoArquivo()));
+    }
+    public Result editaArquivo(String nomeArquivo){
+
+        ArquivoTxt arquivo = formFactory.form(ArquivoTxt.class).bindFromRequest().get();
+        listaDeArquivos.add(arquivo);
+
+        deletFile(nomeArquivo);
+        usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), ".txt");
+
+        return ok(home.render(usuarioLogado));
+
+    }
+    //_____________________________________________________
+    public void deletFile(String nameOfFile){
         for (int i=0; i< listaDeArquivos.size();i++){
-            if (listaDeArquivos.get(i).getNomeArquivo() == nomeArquivo)
-               conteudo  = arquivo.getConteudoArquivo(nomeArquivo);
+            if (listaDeArquivos.get(i).getNomeArquivo().equals(nameOfFile))
+                listaDeArquivos.remove(i);
         }
 
-        return ok(arquivoConteudo.render(conteudo));
     }
+
+    public Arquivo findFileFromList(String nomeArquivo){
+        Arquivo arquivo = null ;
+        for (int i=0; i< listaDeArquivos.size();i++){
+            if (nomeArquivo.equals(listaDeArquivos.get(i).getNomeComExtensao()))
+                arquivo =  listaDeArquivos.get(i);
+        }
+        return arquivo;
+    }
+    //_____________________________________________________
     //GETs and SETs
     public List<Usuario> getListaDeUsuarios() {
         return listaDeUsuarios;
     }
+
     public List<Arquivo> getListaDeArquivos() {
         return listaDeArquivos;
     }
+
+
+
 
 }
