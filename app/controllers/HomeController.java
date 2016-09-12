@@ -5,7 +5,7 @@ import models.EmailValidator;
 import models.Usuario;
 import models.Arquivo;
 import models.ArquivoTxt;
-import play.data.FormFactory;
+import play.data.Form;
 import play.mvc.*;
 
 
@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 public class HomeController extends Controller {
 
     @Inject
-    private FormFactory formFactory;
+    private Form formFactory;
     private List<Usuario> listaDeUsuarios = new ArrayList<>();
     private List<ArquivoTxt> listaDeArquivos = new ArrayList<>();
     private Usuario usuarioLogado = null;
