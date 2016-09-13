@@ -8,17 +8,20 @@ public class Usuario {
     public String email;
     public String senha;
     public Diretorio pastaPessoal;
+    public Diretorio compartilhados;
     public CaixaDeNotificacao caixaDeNotificacao;
     private static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
 
     public Usuario(){
         this.pastaPessoal = new Diretorio("root");
+        this.compartilhados = new Diretorio("Compartilhados");
         this.caixaDeNotificacao = new CaixaDeNotificacao();
     }
 
     public Usuario(String nome, String email, String senha){
         this.caixaDeNotificacao = new CaixaDeNotificacao();
         this.pastaPessoal = new Diretorio("root");
+        this.compartilhados = new Diretorio("Compartilhados");
         this.nome = nome;
         this.email = email;
         this.senha = senha;
@@ -51,7 +54,7 @@ public class Usuario {
         else{
             boolean adicionado = false;
             int count = 1;
-            while (adicionado == false){
+            while (!adicionado){
                 String novoNome = nomeArquivo+ "(" + count + ")";
                 if (!pastaPessoal.containsArquivo(novoNome, extensao)){
                     auxExtensao(novoNome, conteudoFile, extensao);
@@ -112,6 +115,8 @@ public class Usuario {
     public Diretorio getPastaPessoal() {
         return pastaPessoal;
     }
+
+    public Diretorio getCompartilhados(){ return compartilhados;}
 
     public CaixaDeNotificacao getCaixaDeNotificacao() {
         return caixaDeNotificacao;

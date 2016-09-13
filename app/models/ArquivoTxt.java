@@ -2,7 +2,9 @@ package models;
 
 import javax.swing.*;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.List;
 
 
 /**
@@ -15,6 +17,8 @@ public class ArquivoTxt implements Arquivo{
     private final String EXTENSAO = ".txt";
     private String conteudoFile;
     public Diretorio pastaPessoal;
+    private List<String> compartilhadosEdicao;
+    private List<String> compartilhadosLeitura;
 
     public  ArquivoTxt(){
 
@@ -25,6 +29,8 @@ public class ArquivoTxt implements Arquivo{
         this.nomeArquivo = nomeArquivo;
         this.conteudoFile = conteudoFile;
         this.pastaPessoal = new Diretorio("root");
+        this.compartilhadosEdicao = new ArrayList<>();
+        this.compartilhadosLeitura = new ArrayList<>();
         criarArquivo();
     }
 
@@ -82,6 +88,13 @@ public class ArquivoTxt implements Arquivo{
     @Override
     public String getConteudoArquivo() {return  this.conteudoFile;}
 
+    @Override
+    public List<String> getCompartilhadosEdicao() {
+        return compartilhadosEdicao;
+    }
 
-
+    @Override
+    public List<String> getCompartilhadosLeitura() {
+        return compartilhadosLeitura;
+    }
 }

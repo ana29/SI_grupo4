@@ -2,6 +2,8 @@ package models;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by marco on 10/09/2016.
@@ -12,6 +14,8 @@ public class ArquivoMd implements Arquivo {
     private String conteudoFile;
     private final String EXTENSAO = ".md";
     private Diretorio pastaPessoal;
+    private List<String> compartilhadosEdicao;
+    private List<String> compartilhadosLeitura;
 
     public ArquivoMd(){}
 
@@ -19,6 +23,8 @@ public class ArquivoMd implements Arquivo {
         this.nomeArquivo = nome;
         this.conteudoFile = conteudo;
         this.pastaPessoal = new Diretorio("root");
+        this.compartilhadosEdicao = new ArrayList<>();
+        this.compartilhadosLeitura = new ArrayList<>();
         criarArquivo();
     }
     @Override
@@ -52,5 +58,15 @@ public class ArquivoMd implements Arquivo {
 
     @Override
     public String getExtensao(){return EXTENSAO;}
+
+    @Override
+    public List<String> getCompartilhadosEdicao() {
+        return compartilhadosEdicao;
+    }
+
+    @Override
+    public List<String> getCompartilhadosLeitura() {
+        return compartilhadosLeitura;
+    }
 
 }

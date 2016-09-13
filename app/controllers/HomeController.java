@@ -27,6 +27,7 @@ public class HomeController extends Controller {
     private List<Arquivo> listaDeArquivos = new ArrayList<>();
     private Usuario usuarioLogado = null;
     private static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
+    private static final Logger LOGGER2 = Logger.getLogger(Logger.class.getName());
 
     public Result cadastrarUsuario(){
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
@@ -81,16 +82,15 @@ public class HomeController extends Controller {
     }
 
     //Validacao
-    public boolean validarLogin(String email, String senha) throws Exception {
+    private boolean validarLogin(String email, String senha) throws Exception {
 
-        for (int i = 0; i < listaDeUsuarios.size(); i++){
-            Usuario usuario = listaDeUsuarios.get(i);
-            if (usuario.getEmail().equals(email)){
-                if (usuario.getSenha().equals(senha)){
+        for (Usuario usuario : listaDeUsuarios) {
+            if (usuario.getEmail().equals(email)) {
+                if (usuario.getSenha().equals(senha)) {
                     usuarioLogado = usuario;
                     session("login", usuario.getEmail());
                     return true;
-                }else{
+                } else {
                     throw new Exception("Login ou senha incorretos.");
                 }
             }
@@ -109,14 +109,6 @@ public class HomeController extends Controller {
 
     public Result chamarLogin() {
         return ok(login.render(listaDeUsuarios));
-    }
-
-    public Result chamarCadastro() {
-        return ok(cadastro.render(listaDeUsuarios));
-    }
-
-    public Result menuUsuario(){
-        return ok(usuario.render(usuarioLogado));
     }
 
     public Result chamarHome() {
@@ -238,6 +230,49 @@ public class HomeController extends Controller {
     }
     public List<Arquivo> getListaDeArquivos() {
         return listaDeArquivos;
+    }
+
+
+    /*
+     * Compartilhamento
+     */
+
+    public Result compartilha(){
+        LOGGER2.info("ENTROU NO CONTROLLER");
+
+        DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
+        String nomeArquivo = (String) form.getData().get("nomeArquivo");
+        String emailUsuario = (String) form.getData().get("emailUsuario");
+        String tipo = (String) form.getData().get("tipo");
+
+        if (tipo.equals("edicao"))
+            compartilhaEdicao(emailUsuario, nomeArquivo);
+        else
+            compartilhaLeitura(emailUsuario, nomeArquivo);
+
+        return ok(home.render(usuarioLogado));
+    }
+
+    public void compartilhaEdicao(String emailUsuario, String nomeArquivo){
+        for (Usuario usuario: listaDeUsuarios) {
+            if (usuario.getEmail().equals(emailUsuario)){
+                Arquivo procurado = findFileFromList(nomeArquivo);
+                procurado.getCompartilhadosEdicao().add(emailUsuario);
+                Notificacao edicao = new NotificacaoDeEdicao(usuarioLogado.getNome());
+                usuario.getCaixaDeNotificacao().getCaixaDeNotificacao().add(edicao);
+            }
+        }
+    }
+
+    public void compartilhaLeitura(String emailUsuario, String nomeArquivo){
+        for (Usuario usuario: listaDeUsuarios) {
+            if(usuario.getEmail().equals(emailUsuario)) {
+                Arquivo procurado = findFileFromList(nomeArquivo);
+                procurado.getCompartilhadosLeitura().add(emailUsuario);
+                Notificacao leitura = new NotificacaoDeLeitura(usuarioLogado.getNome());
+                usuario.getCaixaDeNotificacao().getCaixaDeNotificacao().add(leitura);
+            }
+        }
     }
 
 }

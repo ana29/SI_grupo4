@@ -18,11 +18,11 @@ POST /cadastraUsuario               controllers.HomeController.cadastrarUsuario(
 POST /logar                         controllers.HomeController.logar()
 
 GET /Login                          controllers.HomeController.chamarLogin()
-GET /Cadastro                       controllers.HomeController.chamarCadastro()
-GET /usuario                        controllers.HomeController.menuUsuario()
 GET /logOut                         controllers.HomeController.logOut()
 GET /criaPasta                      controllers.HomeController.criaPasta()
 GET /Caixa                          controllers.HomeController.chamarCaixa()
+
+GET /compartilha                    controllers.HomeController.compartilha()
 
 #POST /salvaArquivo                  controllers.HomeController.salvaArquivo()
 
