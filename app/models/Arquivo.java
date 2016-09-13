@@ -15,6 +15,7 @@ public interface Arquivo {
     String getNomeComExtensao();
     void setConteudoArquivo(String novoConteudo);
     void deletaArquivoSistema(String nomeArquivo);
+    String getExtensao();
 
 
 }

@@ -1,6 +1,7 @@
 package controllers;
 
 import models.*;
+import play.data.DynamicForm;
 import play.data.FormFactory;
 import play.mvc.*;
 
@@ -51,6 +52,11 @@ public class HomeController extends Controller {
 //        return redirect(routes.HomeController.index());
 //    }
 
+     //   if (validarLogin(usuario.getEmail(), usuario.getSenha())){
+     //       return redirect(routes.HomeController.chamarHome());
+     //   }
+   //     return redirect(routes.HomeController.index());
+  //  }
     public Result logar(){
 
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
@@ -63,9 +69,7 @@ public class HomeController extends Controller {
             flash("erro", e.getMessage());
             return redirect(routes.HomeController.index());
         }
-
-
-        return null;
+        return redirect(routes.HomeController.index());
     }
 
     public Result logOut(){
@@ -124,9 +128,14 @@ public class HomeController extends Controller {
 
     public Result chamaTexto(){return ok(texto.render(listaDeArquivos));}
 
-    public Result chamaTextoMd(){return ok(textoMd.render(listaDeArquivos));}
 
-    //_____________________________________________________
+    /*public  Result salvaArquivo(){
+
+        Arquivo arquivo = formFactory.form(ArquivoTxt.class).bindFromRequest().get();
+        listaDeArquivos.add(arquivo);
+
+        return redirect(routes.HomeController.chamarHome());}
+*/
     public Result criaPasta(){
         LOGGER.info("ENTROU NO CONTROLLER");
         Diretorio dir = formFactory.form(Diretorio.class).bindFromRequest().get();
@@ -139,36 +148,24 @@ public class HomeController extends Controller {
         }
     }
 
-    public Result escreverTexto(){
-        Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
-        listaDeUsuarios.add(usuario);
-
-        try {
-            if (validarLogin(usuario.getEmail(), usuario.getSenha())){
-                return redirect(routes.HomeController.chamarHome());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return redirect(routes.HomeController.index());
-        }
-
-        return null;
-    }
-
     public Result criaArquivos(){
-        ArquivoTxt arquivo = formFactory.form(ArquivoTxt.class).bindFromRequest().get();
+        DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
+        String nomeArquivo = (String) form.getData().get("nomeArquivo");
+        String conteudoArquivo = (String) form.getData().get("conteudoFile");
+        String extensao = (String) form.getData().get("extensao");
+
+        Arquivo arquivo;
+        if (extensao.equals(".txt")){
+            arquivo = new ArquivoTxt(nomeArquivo, conteudoArquivo);
+        }
+        else{
+            arquivo = new ArquivoMd(nomeArquivo, conteudoArquivo);
+        }
         listaDeArquivos.add(arquivo);
-        usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), ".txt");
+        usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), extensao);
         return ok(home.render(usuarioLogado));
     }
 
-    public  Result criaArquivosMd(){
-        ArquivoMd arquivoMd = formFactory.form(ArquivoMd.class).bindFromRequest().get();
-        listaDeArquivos.add(arquivoMd);
-        usuarioLogado.addArquivo(arquivoMd.getNomeArquivo(), arquivoMd.getConteudoArquivo(), ".md");
-        return ok(home.render(usuarioLogado));
-
-    }
 
     public Result abreArquivo(String nomeArquivo){
 
@@ -228,12 +225,8 @@ public class HomeController extends Controller {
     public List<Usuario> getListaDeUsuarios() {
         return listaDeUsuarios;
     }
-
     public List<Arquivo> getListaDeArquivos() {
         return listaDeArquivos;
     }
-
-
-
 
 }

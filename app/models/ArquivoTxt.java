@@ -12,7 +12,8 @@ import java.util.Formatter;
 public class ArquivoTxt implements Arquivo{
 
     public String nomeArquivo;
-    public String conteudoFile;
+    private final String EXTENSAO = ".txt";
+    private String conteudoFile;
     public Diretorio pastaPessoal;
 
     public  ArquivoTxt(){
@@ -71,6 +72,12 @@ public class ArquivoTxt implements Arquivo{
         arquivo.delete();
 
     }
+
+    @Override
+    public String getExtensao() {
+        return null;
+    }
+
     @Override
     public String getNomeArquivo() {return this.nomeArquivo;}
 
@@ -81,6 +88,11 @@ public class ArquivoTxt implements Arquivo{
     public String getNomeComExtensao() {
         return getNomeArquivo()+".txt";
     }
+/*
+public  String getNomeArquivo(){return nomeArquivo;}
+    public String getExtensao(){return EXTENSAO;}
+    public  String getconteudoFile(){return conteudoFile;}
+*/
 
     @Override
     public void setConteudoArquivo(String novoConteudo) {this.conteudoFile=novoConteudo;}

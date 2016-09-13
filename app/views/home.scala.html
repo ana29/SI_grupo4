@@ -1,8 +1,3 @@
-@import controllers.routes
-@import controllers.routes
-@import controllers.routes
-@import controllers.routes
-@import controllers.routes
 @(usuario: Usuario)
 
 @main("SIBox"){
@@ -32,7 +27,6 @@
                 <a href="@routes.HomeController.chamaTexto()"><i style="margin-right: 8px" class="material-icons">note_add</i> </a>
                 <i style="margin-right: 15px"></i>
                 <span>@session().get("login")</span>
-                <a href="@routes.HomeController.chamaTextoMd()"><i style="margin-right: 8px" class="material-icons">note_add</i> </a>
                 <i style="margin-right: 15px"></i>
                 <a href="@routes.HomeController.logOut()"><i class="material-icons">power_settings_new</i></a>
 
@@ -52,18 +46,17 @@
             @for(arquivo <- usuario.getPastaPessoal.getArquivos) {
                 <div class="thumbnail">
                     <i class="material-icons">description
+                        @*<span>@pasta.getArquivos.size() folders / @pasta.getA.size() files</span>*@
                     </i>
                     <a href="/abreArquivo/@arquivo.getNomeArquivo">@arquivo.getNomeArquivo</a>
-                }
-
                 </div>
-
+            }
         </main>
 
         <div id="boxes">
             <form id="dialog" class="window" action="@routes.HomeController.criaPasta()">
-                <a href="#" class="close">x</a>
-                <div><h3>Nova Pasta</h3></div>
+                @*<a href="#" class="close"> Fechar [X]</a>*@
+                <h3>Nova Pasta</h3>
                 <p>
                     Nome: <input id="input" name="nome" type="text" required autocomplete="off"/><br>
                     <input id="buttom" type="submit" value="Criar">
