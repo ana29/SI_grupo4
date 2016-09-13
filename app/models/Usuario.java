@@ -8,13 +8,16 @@ public class Usuario {
     public String email;
     public String senha;
     public Diretorio pastaPessoal;
+    public CaixaDeNotificacao caixaDeNotificacao;
     private static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
 
     public Usuario(){
         this.pastaPessoal = new Diretorio("root");
+        this.caixaDeNotificacao = new CaixaDeNotificacao();
     }
 
     public Usuario(String nome, String email, String senha){
+        this.caixaDeNotificacao = new CaixaDeNotificacao();
         this.pastaPessoal = new Diretorio("root");
         this.nome = nome;
         this.email = email;
@@ -24,7 +27,7 @@ public class Usuario {
 
     public void criaSubDiretorio(String nome){
         LOGGER.info("ENTROU NA CRIAÇÃO DO DIRETORIO");
-        if (!pastaPessoal.getSubDiretorios().contains(new Diretorio(nome))){
+        if (!pastaPessoal.containsDiretorio(nome)){
             pastaPessoal.getSubDiretorios().add(new Diretorio(nome));
         }
         else{
@@ -32,7 +35,7 @@ public class Usuario {
             int count = 1;
             while (adicionado == false){
                 String novoNome = nome + "(" + count + ")";
-                if (!pastaPessoal.getSubDiretorios().contains(new Diretorio(novoNome))){
+                if (!pastaPessoal.containsDiretorio(novoNome)){
                     pastaPessoal.getSubDiretorios().add(new Diretorio(novoNome));
                     adicionado = true;
                 }
@@ -41,21 +44,30 @@ public class Usuario {
         }
     }
 
-    public  void addArquivo(String nomeArquivo,String conteudoFile){
-        if (!pastaPessoal.getArquivos().contains(new ArquivoTxt(nomeArquivo, conteudoFile))){
-            pastaPessoal.getArquivos().add(new ArquivoTxt(nomeArquivo, conteudoFile));
+    public  void addArquivo(String nomeArquivo, String conteudoFile, String extensao){
+        if (!pastaPessoal.containsArquivo(nomeArquivo, extensao)){
+            auxExtensao(nomeArquivo, conteudoFile, extensao);
         }
         else{
             boolean adicionado = false;
             int count = 1;
             while (adicionado == false){
-                String novoNome = nomeArquivo + "(" + count + ")";
-                if (!pastaPessoal.getArquivos().contains(new ArquivoTxt(novoNome, conteudoFile))){
-                    pastaPessoal.getArquivos().add(new ArquivoTxt(novoNome, conteudoFile));
+                String novoNome = nomeArquivo+ "(" + count + ")";
+                if (!pastaPessoal.containsArquivo(novoNome, extensao)){
+                    auxExtensao(novoNome, conteudoFile, extensao);
                     adicionado = true;
                 }
                 count ++;
             }
+        }
+    }
+
+    private void auxExtensao(String nomeArquivo, String conteudoFile, String extensao) {
+        if (extensao.equals(".txt")){
+            pastaPessoal.getArquivos().add(new ArquivoTxt(nomeArquivo, conteudoFile));
+        }
+        else{
+            pastaPessoal.getArquivos().add(new ArquivoMd(nomeArquivo, conteudoFile));
         }
     }
 
@@ -94,5 +106,8 @@ public class Usuario {
     public Diretorio getPastaPessoal() {
         return pastaPessoal;
     }
-}
 
+    public CaixaDeNotificacao getCaixaDeNotificacao() {
+        return caixaDeNotificacao;
+    }
+}

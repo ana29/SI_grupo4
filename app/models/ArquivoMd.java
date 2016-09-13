@@ -3,37 +3,28 @@ package models;
 import java.io.File;
 import java.io.FileWriter;
 
-
 /**
- * Created by AnaGodoy on 05/08/16.
- * Implementacao da interface Arquivo para a criacao de arquivos no formato .txt
+ * Created by marco on 10/09/2016.
  */
-public class ArquivoTxt implements Arquivo{
+public class ArquivoMd implements Arquivo {
 
     public String nomeArquivo;
-    private final String EXTENSAO = ".txt";
     private String conteudoFile;
-    public Diretorio pastaPessoal;
+    private final String EXTENSAO = ".md";
+    private Diretorio pastaPessoal;
 
-    public  ArquivoTxt(){
+    public ArquivoMd(){}
 
-
-    }
-
-    public  ArquivoTxt(String nomeArquivo, String conteudoFile){
-        this.nomeArquivo = nomeArquivo;
-        this.conteudoFile = conteudoFile;
+    public ArquivoMd(String nome, String conteudo){
+        this.nomeArquivo = nome;
+        this.conteudoFile = conteudo;
         this.pastaPessoal = new Diretorio("root");
         criarArquivo();
     }
-
-    /**
-     * Metodo que cria arquivos .txt Retorna um erro casa um dos parametros ou ambos sejam null;
-     */
     @Override
     public void criarArquivo() {
 
-        File arquivo = new File(nomeArquivo+".txt");
+        File arquivo = new File(nomeArquivo+".md");
         try(FileWriter escrever = new FileWriter(arquivo)){
             escrever.write((String) conteudoFile);
             escrever.close();
@@ -44,9 +35,14 @@ public class ArquivoTxt implements Arquivo{
         }
     }
 
-
-    public  String getNomeArquivo(){return nomeArquivo;}
+    @Override
+    public String getNomeArquivo() {
+        return this.nomeArquivo;
+    }
+    @Override
     public String getExtensao(){return EXTENSAO;}
-    public  String getconteudoFile(){return conteudoFile;}
-
+    @Override
+    public String getconteudoFile() {
+        return this.conteudoFile;
+    }
 }
