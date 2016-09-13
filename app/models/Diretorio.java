@@ -2,7 +2,6 @@ package models;
 
 import play.data.validation.Constraints;
 
-import javax.validation.Constraint;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,7 @@ public class Diretorio {
     @Constraints.Required
     public  String nome;
     public List<Diretorio> subDiretorios;
-    public List<ArquivoTxt> arquivos;
+    public List<Arquivo> arquivos;
 
 
     public Diretorio(String nome){
@@ -36,7 +35,24 @@ public class Diretorio {
         return this.subDiretorios;
     }
 
-    public List<ArquivoTxt> getArquivos() {
+    public List<Arquivo> getArquivos() {
         return arquivos;
     }
+
+    public boolean containsDiretorio(String nome){
+        for (Diretorio d: this.subDiretorios){
+            if (d.getNome().equals(nome)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean containsArquivo(String nome){
+        for (Arquivo a: this.getArquivos()){
+            if (a.getNomeArquivo().equals(nome)){
+                return true;
+      }
+      }
+     return false;
+     }
 }

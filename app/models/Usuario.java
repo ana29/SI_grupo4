@@ -27,15 +27,15 @@ public class Usuario {
 
     public void criaSubDiretorio(String nome){
         LOGGER.info("ENTROU NA CRIAÇÃO DO DIRETORIO");
-        if (!pastaPessoal.getSubDiretorios().contains(new Diretorio(nome))){
+        if (!pastaPessoal.containsDiretorio(nome)){
             pastaPessoal.getSubDiretorios().add(new Diretorio(nome));
         }
         else{
             boolean adicionado = false;
             int count = 1;
-            while (adicionado == false){
+            while (!adicionado){
                 String novoNome = nome + "(" + count + ")";
-                if (!pastaPessoal.getSubDiretorios().contains(new Diretorio(novoNome))){
+                if (!pastaPessoal.containsDiretorio(novoNome)){
                     pastaPessoal.getSubDiretorios().add(new Diretorio(novoNome));
                     adicionado = true;
                 }
@@ -44,21 +44,31 @@ public class Usuario {
         }
     }
 
-    public  void addArquivo(String nomeArquivo,String conteudoFile){
-        if (!pastaPessoal.getArquivos().contains(new ArquivoTxt(nomeArquivo, conteudoFile))){
-            pastaPessoal.getArquivos().add(new ArquivoTxt(nomeArquivo, conteudoFile));
+    public  void addArquivo(String nomeArquivo, String conteudoFile, String extensao){
+        if (!pastaPessoal.containsArquivo(nomeArquivo+extensao)){
+            auxExtensao(nomeArquivo+extensao, conteudoFile, extensao);
         }
         else{
             boolean adicionado = false;
             int count = 1;
-            while (adicionado == false){
-                String novoNome = nomeArquivo + "(" + count + ")";
-                if (!pastaPessoal.getArquivos().contains(new ArquivoTxt(novoNome, conteudoFile))){
-                    pastaPessoal.getArquivos().add(new ArquivoTxt(novoNome, conteudoFile));
+            while (!adicionado){
+                String novoNome = nomeArquivo+ "(" + count + ")" + extensao;
+                if (!pastaPessoal.containsArquivo(novoNome)){
+                    auxExtensao(novoNome, conteudoFile, extensao);
                     adicionado = true;
                 }
                 count ++;
             }
+        }
+    }
+
+    private void auxExtensao(String nomeArquivo, String conteudoFile, String extensao) {
+        if (extensao.equals(".txt")){
+            pastaPessoal.getArquivos().add(new ArquivoTxt(nomeArquivo, conteudoFile));
+        }
+        else{
+            pastaPessoal.getArquivos().add(new ArquivoMd(nomeArquivo, conteudoFile));
+
         }
     }
 
@@ -68,6 +78,14 @@ public class Usuario {
                 pastaPessoal.getSubDiretorios().remove(d);
             }
         }
+    }
+
+    public void excluirArquivo(String nome){
+        if (pastaPessoal.containsArquivo(nome))
+
+                pastaPessoal.getArquivos().remove(nome);
+
+
     }
 
     public String getNome() {
@@ -102,4 +120,3 @@ public class Usuario {
         return caixaDeNotificacao;
     }
 }
-

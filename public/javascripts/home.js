@@ -53,6 +53,7 @@ $(function(){
     $("#mask").fadeOut();
     $('.window').fadeOut();
   });
+
 });
 
 // $(document).ready(function(){

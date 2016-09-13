@@ -23,8 +23,7 @@ public class HomeController extends Controller {
     private FormFactory formFactory;
     private Util util = new Util();
     private List<Usuario> listaDeUsuarios = new ArrayList<>();
-    private List<ArquivoTxt> listaDeArquivos = new ArrayList<>();
-    //pegar o usuario logado pela sessao e não assim
+    private List<Arquivo> listaDeArquivos = new ArrayList<>();
     private Usuario usuarioLogado = null;
     private static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
 
@@ -34,6 +33,7 @@ public class HomeController extends Controller {
      */
     public Result cadastrarUsuario(){
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
+
         if (verificaCredenciais(usuario.getNome(), usuario.getEmail(), usuario.getSenha())) {
             listaDeUsuarios.add(usuario);
             flash("sucesso", "Cadastrado com sucesso.");
@@ -48,6 +48,7 @@ public class HomeController extends Controller {
     public Result logar(){
 
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
+        listaDeUsuarios.add(usuario);
 
         try {
             if (validarLogin(usuario.getEmail(), usuario.getSenha())){
@@ -57,9 +58,17 @@ public class HomeController extends Controller {
             flash("erro", e.getMessage());
             return redirect(routes.HomeController.index());
         }
+        return redirect(routes.HomeController.index());
+    }
 
+    public Result logar(){
 
-        return null;
+        Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
+
+        if (validarLogin(usuario.getEmail(), usuario.getSenha())){
+            return redirect(routes.HomeController.chamarHome());
+        }
+        return redirect(routes.HomeController.index());
     }
 
     /**
@@ -67,7 +76,6 @@ public class HomeController extends Controller {
      * @return O redirecionamento para a tela de login.
      */
     public Result logOut(){
-
         usuarioLogado = null;
         session().clear();
 
@@ -135,6 +143,15 @@ public class HomeController extends Controller {
      */
     public Result chamaTexto(){return ok(texto.render(listaDeArquivos));}
 
+    public Result chamaTextoMd(){return ok(textoMd.render(listaDeArquivos));}
+
+    /*public  Result salvaArquivo(){
+
+        Arquivo arquivo = formFactory.form(ArquivoTxt.class).bindFromRequest().get();
+        listaDeArquivos.add(arquivo);
+
+        return redirect(routes.HomeController.chamarHome());}
+*/
     /**
      * Renderiza a página home do usuário após a criação de uma pasta.
      * @return A página home do usuário após a criação de uma pasta.
@@ -170,15 +187,82 @@ public class HomeController extends Controller {
     public Result criaArquivos(){
         ArquivoTxt arquivo = formFactory.form(ArquivoTxt.class).bindFromRequest().get();
         listaDeArquivos.add(arquivo);
-        usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getconteudoFile());
+        usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), ".txt");
         return ok(home.render(usuarioLogado));
     }
+
+    public  Result criaArquivosMd(){
+        ArquivoMd arquivoMd = formFactory.form(ArquivoMd.class).bindFromRequest().get();
+        listaDeArquivos.add(arquivoMd);
+        usuarioLogado.addArquivo(arquivoMd.getNomeArquivo(), arquivoMd.getConteudoArquivo(), ".md");
+        return ok(home.render(usuarioLogado));
+
+    }
+
+    public Result abreArquivo(String nomeArquivo){
+
+        Arquivo arquivo = findFileFromList(nomeArquivo);
+        String conteudo = arquivo.getConteudoArquivo();
+
+        return ok(arquivoConteudo.render(nomeArquivo, conteudo));
+    }
+
+    //__________________________________________________________
+    public Result deletaArquivo(String nomeArquivo){
+        deletFileFromList(nomeArquivo);
+
+        usuarioLogado.excluirArquivo(nomeArquivo);
+
+        return ok(home.render(usuarioLogado));
+    }
+
+    public Result chamaModificaArquivo(String nomeArquivo){
+        Arquivo arquivo=findFileFromList(nomeArquivo);
+
+        return ok(modificaArquivo.render(nomeArquivo, arquivo.getConteudoArquivo()));
+    }
+    public Result editaArquivo(String nomeArquivo){
+
+        ArquivoTxt arquivo = formFactory.form(ArquivoTxt.class).bindFromRequest().get();
+        listaDeArquivos.add(arquivo);
+
+        deletFileFromList(nomeArquivo);
+        usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), ".txt");
+
+        return ok(home.render(usuarioLogado));
+
+    }
+    //_____________________________________________________
+
+    public void deletFileFromList(String nameOfFile){
+        Arquivo arquivo=null;
+        for (int i=0; i< listaDeArquivos.size();i++){
+            if (nameOfFile.equals(listaDeArquivos.get(i).getNomeComExtensao()))
+                 arquivo = listaDeArquivos.get(i);
+                listaDeArquivos.remove(i);
+        }
+        arquivo.deletaArquivoSistema(nameOfFile);
+    }
+
+    public Arquivo findFileFromList(String nomeArquivo){
+        Arquivo arquivo = null ;
+        for (int i=0; i< listaDeArquivos.size();i++){
+            if (nomeArquivo.equals(listaDeArquivos.get(i).getNomeComExtensao()))
+                arquivo =  listaDeArquivos.get(i);
+        }
+        return arquivo;
+    }
+    //_____________________________________________________
     //GETs and SETs
     public List<Usuario> getListaDeUsuarios() {
         return listaDeUsuarios;
     }
-    public List<ArquivoTxt> getListaDeArquivos() {
+
+    public List<Arquivo> getListaDeArquivos() {
         return listaDeArquivos;
     }
+
+
+
 
 }

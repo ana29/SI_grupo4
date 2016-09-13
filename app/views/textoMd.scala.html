@@ -23,28 +23,30 @@
             </div>
         </header>
 
-    <div id="texto_com_content">
-        <center>
-        <form method="post" action="@routes.HomeController.criaArquivos()">
-            <br>
-            <div class="field-wrap">
-                <label>
-                    Nome do arquivo: <span class="req"></span>
-                </label>
+        <div id="texto_com_content">
+            <center>
+                <form action="@routes.HomeController.criaArquivosMd()">
+                    <br>
+                    <div class="field-wrap">
+                        <label>
+                            Nome do arquivo: <span class="req"></span>
+                        </label>
+                        <input style="border: solid 1px;" type="text" name="nomeArquivo"  required autocomplete="off"/>
 
-                <input type="text" style="border: solid 1px;" name="nomeArquivo"  required autocomplete="off"/>
-            </div>
-            <br>
 
-            <textarea  name="conteudoFile" style="border: solid 1px;" cols="100" rows="20"></textarea>
+                    </div>
+                    <br>
 
-            <br>
-            <div style="margin-left: 10%;" class="field-wrap">
-                    <button name="Submit" type="submit"  class="button button-block">Criar</button>
-                    <button name="Reset" type="reset"  class="button button-block">Deletar</button>
-            </div>
-        </form>
-        </center>
-    </div>
+                    <textarea style="border: solid 1px;" name="conteudoFile"  cols="100" rows="20"></textarea>
+
+                    <br>
+                    <div id="texto_html_form_buttons">
+                        <br>
+                        <button name="Submit" type="submit"  class="button button-block">Criar</button>
+                        <button name="Reset" type="reset"  class="button button-block">Deletar</button>
+                    </div>
+                </form>
+            </center>
+        </div>
     </body>
 }

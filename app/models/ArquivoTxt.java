@@ -1,9 +1,8 @@
 package models;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.List;
+import javax.swing.*;
+import java.io.*;
+import java.util.Formatter;
 
 
 /**
@@ -15,9 +14,6 @@ public class ArquivoTxt implements Arquivo{
     public String nomeArquivo;
     public String conteudoFile;
     public Diretorio pastaPessoal;
-    public Diretorio compartilhados;
-    private List<String> compartilhamentoEdicao;
-    private List<String> compartilhamentoLeitura;
 
     public  ArquivoTxt(){
 
@@ -28,61 +24,65 @@ public class ArquivoTxt implements Arquivo{
         this.nomeArquivo = nomeArquivo;
         this.conteudoFile = conteudoFile;
         this.pastaPessoal = new Diretorio("root");
-        this.compartilhamentoEdicao = new ArrayList<>();
-        this.compartilhamentoLeitura= new ArrayList<>();
-        this.compartilhados = new Diretorio();
         criarArquivo();
     }
 
+    /**
+     * Abre o arquivo pelo nome e retorna uma string com o conteudo;
+     * @param nomeArquivo
+     * @return
+     */
+    public String getConteudoArquivo(String nomeArquivo){
+        String conteudoArquivo = null;
+
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(nomeArquivo));
+            while(br.ready()){
+                String linha = br.readLine();
+                conteudoArquivo+=linha;
+            }
+            br.close();
+        }catch(IOException ioe){
+            ioe.printStackTrace();
+        }
+
+        return conteudoArquivo;
+    }
     /**
      * Metodo que cria arquivos .txt Retorna um erro casa um dos parametros ou ambos sejam null;
      */
     @Override
     public void criarArquivo() {
 
-
-            File arquivo = new File(nomeArquivo+".txt");
+            File arquivo = new File(getNomeArquivo());
             try(FileWriter escrever = new FileWriter(arquivo)){
-                escrever.write((String) conteudoFile);
+                escrever.write((String) getConteudoArquivo());
                 escrever.close();
-                //JOptionPane.showMessageDialog(null,"Arquivo '"+nomeArquivo+"' criado!","Arquivo",1);
+
             }
             catch(Exception erro){
-                //JOptionPane.showMessageDialog(null,"Arquivo nao pode ser gerado!","Erro",0);
+            erro.getCause();
             }
 
         }
 
-    @Override
-    public String getNomeArquivo() {
-        return nomeArquivo;
+    public void deletaArquivoSistema(String nomeArquivo){
+        File arquivo = new File(nomeArquivo);
+        arquivo.delete();
+
     }
-
-    public  String getconteudoFile(){return conteudoFile;}
+    @Override
+    public String getNomeArquivo() {return this.nomeArquivo;}
 
     @Override
-    public void compartilharEdicao(String emailUsuario){
-        compartilhamentoEdicao.add(emailUsuario);
-    }
+    public String getConteudoArquivo() {return  this.conteudoFile;}
 
     @Override
-    public void compartilharLeitura(String emailUsuario){
-        compartilhamentoEdicao.add(emailUsuario);
-    }
-
-    @Override
-    public List<String> getCompartilhadosEdicao() {
-        return compartilhamentoEdicao;
+    public String getNomeComExtensao() {
+        return getNomeArquivo()+".txt";
     }
 
     @Override
-    public List<String> getCompartilhadosLeitura() {
-        return compartilhamentoLeitura;
-    }
+    public void setConteudoArquivo(String novoConteudo) {this.conteudoFile=novoConteudo;}
 
-    @Override
-    public String getNomeDono() {
-        //Pegar usuario cadastrado atualmente
-        return "teste";
-    }
 }

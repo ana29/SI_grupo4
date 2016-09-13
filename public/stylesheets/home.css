@@ -230,7 +230,22 @@ main {
     height:203px;
 }
 
-#boxes .close{
-    display:block;
-    text-align:right;
+.close{
+    position: absolute;
+    width: 20px;
+    right: -7px;
+    top: -13px;
+    text-align: center;
+    line-height: 20px;
+    margin-top: 3px;
+    background: #ffffff;
+    border-radius: 50%;
+    font-size: 16px;
+    color: #000000;
+    /*cursor: pointer;*/
+    /*width: 10px;*/
+    /*height: 10px;*/
+    /*background: url("../images/botaox.png");*/
+    /*float: right;*/
+    /*text-align: right;*/
 }
