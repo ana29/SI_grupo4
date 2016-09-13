@@ -175,7 +175,7 @@ public class HomeController extends Controller {
         return ok(arquivoConteudo.render(nomeArquivo, conteudo));
     }
 
-    //__________________________________________________________
+
     public Result deletaArquivo(String nomeArquivo){
         deletFileFromList(nomeArquivo);
 
@@ -189,13 +189,24 @@ public class HomeController extends Controller {
 
         return ok(modificaArquivo.render(nomeArquivo, arquivo.getConteudoArquivo()));
     }
-    public Result editaArquivo(String nomeArquivo){
 
-        ArquivoTxt arquivo = formFactory.form(ArquivoTxt.class).bindFromRequest().get();
+    //__________________________________________________________
+    public Result editaArquivo(String nomeArquivoASerEditado){
+
+        DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
+        String nomeArquivo = (String) form.getData().get("nomeArquivo");
+        String conteudoArquivo = (String) form.getData().get("conteudoFile");
+        String extensao = (String) form.getData().get("extensao");
+
+        Arquivo arquivo;
+        if (extensao.equals(".txt")){
+            arquivo = new ArquivoTxt(nomeArquivo, conteudoArquivo);
+        }
+        else{
+            arquivo = new ArquivoMd(nomeArquivo, conteudoArquivo);
+        }
         listaDeArquivos.add(arquivo);
-
-        deletFileFromList(nomeArquivo);
-        usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), ".txt");
+        usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), extensao);
 
         return ok(home.render(usuarioLogado));
 
@@ -205,7 +216,7 @@ public class HomeController extends Controller {
     public void deletFileFromList(String nameOfFile){
         Arquivo arquivo=null;
         for (int i=0; i< listaDeArquivos.size();i++){
-            if (nameOfFile.equals(listaDeArquivos.get(i).getNomeComExtensao()))
+            if (nameOfFile.equals(listaDeArquivos.get(i).getNomeArquivo()))
                  arquivo = listaDeArquivos.get(i);
                 listaDeArquivos.remove(i);
         }
@@ -215,7 +226,7 @@ public class HomeController extends Controller {
     public Arquivo findFileFromList(String nomeArquivo){
         Arquivo arquivo = null ;
         for (int i=0; i< listaDeArquivos.size();i++){
-            if (nomeArquivo.equals(listaDeArquivos.get(i).getNomeComExtensao()))
+            if (nomeArquivo.equals(listaDeArquivos.get(i).getNomeArquivo()))
                 arquivo =  listaDeArquivos.get(i);
         }
         return arquivo;
