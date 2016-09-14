@@ -16,8 +16,12 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 POST /cadastraUsuario               controllers.HomeController.cadastrarUsuario()
 POST /logar                         controllers.HomeController.logar()
+POST /criaArquivos                  controllers.HomeController.criaArquivos()
 
+<<<<<<< HEAD
+=======
 GET /Login                          controllers.HomeController.chamarLogin()
+>>>>>>> c904584f076988e4ef402133e69c36a897d4498d
 GET /logOut                         controllers.HomeController.logOut()
 GET /criaPasta                      controllers.HomeController.criaPasta()
 GET /Caixa                          controllers.HomeController.chamarCaixa()

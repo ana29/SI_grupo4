@@ -8,17 +8,20 @@ public class Usuario {
     public String email;
     public String senha;
     public Diretorio pastaPessoal;
+    public Diretorio compartilhados;
     public CaixaDeNotificacao caixaDeNotificacao;
     private static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
 
     public Usuario(){
         this.pastaPessoal = new Diretorio("root");
+        this.compartilhados = new Diretorio("Compartilhados");
         this.caixaDeNotificacao = new CaixaDeNotificacao();
     }
 
     public Usuario(String nome, String email, String senha){
         this.caixaDeNotificacao = new CaixaDeNotificacao();
         this.pastaPessoal = new Diretorio("root");
+        this.compartilhados = new Diretorio("Compartilhados");
         this.nome = nome;
         this.email = email;
         this.senha = senha;
@@ -45,15 +48,15 @@ public class Usuario {
     }
 
     public  void addArquivo(String nomeArquivo, String conteudoFile, String extensao){
-        if (!pastaPessoal.containsArquivo(nomeArquivo+extensao)){
-            auxExtensao(nomeArquivo+extensao, conteudoFile, extensao);
+        if (!pastaPessoal.containsArquivo(nomeArquivo, extensao)){
+            auxExtensao(nomeArquivo, conteudoFile, extensao);
         }
         else{
             boolean adicionado = false;
             int count = 1;
             while (!adicionado){
-                String novoNome = nomeArquivo+ "(" + count + ")" + extensao;
-                if (!pastaPessoal.containsArquivo(novoNome)){
+                String novoNome = nomeArquivo+ "(" + count + ")";
+                if (!pastaPessoal.containsArquivo(novoNome, extensao)){
                     auxExtensao(novoNome, conteudoFile, extensao);
                     adicionado = true;
                 }
@@ -81,11 +84,8 @@ public class Usuario {
     }
 
     public void excluirArquivo(String nome){
-        if (pastaPessoal.containsArquivo(nome))
-
+        if (pastaPessoal.containsArquivo(nome, ""))
                 pastaPessoal.getArquivos().remove(nome);
-
-
     }
 
     public String getNome() {
@@ -116,7 +116,10 @@ public class Usuario {
         return pastaPessoal;
     }
 
+    public Diretorio getCompartilhados(){ return compartilhados;}
+
     public CaixaDeNotificacao getCaixaDeNotificacao() {
         return caixaDeNotificacao;
     }
 }
+

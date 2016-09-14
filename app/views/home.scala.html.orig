@@ -36,6 +36,10 @@
 
                 <i style="margin-right: 15px"></i>
                 <span>@session().get("login")</span>
+<<<<<<< HEAD
+		<a href="@routes.HomeController.chamaTextoMd()"><i style="margin-right: 8px" class="material-icons">note_add</i> </a>
+=======
+>>>>>>> c904584f076988e4ef402133e69c36a897d4498d
                 <i style="margin-right: 15px"></i>
                 <a href="@routes.HomeController.logOut()"><i class="material-icons">power_settings_new</i></a>
 

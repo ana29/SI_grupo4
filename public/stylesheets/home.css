@@ -187,10 +187,28 @@ main {
     padding:20px;
     height: 120px;
 }
+#share .window2 {
+    border-radius: 10px;
+    position:absolute;
+    left:0;
+    top:0;
+    display:none;
+    z-index:9999;
+    padding:20px;
+    height: 120px;
+}
+
 
 #boxes #dialog {
     width:250px;
     height:130px;
+    padding:0;
+    background-color:#ffffff;
+}
+
+#share #dialog2 {
+    width:200px;
+    height:120px;
     padding:0;
     background-color:#ffffff;
 }
@@ -206,8 +224,23 @@ main {
     background: -moz-linear-gradient(top, #2e5764, #1e3d47);
     background: -webkit-gradient(linear,left bottom,left top,color-stop(0, #1e3d47),color-stop(1, #2e5764));
 }
+#share h3{
+    height: 33px;
+    color: white;
+    margin: 0px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    text-align: center;
+    background: -moz-linear-gradient(top, #2e5764, #1e3d47);
+    background: -webkit-gradient(linear,left bottom,left top,color-stop(0, #1e3d47),color-stop(1, #2e5764));
+}
 
 #boxes p{
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#share p{
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
 }

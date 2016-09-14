@@ -2,7 +2,9 @@ package models;
 
 import javax.swing.*;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.List;
 
 
 /**
@@ -12,8 +14,11 @@ import java.util.Formatter;
 public class ArquivoTxt implements Arquivo{
 
     public String nomeArquivo;
-    public String conteudoFile;
+    private final String EXTENSAO = ".txt";
+    private String conteudoFile;
     public Diretorio pastaPessoal;
+    private List<String> compartilhadosEdicao;
+    private List<String> compartilhadosLeitura;
 
     public  ArquivoTxt(){
 
@@ -24,6 +29,8 @@ public class ArquivoTxt implements Arquivo{
         this.nomeArquivo = nomeArquivo;
         this.conteudoFile = conteudoFile;
         this.pastaPessoal = new Diretorio("root");
+        this.compartilhadosEdicao = new ArrayList<>();
+        this.compartilhadosLeitura = new ArrayList<>();
         criarArquivo();
     }
 
@@ -54,7 +61,7 @@ public class ArquivoTxt implements Arquivo{
     @Override
     public void criarArquivo() {
 
-            File arquivo = new File(getNomeArquivo());
+            File arquivo = new File(getNomeArquivo()+EXTENSAO);
             try(FileWriter escrever = new FileWriter(arquivo)){
                 escrever.write((String) getConteudoArquivo());
                 escrever.close();
@@ -71,6 +78,10 @@ public class ArquivoTxt implements Arquivo{
         arquivo.delete();
 
     }
+
+    @Override
+    public String getExtensao(){return EXTENSAO;}
+
     @Override
     public String getNomeArquivo() {return this.nomeArquivo;}
 
@@ -78,11 +89,12 @@ public class ArquivoTxt implements Arquivo{
     public String getConteudoArquivo() {return  this.conteudoFile;}
 
     @Override
-    public String getNomeComExtensao() {
-        return getNomeArquivo()+".txt";
+    public List<String> getCompartilhadosEdicao() {
+        return compartilhadosEdicao;
     }
 
     @Override
-    public void setConteudoArquivo(String novoConteudo) {this.conteudoFile=novoConteudo;}
-
+    public List<String> getCompartilhadosLeitura() {
+        return compartilhadosLeitura;
+    }
 }
