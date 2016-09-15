@@ -166,6 +166,14 @@ public class HomeController extends Controller {
         return ok(arquivoConteudo.render(nomeArquivo, conteudo));
     }
 
+    public Result leituraArquivo(String nomeArquivo){
+
+        Arquivo arquivo = findFileFromList(nomeArquivo);
+        String conteudo = arquivo.getConteudoArquivo();
+
+        return ok(leituraArquivo.render(nomeArquivo, conteudo));
+    }
+
 
     public Result deletaArquivo(String nomeArquivo){
         deletFileFromList(nomeArquivo);

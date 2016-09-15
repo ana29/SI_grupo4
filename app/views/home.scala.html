@@ -44,16 +44,17 @@
                 </div>
             }
 
-
-
-
-
             @for(arquivo <- usuario.getCompartilhados.getArquivos) {
                 <div class="thumbnail">
                     <i class="material-icons">description
                         @*<span>@pasta.getArquivos.size() folders / @pasta.getA.size() files</span>*@
                     </i>
-                    <a href="/abreArquivo/@arquivo.getNomeArquivo">@arquivo.getNomeArquivo</a>
+                    @if(arquivo.getCompartilhadosEdicao.contains(usuario.getEmail)) {
+                        <a href="/abreArquivo/@arquivo.getNomeArquivo">@arquivo.getNomeArquivo</a>
+                    }
+                    @if(arquivo.getCompartilhadosLeitura.contains(usuario.getEmail)){
+                        <a href="/leituraArquivo/@arquivo.getNomeArquivo">@arquivo.getNomeArquivo</a>
+                    }
                 </div>
             }
 
@@ -90,9 +91,9 @@
                     Arquivo: <input id="input" name="nomeArquivo" type="text" required autocomplete="off"/><br/>
                     E-mail:   <input id="input" name="emailUsuario" type="text" required autocomplete="off"/><br/>
 
-                        <input id="radio" type="radio" name="tipo" value="edicao"/>Edição
+                        <input id="radio" type="radio" name="tipo" value="edicao" required/>Edição
 
-                        <input id="radio" type="radio" name="tipo" value="leitura"/>Leitura
+                        <input id="radio" type="radio" name="tipo" value="leitura" required/>Leitura
 
                     <input id="button" type="submit" value="Compartilhar"/>
                 </p>
