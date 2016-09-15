@@ -47,7 +47,6 @@ public class ArquivoTxt implements Arquivo{
 
         }
 
-
     public  String getNomeArquivo(){return nomeArquivo;}
     public  String getconteudoFile(){return conteudoFile;}
 

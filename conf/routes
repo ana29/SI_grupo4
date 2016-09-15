@@ -28,3 +28,5 @@ GET /Caixa                          controllers.HomeController.chamarCaixa()
 
 GET /criaArquivos                   controllers.HomeController.criaArquivos()
 GET /chamaTexto                     controllers.HomeController.chamaTexto()
+GET /editaPasta/                    controllers.HomeController.editaNomePasta()
+POST /                              controllers.HomeController.excluirPasta()

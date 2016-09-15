@@ -70,6 +70,15 @@ public class Usuario {
         }
     }
 
+    public Diretorio getDiretorio(String nome){
+        for (Diretorio dir: pastaPessoal.subDiretorios) {
+            if (dir.getNome().equals(nome)){
+                return dir;
+            }
+        }
+        return null;
+    }
+
     public String getNome() {
         return nome;
     }
