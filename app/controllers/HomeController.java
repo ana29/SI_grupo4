@@ -256,6 +256,7 @@ public class HomeController extends Controller {
             if (usuario.getEmail().equals(emailUsuario)){
                 Arquivo procurado = findFileFromList(nomeArquivo);
                 procurado.getCompartilhadosEdicao().add(emailUsuario);
+                usuario.getCompartilhados().getArquivos().add(procurado);
                 Notificacao edicao = new NotificacaoDeEdicao(usuarioLogado.getNome());
                 usuario.getCaixaDeNotificacao().getCaixaDeNotificacao().add(edicao);
             }
@@ -267,6 +268,7 @@ public class HomeController extends Controller {
             if(usuario.getEmail().equals(emailUsuario)) {
                 Arquivo procurado = findFileFromList(nomeArquivo);
                 procurado.getCompartilhadosLeitura().add(emailUsuario);
+                usuario.getCompartilhados().getArquivos().add(procurado);
                 Notificacao leitura = new NotificacaoDeLeitura(usuarioLogado.getNome());
                 usuario.getCaixaDeNotificacao().getCaixaDeNotificacao().add(leitura);
             }

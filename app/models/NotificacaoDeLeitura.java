@@ -11,6 +11,6 @@ public class NotificacaoDeLeitura implements Notificacao{
         this.remetente = nomeRemetente;
     }
     public String getMensagem(){
-        return this.remetente + " lhe convidou para editar um arquivo";
+        return this.remetente + " lhe convidou para visualizar um arquivo";
     }
 }
