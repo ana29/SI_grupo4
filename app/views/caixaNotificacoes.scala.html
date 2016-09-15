@@ -24,11 +24,11 @@
         </header>
 
         <main id="main">
-        @for(mensagem <- usuario.getCaixaDeNotificacao.getCaixaDeNotificacao) {
-            <div>
-                <h1>@mensagem.getMensagem</h1>
-            </div>
-        }
+            @for(mensagem <- usuario.getCaixaDeNotificacao.getCaixaDeNotificacao) {
+                <div>
+                    <h1>@mensagem.getMensagem</h1>
+                </div>
+            }
         </main>
 
     </body>

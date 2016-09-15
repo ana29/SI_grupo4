@@ -15,19 +15,27 @@ public class CaixaDeNotificacao {
 
     public CaixaDeNotificacao(){
         this.caixaDeNotificacao = new ArrayList<>();
-        Notificacao not = new NotificacaoDeLeitura("Marcos");
-        Notificacao not2 = new NotificacaoDeEdicao("Marcos");
-
-        //Só para testar
-        caixaDeNotificacao.add(not);
-        caixaDeNotificacao.add(not2);
-//        caixaDeNotificacao.add("Mensagem 1");
-//        caixaDeNotificacao.add("Mensagem 2");
+//        Notificacao not = new NotificacaoDeLeitura("Marcos");
+//        Notificacao not2 = new NotificacaoDeEdicao("Marcos");
+//
+//        //Só para testar
+//        caixaDeNotificacao.add(not);
+//        caixaDeNotificacao.add(not2);
+////        caixaDeNotificacao.add("Mensagem 1");
+////        caixaDeNotificacao.add("Mensagem 2");
 
     }
 
     public List<Notificacao> getCaixaDeNotificacao() {
         return this.caixaDeNotificacao;
+    }
+
+    public void notificaEdicao(String nome){
+        caixaDeNotificacao.add(new NotificacaoDeEdicao(nome));
+    }
+
+    public void notificaLeitura(String nome){
+        caixaDeNotificacao.add(new NotificacaoDeLeitura(nome));
     }
 
 }

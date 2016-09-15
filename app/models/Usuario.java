@@ -8,17 +8,20 @@ public class Usuario {
     public String email;
     public String senha;
     public Diretorio pastaPessoal;
+    public Diretorio compartilhados;
     public CaixaDeNotificacao caixaDeNotificacao;
     private static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
 
     public Usuario(){
         this.pastaPessoal = new Diretorio("root");
+        this.compartilhados = new Diretorio("Compartilhados");
         this.caixaDeNotificacao = new CaixaDeNotificacao();
     }
 
     public Usuario(String nome, String email, String senha){
         this.caixaDeNotificacao = new CaixaDeNotificacao();
         this.pastaPessoal = new Diretorio("root");
+        this.compartilhados = new Diretorio("Compartilhados");
         this.nome = nome;
         this.email = email;
         this.senha = senha;
@@ -33,7 +36,7 @@ public class Usuario {
         else{
             boolean adicionado = false;
             int count = 1;
-            while (adicionado == false){
+            while (!adicionado){
                 String novoNome = nome + "(" + count + ")";
                 if (!pastaPessoal.containsDiretorio(novoNome)){
                     pastaPessoal.getSubDiretorios().add(new Diretorio(novoNome));
@@ -51,7 +54,7 @@ public class Usuario {
         else{
             boolean adicionado = false;
             int count = 1;
-            while (adicionado == false){
+            while (!adicionado){
                 String novoNome = nomeArquivo+ "(" + count + ")";
                 if (!pastaPessoal.containsArquivo(novoNome, extensao)){
                     auxExtensao(novoNome, conteudoFile, extensao);
@@ -68,6 +71,7 @@ public class Usuario {
         }
         else{
             pastaPessoal.getArquivos().add(new ArquivoMd(nomeArquivo, conteudoFile));
+
         }
     }
 
@@ -77,6 +81,11 @@ public class Usuario {
                 pastaPessoal.getSubDiretorios().remove(d);
             }
         }
+    }
+
+    public void excluirArquivo(String nome){
+        if (pastaPessoal.containsArquivo(nome, ""))
+                pastaPessoal.getArquivos().remove(nome);
     }
 
     public String getNome() {
@@ -107,7 +116,10 @@ public class Usuario {
         return pastaPessoal;
     }
 
+    public Diretorio getCompartilhados(){ return compartilhados;}
+
     public CaixaDeNotificacao getCaixaDeNotificacao() {
         return caixaDeNotificacao;
     }
 }
+

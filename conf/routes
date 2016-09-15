@@ -4,7 +4,6 @@
 
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index
-
 # An example controller showing how to write asynchronous code
 GET     /message                    controllers.AsyncController.message
 
@@ -16,15 +15,23 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 POST /cadastraUsuario               controllers.HomeController.cadastrarUsuario()
 POST /logar                         controllers.HomeController.logar()
 
-GET /Login                          controllers.HomeController.chamarLogin()
-GET /Cadastro                       controllers.HomeController.chamarCadastro()
-GET /usuario                        controllers.HomeController.menuUsuario()
 GET /logOut                         controllers.HomeController.logOut()
 GET /criaPasta                      controllers.HomeController.criaPasta()
-GET /chamarCaixa                    controllers.HomeController.chamarCaixa()
+GET /Caixa                          controllers.HomeController.chamarCaixa()
+
+GET /compartilha                    controllers.HomeController.compartilha()
 
 #POST /salvaArquivo                  controllers.HomeController.salvaArquivo()
 
 GET /criaArquivos                   controllers.HomeController.criaArquivos()
 GET /chamaTexto                     controllers.HomeController.chamaTexto()
+
+
+GET /abreArquivo/:nomeArquivo       controllers.HomeController.abreArquivo(nomeArquivo: String)
+GET /leituraArquivo/:nomeArquivo    controllers.HomeController.leituraArquivo(nomeArquivo: String)
+GET /deletaArquivo/:nomeArquivo     controllers.HomeController.deletaArquivo(nomeArquivo: String)
+GET /modificaArquivo/:nomeArquivo   controllers.HomeController.chamaModificaArquivo(nomeArquivo: String)
+GET /editaArquivo/:nomeArquivo      controllers.HomeController.editaArquivo(nomeArquivo:String)
+
+
 

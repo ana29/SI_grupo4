@@ -3,8 +3,9 @@ package controllers;
 import models.*;
 import play.data.DynamicForm;
 import play.data.FormFactory;
-import play.mvc.Controller;
-import play.mvc.Result;
+import play.mvc.*;
+
+
 import views.html.*;
 
 import javax.inject.Inject;
@@ -27,29 +28,50 @@ public class HomeController extends Controller {
     private Usuario usuarioLogado = null;
     private static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
 
+    /**
+     * Cadastra um usuário no sistema
+     * @return O redirecionamento para o login
+     */
     public Result cadastrarUsuario(){
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
+
         if (verificaCredenciais(usuario.getNome(), usuario.getEmail(), usuario.getSenha())) {
             listaDeUsuarios.add(usuario);
+            flash("sucesso", "Cadastrado com sucesso.");
         }
         return redirect(routes.HomeController.index());
     }
 
-    public Result escreverTexto(){
-        Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
-        listaDeUsuarios.add(usuario);
+//    public Result escreverTexto(){
+//        Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
+//        listaDeUsuarios.add(usuario);
+//
+//        try {
+//            if (validarLogin(usuario.getEmail(), usuario.getSenha())){
+//                return redirect(routes.HomeController.chamarHome());
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return redirect(routes.HomeController.index());
+//    }
 
-        if (validarLogin(usuario.getEmail(), usuario.getSenha())){
-            return redirect(routes.HomeController.chamarHome());
-        }
-        return redirect(routes.HomeController.index());
-    }
+     //   if (validarLogin(usuario.getEmail(), usuario.getSenha())){
+     //       return redirect(routes.HomeController.chamarHome());
+     //   }
+   //     return redirect(routes.HomeController.index());
+  //  }
     public Result logar(){
 
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
 
-        if (validarLogin(usuario.getEmail(), usuario.getSenha())){
-            return redirect(routes.HomeController.chamarHome());
+        try {
+            if (validarLogin(usuario.getEmail(), usuario.getSenha())){
+                return redirect(routes.HomeController.chamarHome());
+            }
+        } catch (Exception e) {
+            flash("erro", e.getMessage());
+            return redirect(routes.HomeController.index());
         }
         return redirect(routes.HomeController.index());
     }
@@ -57,25 +79,26 @@ public class HomeController extends Controller {
     public Result logOut(){
 
         usuarioLogado = null;
+        session().clear();
 
         return redirect(routes.HomeController.index());
     }
 
     //Validacao
-    public boolean validarLogin(String email, String senha){
+    private boolean validarLogin(String email, String senha) throws Exception {
 
-        for (int i = 0; i < listaDeUsuarios.size(); i++){
-            Usuario usuario = listaDeUsuarios.get(i);
-            if (usuario.getEmail().equals(email)){
-                if (usuario.getSenha().equals(senha)){
+        for (Usuario usuario : listaDeUsuarios) {
+            if (usuario.getEmail().equals(email)) {
+                if (usuario.getSenha().equals(senha)) {
                     usuarioLogado = usuario;
+                    session("login", usuario.getEmail());
                     return true;
-                }else{
-                    return false;
+                } else {
+                    throw new Exception("Login ou senha incorretos.");
                 }
             }
         }
-        return false;
+        throw new Exception("Usuario inexistente");
     }
 
     private Boolean verificaCredenciais(String nome, String email, String senha){
@@ -87,18 +110,6 @@ public class HomeController extends Controller {
         return ok(index.render());
     }
 
-    public Result chamarLogin() {
-        return ok(login.render(listaDeUsuarios));
-    }
-
-    public Result chamarCadastro() {
-        return ok(cadastro.render(listaDeUsuarios));
-    }
-
-    public Result menuUsuario(){
-        return ok(usuario.render(usuarioLogado));
-    }
-
     public Result chamarHome() {
         return ok(home.render(usuarioLogado));
     }
@@ -108,9 +119,12 @@ public class HomeController extends Controller {
 
     public Result chamaTexto(){return ok(texto.render(listaDeArquivos));}
 
+
     /*public  Result salvaArquivo(){
+
         Arquivo arquivo = formFactory.form(ArquivoTxt.class).bindFromRequest().get();
         listaDeArquivos.add(arquivo);
+
         return redirect(routes.HomeController.chamarHome());}
 */
     public Result criaPasta(){
@@ -139,17 +153,134 @@ public class HomeController extends Controller {
             arquivo = new ArquivoMd(nomeArquivo, conteudoArquivo);
         }
         listaDeArquivos.add(arquivo);
-        usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getconteudoFile(), extensao);
+        usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), extensao);
         return ok(home.render(usuarioLogado));
     }
 
 
+    public Result abreArquivo(String nomeArquivo){
+
+        Arquivo arquivo = findFileFromList(nomeArquivo);
+        String conteudo = arquivo.getConteudoArquivo();
+
+        return ok(arquivoConteudo.render(nomeArquivo, conteudo));
+    }
+
+    public Result leituraArquivo(String nomeArquivo){
+
+        Arquivo arquivo = findFileFromList(nomeArquivo);
+        String conteudo = arquivo.getConteudoArquivo();
+
+        return ok(leituraArquivo.render(nomeArquivo, conteudo));
+    }
+
+
+    public Result deletaArquivo(String nomeArquivo){
+        deletFileFromList(nomeArquivo);
+
+        usuarioLogado.excluirArquivo(nomeArquivo);
+
+        return ok(home.render(usuarioLogado));
+    }
+
+    public Result chamaModificaArquivo(String nomeArquivo){
+        Arquivo arquivo=findFileFromList(nomeArquivo);
+
+        return ok(modificaArquivo.render(nomeArquivo, arquivo.getConteudoArquivo()));
+    }
+
+    //__________________________________________________________
+    public Result editaArquivo(String nomeArquivoASerEditado){
+
+        DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
+        String nomeArquivo = (String) form.getData().get("nomeArquivo");
+        String conteudoArquivo = (String) form.getData().get("conteudoFile");
+        String extensao = (String) form.getData().get("extensao");
+
+        Arquivo arquivo;
+        if (extensao.equals(".txt")){
+            arquivo = new ArquivoTxt(nomeArquivo, conteudoArquivo);
+        }
+        else{
+            arquivo = new ArquivoMd(nomeArquivo, conteudoArquivo);
+        }
+        listaDeArquivos.add(arquivo);
+        usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), extensao);
+
+        return ok(home.render(usuarioLogado));
+
+    }
+    //_____________________________________________________
+
+    public void deletFileFromList(String nameOfFile){
+        Arquivo arquivo=null;
+        for (int i=0; i< listaDeArquivos.size();i++){
+            if (nameOfFile.equals(listaDeArquivos.get(i).getNomeArquivo()))
+                 arquivo = listaDeArquivos.get(i);
+                listaDeArquivos.remove(i);
+        }
+        arquivo.deletaArquivoSistema(nameOfFile);
+    }
+
+    public Arquivo findFileFromList(String nomeArquivo){
+        Arquivo arquivo = null ;
+        for (int i=0; i< listaDeArquivos.size();i++){
+            if (nomeArquivo.equals(listaDeArquivos.get(i).getNomeArquivo()))
+                arquivo =  listaDeArquivos.get(i);
+        }
+        return arquivo;
+    }
+    //_____________________________________________________
     //GETs and SETs
     public List<Usuario> getListaDeUsuarios() {
         return listaDeUsuarios;
     }
     public List<Arquivo> getListaDeArquivos() {
         return listaDeArquivos;
+    }
+
+
+    /*
+     * Compartilhamento
+     */
+
+    public Result compartilha(){
+
+        DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
+        String nomeArquivo = (String) form.getData().get("nomeArquivo");
+        String emailUsuario = (String) form.getData().get("emailUsuario");
+        String tipo = (String) form.getData().get("tipo");
+
+        if (tipo.equals("edicao"))
+            compartilhaEdicao(emailUsuario, nomeArquivo);
+        else
+            compartilhaLeitura(emailUsuario, nomeArquivo);
+
+        return ok(home.render(usuarioLogado));
+    }
+
+    public void compartilhaEdicao(String emailUsuario, String nomeArquivo){
+        for (Usuario usuario: listaDeUsuarios) {
+            if (usuario.getEmail().equals(emailUsuario)){
+                Arquivo procurado = findFileFromList(nomeArquivo);
+                procurado.getCompartilhadosEdicao().add(emailUsuario);
+                usuario.getCompartilhados().getArquivos().add(procurado);
+                Notificacao edicao = new NotificacaoDeEdicao(usuarioLogado.getNome());
+                usuario.getCaixaDeNotificacao().getCaixaDeNotificacao().add(edicao);
+            }
+        }
+    }
+
+    public void compartilhaLeitura(String emailUsuario, String nomeArquivo){
+        for (Usuario usuario: listaDeUsuarios) {
+            if(usuario.getEmail().equals(emailUsuario)) {
+                Arquivo procurado = findFileFromList(nomeArquivo);
+                procurado.getCompartilhadosLeitura().add(emailUsuario);
+                usuario.getCompartilhados().getArquivos().add(procurado);
+                Notificacao leitura = new NotificacaoDeLeitura(usuarioLogado.getNome());
+                usuario.getCaixaDeNotificacao().getCaixaDeNotificacao().add(leitura);
+            }
+        }
     }
 
 }
