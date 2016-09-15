@@ -1,9 +1,7 @@
 package models;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.Formatter;
 
 
 /**
@@ -12,7 +10,8 @@ import java.util.Formatter;
  */
 public class ArquivoTxt implements Arquivo{
 
-    private String nomeArquivo;
+    public String nomeArquivo;
+    private final String EXTENSAO = ".txt";
     private String conteudoFile;
     public Diretorio pastaPessoal;
 
@@ -34,7 +33,6 @@ public class ArquivoTxt implements Arquivo{
     @Override
     public void criarArquivo() {
 
-
             File arquivo = new File(nomeArquivo+".txt");
             try(FileWriter escrever = new FileWriter(arquivo)){
                 escrever.write((String) conteudoFile);
@@ -44,10 +42,10 @@ public class ArquivoTxt implements Arquivo{
             catch(Exception erro){
                 //JOptionPane.showMessageDialog(null,"Arquivo nao pode ser gerado!","Erro",0);
             }
-
         }
 
     public  String getNomeArquivo(){return nomeArquivo;}
+    public String getExtensao(){return EXTENSAO;}
     public  String getconteudoFile(){return conteudoFile;}
 
 }

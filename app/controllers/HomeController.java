@@ -1,8 +1,10 @@
 package controllers;
 
 import models.*;
-import org.apache.commons.lang3.reflect.ConstructorUtils;
+import play.data.DynamicForm;
 import play.data.FormFactory;
+import play.mvc.Controller;
+import play.mvc.Result;
 import play.mvc.*;
 
 
@@ -25,7 +27,7 @@ public class HomeController extends Controller {
     private FormFactory formFactory;
     private Util util = new Util();
     private List<Usuario> listaDeUsuarios = new ArrayList<>();
-    private List<ArquivoTxt> listaDeArquivos = new ArrayList<>();
+    private List<Arquivo> listaDeArquivos = new ArrayList<>();
     private Usuario usuarioLogado = null;
     private static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
 
@@ -110,7 +112,6 @@ public class HomeController extends Controller {
 
     public Result chamaTexto(){return ok(texto.render(listaDeArquivos));}
 
-
     /*public  Result salvaArquivo(){
 
         Arquivo arquivo = formFactory.form(ArquivoTxt.class).bindFromRequest().get();
@@ -146,17 +147,29 @@ public class HomeController extends Controller {
     }
 
     public Result criaArquivos(){
-        ArquivoTxt arquivo = formFactory.form(ArquivoTxt.class).bindFromRequest().get();
+        DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
+        String nomeArquivo = (String) form.getData().get("nomeArquivo");
+        String conteudoArquivo = (String) form.getData().get("conteudoFile");
+        String extensao = (String) form.getData().get("extensao");
+
+        Arquivo arquivo;
+        if (extensao.equals(".txt")){
+            arquivo = new ArquivoTxt(nomeArquivo, conteudoArquivo);
+        }
+        else{
+            arquivo = new ArquivoMd(nomeArquivo, conteudoArquivo);
+        }
         listaDeArquivos.add(arquivo);
-        usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getconteudoFile());
+        usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getconteudoFile(), extensao);
         return ok(home.render(usuarioLogado));
     }
+
 
     //GETs and SETs
     public List<Usuario> getListaDeUsuarios() {
         return listaDeUsuarios;
     }
-    public List<ArquivoTxt> getListaDeArquivos() {
+    public List<Arquivo> getListaDeArquivos() {
         return listaDeArquivos;
     }
 }
