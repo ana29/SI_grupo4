@@ -27,7 +27,6 @@ public class HomeController extends Controller {
     private List<Arquivo> listaDeArquivos = new ArrayList<>();
     private Usuario usuarioLogado = null;
     private static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
-    private static final Logger LOGGER2 = Logger.getLogger(Logger.class.getName());
 
     /**
      * Cadastra um usuário no sistema
@@ -99,7 +98,7 @@ public class HomeController extends Controller {
                 }
             }
         }
-        throw new Exception("Usuario inesistente");
+        throw new Exception("Usuario inexistente");
     }
 
     private Boolean verificaCredenciais(String nome, String email, String senha){
@@ -109,10 +108,6 @@ public class HomeController extends Controller {
     //Renders
     public Result index() {
         return ok(index.render());
-    }
-
-    public Result chamarLogin() {
-        return ok(login.render(listaDeUsuarios));
     }
 
     public Result chamarHome() {
@@ -242,7 +237,6 @@ public class HomeController extends Controller {
      */
 
     public Result compartilha(){
-        LOGGER2.info("ENTROU NO CONTROLLER");
 
         DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
         String nomeArquivo = (String) form.getData().get("nomeArquivo");

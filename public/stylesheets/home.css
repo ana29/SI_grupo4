@@ -207,8 +207,8 @@ main {
 }
 
 #share #dialog2 {
-    width:200px;
-    height:120px;
+    width:270px;
+    height:200px;
     padding:0;
     background-color:#ffffff;
 }
@@ -228,6 +228,7 @@ main {
     height: 33px;
     color: white;
     margin: 0px;
+    padding-top: 8px;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     text-align: center;
@@ -241,13 +242,19 @@ main {
 }
 
 #share p{
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    margin: 8px;
+
 }
 
 #input{
     border-radius: 3px;
-    width: 144px;
+    width: 160px;
+    margin: 5px;
+}
+
+#radio{
+    margin-right: 4px;
+    margin-left: 7px;
 }
 
 #buttom{
@@ -256,6 +263,12 @@ main {
     cursor: pointer;
     margin-top: 18px;
     margin-left: 38%;
+}
+
+#button{
+    cursor: pointer;
+    margin-top: 18px;
+    margin-left: 25%;
 }
 
 #boxes #dialog1 {

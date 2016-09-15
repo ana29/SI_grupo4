@@ -27,8 +27,9 @@ var addFolder = function(folder) {
 
 $(function(){
   var $dialog = $('#dialog');
+  var $dialog2 = $('#dialog2');
 
-  var maskHeight = $(document).height();
+  var maskHeight = $(window).height();
   var maskWidth = $(window).width();
 
   $('#mask').css({'width':maskWidth,'height':maskHeight});
@@ -40,16 +41,26 @@ $(function(){
   $dialog.css('top',  winH/2-$dialog.height()/2);
   $dialog.css('left', winW/2-$dialog.width()/2);
 
+  $dialog2.css('top',  winH/2-$dialog2.height()/2);
+  $dialog2.css('left', winW/2-$dialog2.width()/2);
+
   $('.window .close').hide();
 
   $("#boxes").click(function (e) {
     e.preventDefault();
     $('#mask').fadeIn();
     $('.window').fadeIn();
+  });
+
+  $("#share").click(function (e) {
+    e.preventDefault();
+    $('#mask').fadeIn();
+    $('.window2').fadeIn();
     $('.close').fadeIn();
   });
 
-  $(".close").click(function () {
+  $(".close").click(function (e) {
+    e.preventDefault();
     $("#mask").fadeOut();
     $('.window').fadeOut();
   });

@@ -19,6 +19,6 @@ public class Secured extends Security.Authenticator {
     @Override
     public Result onUnauthorized(Context ctx) {
         flash("erro", "Você não está logado no sistema.");
-        return redirect(routes.HomeController.chamarLogin());
+        return redirect(routes.HomeController.index());
     }
 }
