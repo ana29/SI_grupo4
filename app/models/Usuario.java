@@ -88,6 +88,15 @@ public class Usuario {
         return null;
     }
 
+//    public Diretorio getArquivo(String nome){
+//        for (ArquivoTxt arquivo: pastaPessoal.subDiretorios) {
+//            if (arquivo.getNome().equals(nome)){
+//                return dir;
+//            }
+//        }
+//        return null;
+//    }
+
     public String getNome() {
         return nome;
     }

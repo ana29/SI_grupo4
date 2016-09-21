@@ -40,7 +40,6 @@
                             <br>
                             <div>
                                 <button type="button" class="botaoED">Editar Nome</button>
-                                <button type="button" class="botaoEX">Excluir</button>
                             </div>
                         </span>
                     </i>
@@ -54,7 +53,6 @@
                         <span>
                             <div>
                                 <button type="button" class="botaoED">Editar Nome</button>
-                                <button type="button" class="botaoEX">Excluir</button>
                             </div>
                         </span>
                     </i>
@@ -81,24 +79,16 @@
         <div id="boxes2">
             <form id="dialog2" class="window2" action="@routes.HomeController.editaNomePasta()">
                 <a href="#" class="close2">x</a>
-                <div><h3>Renomear</h3></div>
+                <div><h3>Renomear Pasta</h3></div>
                 <p>
                         Nome: <input id="input2" name="nome" type="text" required autocomplete="off"/><br>
-                        <input id="antigoNome" name="antigoNome" type="text" style="display: none">
+                        <input id="antigoNomePasta" name="antigoNomePasta" type="text" style="display: none">
                         <input id="buttom2" type="submit" value="OK">
                 </p>
             </form>
                 <!-- Máscara para cobrir a tela -->
             <div id="mask2"></div>
         </div>
-
-        <div id="alertConfirmaExcluirPasta">
-            <form action="@routes.HomeController.excluirPasta()">
-                <input id="nomePasta" style="display: none" type="submit">
-                <input id="botaoExcluirConfirma" style="display: none" type="submit">
-            </form>
-        </div>
-
         @*<script src="@routes.Assets.at("javascripts/home.js")" type="text/javascript"></script>*@
     </body>
 }

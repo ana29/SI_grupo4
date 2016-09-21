@@ -133,16 +133,16 @@ public class HomeController extends Controller {
 
     public Result editaNomePasta() {
         String nomeNovo = request().getQueryString("nome").trim();
-        String nomeAntigo = request().getQueryString("antigoNome").trim();
+        String nomeAntigo = request().getQueryString("antigoNomePasta").trim();
         Diretorio dir = usuarioLogado.getDiretorio(nomeAntigo);
         dir.setNome(nomeNovo);
         System.out.print(dir.getNome());
         return ok(home.render(usuarioLogado));
     }
 
-    public Result excluirPasta(){
-        String nome = request().getQueryString("nomePasta").trim();
-        usuarioLogado.excluirSubDiretorio(nome);
+    public Result editaNomeArquivo() {
+        String nomeNovo = request().getQueryString("nome").trim();
+        String nomeAntigo = request().getQueryString("antigoNome").trim();
         return ok(home.render(usuarioLogado));
     }
 

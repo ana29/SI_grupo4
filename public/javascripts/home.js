@@ -81,22 +81,14 @@ $(document).ready(function() {
         $('.window2').fadeIn();
         $('.close2').fadeIn();
     });
-    
-    $(".botaoEX").click(function () {
-        alert('Tem certeza ?');
-        var elementoPasta = $(this).closest('.thumbnail');
-        elementoPasta.remove();
-    })
 
     $('#buttom2').click(function () {
+        console.log("ENTROU AQUI")
         var antigoNome = $('#'+IdDaPasta).text();
-        $('#antigoNome').val(antigoNome);
+        console.log(antigoNome);
+        var antigo = $('#antigoNomePasta').val(antigoNome);
+        console.log(antigo);
     });
-
-    $('#botaoExcluirConfirma').click(function () {
-        var nomePasta = $('#'+IdDaPasta).text();
-        $('#nomePasta').val(nomePasta);
-    })
 
     $(".close2").click(function () {
         $("#mask2").fadeOut();
