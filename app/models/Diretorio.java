@@ -56,4 +56,8 @@ public class Diretorio {
         }
         return false;
     }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 }

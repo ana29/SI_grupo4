@@ -5,12 +5,15 @@ import play.data.DynamicForm;
 import play.data.FormFactory;
 import play.mvc.*;
 
+import play.mvc.*;
+
 
 import views.html.*;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 
@@ -127,16 +130,31 @@ public class HomeController extends Controller {
 
         return redirect(routes.HomeController.chamarHome());}
 */
-    public Result criaPasta(){
-        LOGGER.info("ENTROU NO CONTROLLER");
-        Diretorio dir = formFactory.form(Diretorio.class).bindFromRequest().get();
 
+    public Result criaPasta(){
+        Diretorio dir = formFactory.form(Diretorio.class).bindFromRequest().get();
+        System.out.println("Executou o criaPasta");
         if (dir.getNome() == null || dir.getNome().isEmpty()){
-            return ok(home.render(usuarioLogado));
+            return ok(index.render());
         }else {
             usuarioLogado.criaSubDiretorio(dir.getNome());
             return ok(home.render(usuarioLogado));
         }
+    }
+
+    public Result editaNomePasta() {
+        String nomeNovo = request().getQueryString("nome").trim();
+        String nomeAntigo = request().getQueryString("antigoNomePasta").trim();
+        Diretorio dir = usuarioLogado.getDiretorio(nomeAntigo);
+        dir.setNome(nomeNovo);
+        System.out.print(dir.getNome());
+        return ok(home.render(usuarioLogado));
+    }
+
+    public Result editaNomeArquivo() {
+        String nomeNovo = request().getQueryString("nome").trim();
+        String nomeAntigo = request().getQueryString("antigoNome").trim();
+        return ok(home.render(usuarioLogado));
     }
 
     public Result criaArquivos(){
@@ -282,5 +300,4 @@ public class HomeController extends Controller {
             }
         }
     }
-
 }

@@ -78,7 +78,6 @@ public class ArquivoTxt implements Arquivo{
         arquivo.delete();
 
     }
-
     @Override
     public String getExtensao(){return EXTENSAO;}
 
