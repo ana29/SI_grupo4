@@ -83,19 +83,20 @@ public class Usuario {
         }
     }
 
-    public Diretorio getDiretorio(String nome){
-        for (Diretorio dir: pastaPessoal.subDiretorios) {
-            if (dir.getNome().equals(nome)){
-            	return dir;
+    public Diretorio getDiretorio(String nome) {
+        for (Diretorio dir : pastaPessoal.subDiretorios) {
+            if (dir.getNome().equals(nome)) {
+                return dir;
+            }
         }
         return null;
     }
-    
-    
 
-    
-    
-    
+    public void excluirArquivo(String nome){
+        if (pastaPessoal.containsArquivo(nome, ""))
+            pastaPessoal.getArquivos().remove(nome);
+    }
+
 //    public Diretorio getArquivo(String nome){
 //        for (ArquivoTxt arquivo: pastaPessoal.subDiretorios) {
 //            if (arquivo.getNome().equals(nome)){

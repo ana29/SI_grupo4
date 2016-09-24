@@ -25,12 +25,11 @@ var addFolder = function (folder) {
     document.getElementById('main').appendChild(newFolder);
 };
 
-$(document).ready(function() {
+$(document).ready(function () {
     console.log("Document.ready executado");
     var $dialog = $('#dialog');
-  var $dialog2 = $('#dialog2');
 
-  var maskHeight = $(window).height();
+    var maskHeight = $(window).height();
     var maskWidth = $(window).width();
 
     $('#mask').css({'width': maskWidth, 'height': maskHeight});
@@ -42,9 +41,6 @@ $(document).ready(function() {
     $dialog.css('top', winH / 2 - $dialog.height() / 2);
     $dialog.css('left', winW / 2 - $dialog.width() / 2);
 
-  $dialog2.css('top',  winH/2-$dialog2.height()/2);
-  $dialog2.css('left', winW/2-$dialog2.width()/2);
-
     $('.window .close').hide();
 
     $("#boxes").click(function (e) {
@@ -52,17 +48,17 @@ $(document).ready(function() {
         $('#boxes2').hide();
         $('#mask').fadeIn();
         $('.window').fadeIn();
-  });
-
-  $("#share").click(function (e) {
-    e.preventDefault();
-    $('#mask').fadeIn();
-    $('.window2').fadeIn();
-        $('.close').fadeIn();
     });
+    //
+    // $("#share").click(function (e) {
+    //     e.preventDefault();
+    //     $('#mask').fadeIn();
+    //     $('.window2').fadeIn();
+    //     $('.close').fadeIn();
+    // });
 
-  $(".close").click(function (e) {
-    e.preventDefault();
+    $(".close").click(function (e) {
+        e.preventDefault();
         $("#mask").fadeOut();
         $('.window').fadeOut();
     });
@@ -95,7 +91,7 @@ $(document).ready(function() {
 
     $('#buttom2').click(function () {
         console.log("ENTROU AQUI")
-        var antigoNome = $('#'+IdDaPasta).text();
+        var antigoNome = $('#' + IdDaPasta).text();
         console.log(antigoNome);
         var antigo = $('#antigoNomePasta').val(antigoNome);
         console.log(antigo);

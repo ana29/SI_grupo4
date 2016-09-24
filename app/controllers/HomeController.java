@@ -195,9 +195,7 @@ public class HomeController extends Controller {
 
     public Result deletaArquivo(String nomeArquivo){
         deletFileFromList(nomeArquivo);
-
         usuarioLogado.excluirArquivo(nomeArquivo);
-
         return ok(home.render(usuarioLogado));
     }
 
