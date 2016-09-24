@@ -1,5 +1,6 @@
 package controllers;
 
+import Util.EmailValidator;
 import models.*;
 import play.data.DynamicForm;
 import play.data.FormFactory;
@@ -22,7 +23,6 @@ public class HomeController extends Controller {
 
     @Inject
     private FormFactory formFactory;
-    private Util util = new Util();
     private List<Usuario> listaDeUsuarios = new ArrayList<>();
     private List<Arquivo> listaDeArquivos = new ArrayList<>();
     private Usuario usuarioLogado = null;
@@ -35,10 +35,20 @@ public class HomeController extends Controller {
     public Result cadastrarUsuario(){
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
 
-        if (verificaCredenciais(usuario.getNome(), usuario.getEmail(), usuario.getSenha())) {
-            listaDeUsuarios.add(usuario);
-            flash("sucesso", "Cadastrado com sucesso.");
+        try{
+            if (verificaCredenciais(usuario.getNome(), usuario.getEmail(), usuario.getSenha())) {
+                listaDeUsuarios.add(usuario);
+                flash("sucesso", "Cadastrado com sucesso.");
+            }
+        }catch (Exception e){
+            flash("erro", "O usuario não foi cadastrado: " + e.getMessage());
         }
+//        if (verificaCredenciais(usuario.getNome(), usuario.getEmail(), usuario.getSenha())) {
+//            listaDeUsuarios.add(usuario);
+//            flash("sucesso", "Cadastrado com sucesso.");
+//        }else{
+//            flash("erro", "O usuario não foi cadastrado.");
+//        }
         return redirect(routes.HomeController.index());
     }
 
@@ -101,8 +111,21 @@ public class HomeController extends Controller {
         throw new Exception("Usuario inexistente");
     }
 
-    private Boolean verificaCredenciais(String nome, String email, String senha){
-        return util.validaCredenciais(nome, email, senha);
+    private Boolean verificaCredenciais(String nome, String email, String senha) throws Exception{
+        EmailValidator userMail = new EmailValidator();
+        if (nome.length() > 2 && nome.length() < 21){
+            if (senha.length() > 7){
+                if (userMail.validate(email)){
+                    return true;
+                }else{
+                    throw new Exception("Email inválido.");
+                }
+            }else{
+                throw new Exception("Senha inválida.");
+            }
+        }else {
+            throw new Exception("Nome inválido");
+        }
     }
 
     //Renders
