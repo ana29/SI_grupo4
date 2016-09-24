@@ -102,6 +102,7 @@ public class HomeController extends Controller {
                 if (usuario.getSenha().equals(senha)) {
                     usuarioLogado = usuario;
                     session("login", usuario.getEmail());
+                    session("token", geraToken());
                     return true;
                 } else {
                     throw new Exception("Login ou senha incorretos.");
@@ -151,86 +152,116 @@ public class HomeController extends Controller {
         return redirect(routes.HomeController.chamarHome());}
 */
     public Result criaPasta(){
-        LOGGER.info("ENTROU NO CONTROLLER");
-        Diretorio dir = formFactory.form(Diretorio.class).bindFromRequest().get();
+        if (isAutenticate()) {
+            LOGGER.info("ENTROU NO CONTROLLER");
+            Diretorio dir = formFactory.form(Diretorio.class).bindFromRequest().get();
 
-        if (dir.getNome() == null || dir.getNome().isEmpty()){
-            return ok(home.render(usuarioLogado));
-        }else {
-            usuarioLogado.criaSubDiretorio(dir.getNome());
-            return ok(home.render(usuarioLogado));
+            if (dir.getNome() == null || dir.getNome().isEmpty()) {
+                return ok(home.render(usuarioLogado));
+            } else {
+                usuarioLogado.criaSubDiretorio(dir.getNome());
+                return ok(home.render(usuarioLogado));
+            }
+        } else {
+            flash("tokenExpirado", "Você não está autenticado! Realize o login.");
+            return redirect(routes.HomeController.index());
         }
     }
 
     public Result criaArquivos(){
-        DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
-        String nomeArquivo = (String) form.getData().get("nomeArquivo");
-        String conteudoArquivo = (String) form.getData().get("conteudoFile");
-        String extensao = (String) form.getData().get("extensao");
+        if (isAutenticate()) {
+            DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
+            String nomeArquivo = (String) form.getData().get("nomeArquivo");
+            String conteudoArquivo = (String) form.getData().get("conteudoFile");
+            String extensao = (String) form.getData().get("extensao");
 
-        Arquivo arquivo;
-        if (extensao.equals(".txt")){
-            arquivo = new ArquivoTxt(nomeArquivo, conteudoArquivo);
+            Arquivo arquivo;
+            if (extensao.equals(".txt")) {
+                arquivo = new ArquivoTxt(nomeArquivo, conteudoArquivo);
+            } else {
+                arquivo = new ArquivoMd(nomeArquivo, conteudoArquivo);
+            }
+            listaDeArquivos.add(arquivo);
+            usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), extensao);
+            return ok(home.render(usuarioLogado));
+        } else {
+            flash("tokenExpirado", "Você não está autenticado! Realize o login.");
+            return redirect(routes.HomeController.index());
         }
-        else{
-            arquivo = new ArquivoMd(nomeArquivo, conteudoArquivo);
-        }
-        listaDeArquivos.add(arquivo);
-        usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), extensao);
-        return ok(home.render(usuarioLogado));
     }
 
 
     public Result abreArquivo(String nomeArquivo){
+        if (isAutenticate()) {
+            Arquivo arquivo = findFileFromList(nomeArquivo);
+            String conteudo = arquivo.getConteudoArquivo();
 
-        Arquivo arquivo = findFileFromList(nomeArquivo);
-        String conteudo = arquivo.getConteudoArquivo();
-
-        return ok(arquivoConteudo.render(nomeArquivo, conteudo));
+            return ok(arquivoConteudo.render(nomeArquivo, conteudo));
+        } else {
+            flash("tokenExpirado", "Você não está autenticado! Realize o login.");
+            return redirect(routes.HomeController.index());
+        }
     }
 
     public Result leituraArquivo(String nomeArquivo){
+        if (isAutenticate()) {
+            Arquivo arquivo = findFileFromList(nomeArquivo);
+            String conteudo = arquivo.getConteudoArquivo();
 
-        Arquivo arquivo = findFileFromList(nomeArquivo);
-        String conteudo = arquivo.getConteudoArquivo();
-
-        return ok(leituraArquivo.render(nomeArquivo, conteudo));
+            return ok(leituraArquivo.render(nomeArquivo, conteudo));
+        } else {
+            flash("tokenExpirado", "Você não está autenticado! Realize o login.");
+            return redirect(routes.HomeController.index());
+        }
     }
 
 
     public Result deletaArquivo(String nomeArquivo){
-        deletFileFromList(nomeArquivo);
+        if (isAutenticate()) {
+            deletFileFromList(nomeArquivo);
 
-        usuarioLogado.excluirArquivo(nomeArquivo);
+            usuarioLogado.excluirArquivo(nomeArquivo);
 
-        return ok(home.render(usuarioLogado));
+            return ok(home.render(usuarioLogado));
+        } else {
+            flash("tokenExpirado", "Você não está autenticado! Realize o login.");
+            return redirect(routes.HomeController.index());
+        }
     }
 
     public Result chamaModificaArquivo(String nomeArquivo){
-        Arquivo arquivo=findFileFromList(nomeArquivo);
+        if (isAutenticate()) {
+            Arquivo arquivo = findFileFromList(nomeArquivo);
 
-        return ok(modificaArquivo.render(nomeArquivo, arquivo.getConteudoArquivo()));
+            return ok(modificaArquivo.render(nomeArquivo, arquivo.getConteudoArquivo()));
+        } else {
+            flash("tokenExpirado", "Você não está autenticado! Realize o login.");
+            return redirect(routes.HomeController.index());
+        }
     }
 
     //__________________________________________________________
     public Result editaArquivo(String nomeArquivoASerEditado){
+        if (isAutenticate()) {
+            DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
+            String nomeArquivo = (String) form.getData().get("nomeArquivo");
+            String conteudoArquivo = (String) form.getData().get("conteudoFile");
+            String extensao = (String) form.getData().get("extensao");
 
-        DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
-        String nomeArquivo = (String) form.getData().get("nomeArquivo");
-        String conteudoArquivo = (String) form.getData().get("conteudoFile");
-        String extensao = (String) form.getData().get("extensao");
+            Arquivo arquivo;
+            if (extensao.equals(".txt")) {
+                arquivo = new ArquivoTxt(nomeArquivo, conteudoArquivo);
+            } else {
+                arquivo = new ArquivoMd(nomeArquivo, conteudoArquivo);
+            }
+            listaDeArquivos.add(arquivo);
+            usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), extensao);
 
-        Arquivo arquivo;
-        if (extensao.equals(".txt")){
-            arquivo = new ArquivoTxt(nomeArquivo, conteudoArquivo);
+            return ok(home.render(usuarioLogado));
+        } else {
+            flash("tokenExpirado", "Você não está autenticado! Realize o login.");
+            return redirect(routes.HomeController.index());
         }
-        else{
-            arquivo = new ArquivoMd(nomeArquivo, conteudoArquivo);
-        }
-        listaDeArquivos.add(arquivo);
-        usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), extensao);
-
-        return ok(home.render(usuarioLogado));
 
     }
     //_____________________________________________________
@@ -268,18 +299,22 @@ public class HomeController extends Controller {
      */
 
     public Result compartilha(){
+        if (isAutenticate()) {
+            DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
+            String nomeArquivo = (String) form.getData().get("nomeArquivo");
+            String emailUsuario = (String) form.getData().get("emailUsuario");
+            String tipo = (String) form.getData().get("tipo");
 
-        DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
-        String nomeArquivo = (String) form.getData().get("nomeArquivo");
-        String emailUsuario = (String) form.getData().get("emailUsuario");
-        String tipo = (String) form.getData().get("tipo");
+            if (tipo.equals("edicao"))
+                compartilhaEdicao(emailUsuario, nomeArquivo);
+            else
+                compartilhaLeitura(emailUsuario, nomeArquivo);
 
-        if (tipo.equals("edicao"))
-            compartilhaEdicao(emailUsuario, nomeArquivo);
-        else
-            compartilhaLeitura(emailUsuario, nomeArquivo);
-
-        return ok(home.render(usuarioLogado));
+            return ok(home.render(usuarioLogado));
+        } else {
+            flash("tokenExpirado", "Você não está autenticado! Realize o login.");
+            return redirect(routes.HomeController.index());
+        }
     }
 
     public void compartilhaEdicao(String emailUsuario, String nomeArquivo){
@@ -304,6 +339,14 @@ public class HomeController extends Controller {
                 usuario.getCaixaDeNotificacao().getCaixaDeNotificacao().add(leitura);
             }
         }
+    }
+
+    private String geraToken(){
+        return "A";
+    }
+
+    private boolean isAutenticate(){
+        return session("token") != null;
     }
 
 }
