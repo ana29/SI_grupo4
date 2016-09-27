@@ -9,10 +9,17 @@ import play.mvc.*;
 
 import views.html.*;
 
+import java.security.SecureRandom;
+
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Logger;
+
+
+
+
 
 
 /**
@@ -38,7 +45,7 @@ public class HomeController extends Controller {
         try{
             if (verificaCredenciais(usuario.getNome(), usuario.getEmail(), usuario.getSenha())) {
                 listaDeUsuarios.add(usuario);
-                flash("sucesso", "Cadastrado com sucesso.");
+                flash("sucesso", "Usuario cadastrado com sucesso.");
             }
         }catch (Exception e){
             flash("erro", "O usuario não foi cadastrado: " + e.getMessage());
@@ -342,7 +349,10 @@ public class HomeController extends Controller {
     }
 
     private String geraToken(){
-        return "A";
+        Random rand = new Random();
+        String token = Long.toHexString(rand.nextLong()) + Long.toHexString(rand.nextLong());
+        System.out.println(token);
+        return token;
     }
 
     private boolean isAutenticate(){
