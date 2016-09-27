@@ -25,7 +25,7 @@ var addFolder = function (folder) {
     document.getElementById('main').appendChild(newFolder);
 };
 
-$(document).ready(function () {
+$(document).ready(function() {
     console.log("Document.ready executado");
     var $dialog = $('#dialog');
 
@@ -48,24 +48,17 @@ $(document).ready(function () {
         $('#boxes2').hide();
         $('#mask').fadeIn();
         $('.window').fadeIn();
+        $('.close').fadeIn();
     });
-    //
-    // $("#share").click(function (e) {
-    //     e.preventDefault();
-    //     $('#mask').fadeIn();
-    //     $('.window2').fadeIn();
-    //     $('.close').fadeIn();
-    // });
 
-    $(".close").click(function (e) {
-        e.preventDefault();
+    $(".close").click(function () {
         $("#mask").fadeOut();
         $('.window').fadeOut();
     });
 
     var $dialog2 = $('#dialog2');
 
-    var maskHeight = $(document).height();
+    var maskHeight = $(window).height();
     var maskWidth = $(window).width();
 
     $('#mask2').css({'width': maskWidth, 'height': maskHeight});
@@ -84,6 +77,7 @@ $(document).ready(function () {
     $(".botaoED").click(function (e) {
         IdDaPasta = $(this).closest('.thumbnail').find('h1').attr('id');
         e.preventDefault();
+        $('#dialog3').hide();
         $('#mask2').fadeIn();
         $('.window2').fadeIn();
         $('.close2').fadeIn();
@@ -91,7 +85,7 @@ $(document).ready(function () {
 
     $('#buttom2').click(function () {
         console.log("ENTROU AQUI")
-        var antigoNome = $('#' + IdDaPasta).text();
+        var antigoNome = $('#'+IdDaPasta).text();
         console.log(antigoNome);
         var antigo = $('#antigoNomePasta').val(antigoNome);
         console.log(antigo);
@@ -100,6 +94,19 @@ $(document).ready(function () {
     $(".close2").click(function () {
         $("#mask2").fadeOut();
         $('.window2').fadeOut();
+    });
+
+    $("#share").click(function (e) {
+        e.preventDefault();
+        $('#boxes2').hide();
+        $('#mask3').fadeIn();
+        $('.window3').fadeIn();
+        $('.close3').fadeIn();
+    });
+
+    $(".close3").click(function () {
+        $("#mask3").fadeOut();
+        $('.window3').fadeOut();
     });
 });
 

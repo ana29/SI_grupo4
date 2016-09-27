@@ -83,8 +83,8 @@
         @*modal para criar as pastas*@
         <div id="boxes">
             <form id="dialog" class="window" action="@routes.HomeController.criaPasta()">
-                @*<a href="#" class="close"> Fechar [X]</a>*@
-                <h3>Nova Pasta</h3>
+                <a href="#" class="close">x</a>
+                <div><h3>Nova Pasta</h3></div>
                 <p>
                     Nome: <input id="input" name="nome" type="text" required autocomplete="off"/><br>
                     <input id="buttom" type="submit" value="Criar">
@@ -100,14 +100,32 @@
                 <a href="#" class="close2">x</a>
                 <div><h3>Renomear Pasta</h3></div>
                 <p>
-                        Nome: <input id="input2" name="nome" type="text" required autocomplete="off"/><br>
-                        <input id="antigoNomePasta" name="antigoNomePasta" type="text" style="display: none">
-                        <input id="buttom2" type="submit" value="OK">
+                    Nome: <input id="input2" name="nome" type="text" required autocomplete="off"/><br>
+                    <input id="antigoNomePasta" name="antigoNomePasta" type="text" style="display: none">
+                    <input id="buttom2" type="submit" value="OK">
                 </p>
             </form>
                 <!-- Máscara para cobrir a tela -->
             <div id="mask2"></div>
         </div>
-        @*<script src="@routes.Assets.at("javascripts/home.js")" type="text/javascript"></script>*@
+
+        <div id="share">
+            <form id="dialog3" class="window3" action="@routes.HomeController.compartilha()">
+                <a href="#" class="close3">x</a>
+                <h3>Compartilhar</h3>
+                <p>
+                    Arquivo: <input id="input" name="nomeArquivo" type="text" required autocomplete="off"/><br>
+                    E-mail: <input id="input" name="emailUsuario" type="text" required autocomplete="off"/><br>
+
+                    <input type="radio" name="tipo" value="edicao">Edição
+
+                    <input type="radio" name="tipo" value="leitura">Leitura
+
+                    <input id="buttom" type="submit" value="Compartilhar">
+                </p>
+            </form>
+                <!-- Máscara para cobrir a tela -->
+            <div id="mask3"></div>
+        </div>
     </body>
 }
