@@ -1,5 +1,7 @@
 package models;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.logging.Logger;
 
 public class Usuario {
@@ -11,6 +13,7 @@ public class Usuario {
     public Diretorio compartilhados;
     public CaixaDeNotificacao caixaDeNotificacao;
     private static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
+    public Timestamp horaDoLogin;
 
     public Usuario(){
         this.pastaPessoal = new Diretorio("root");
@@ -120,6 +123,14 @@ public class Usuario {
 
     public CaixaDeNotificacao getCaixaDeNotificacao() {
         return caixaDeNotificacao;
+    }
+
+    public Timestamp getHoraDoLogin(){
+        return horaDoLogin;
+    }
+
+    public void setHoraDoLogin(Timestamp horaDoLogin){
+        this.horaDoLogin = horaDoLogin;
     }
 }
 

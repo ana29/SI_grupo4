@@ -8,18 +8,15 @@ import play.mvc.*;
 
 
 import views.html.*;
-
+import java.sql.Timestamp;
 import java.security.SecureRandom;
 
 import javax.inject.Inject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
-
-
-
-
 
 
 /**
@@ -102,14 +99,35 @@ public class HomeController extends Controller {
     }
 
     //Validacao
+
+    private boolean verificaTimeStampDoToken(){
+
+        //horaAtual -> pega a hora da realizacao de determinada requisição
+        Timestamp horaAtual = new Timestamp(System.currentTimeMillis());
+        //diasLong -> será a diferenca entra a hr que logou e a hora da requisição
+        Long diasLong = horaAtual.getTime() - usuarioLogado.getHoraDoLogin().getTime();
+        //dias -> converte diasLong para a quantidade de dias
+        long dias = diasLong/(1000*60*60*24);
+
+        if(dias > 1){
+            return false;
+        }
+        return true;
+    }
+
+
     private boolean validarLogin(String email, String senha) throws Exception {
 
         for (Usuario usuario : listaDeUsuarios) {
             if (usuario.getEmail().equals(email)) {
                 if (usuario.getSenha().equals(senha)) {
+                    Timestamp horaDoLogin = new Timestamp(System.currentTimeMillis());
+                    usuario.setHoraDoLogin(horaDoLogin);
                     usuarioLogado = usuario;
+
                     session("login", usuario.getEmail());
                     session("token", geraToken());
+
                     return true;
                 } else {
                     throw new Exception("Login ou senha incorretos.");
@@ -356,7 +374,13 @@ public class HomeController extends Controller {
     }
 
     private boolean isAutenticate(){
-        return session("token") != null;
+
+        if(session("token") != null && verificaTimeStampDoToken()){
+            return true;
+        }else{
+            return false;
+        }
+
     }
 
 }
