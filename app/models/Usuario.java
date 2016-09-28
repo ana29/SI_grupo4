@@ -16,33 +16,33 @@ public class Usuario {
     public Timestamp horaDoLogin;
 
     public Usuario(){
-        this.pastaPessoal = new Diretorio("root");
-        this.compartilhados = new Diretorio("Compartilhados");
+        this.pastaPessoal = new Diretorio("root", "/root");
+        this.compartilhados = new Diretorio("Compartilhados", "/root/Compartilhados");
         this.caixaDeNotificacao = new CaixaDeNotificacao();
     }
 
     public Usuario(String nome, String email, String senha){
         this.caixaDeNotificacao = new CaixaDeNotificacao();
-        this.pastaPessoal = new Diretorio("root");
-        this.compartilhados = new Diretorio("Compartilhados");
+        this.pastaPessoal = new Diretorio("root", "/root");
+        this.compartilhados = new Diretorio("Compartilhados", "/root/Compartilhados");
         this.nome = nome;
         this.email = email;
         this.senha = senha;
 
     }
 
-    public void criaSubDiretorio(String nome){
+    public void criaSubDiretorio(String nome, Diretorio diretorio){
         LOGGER.info("ENTROU NA CRIAÇÃO DO DIRETORIO");
-        if (!pastaPessoal.containsDiretorio(nome)){
-            pastaPessoal.getSubDiretorios().add(new Diretorio(nome));
+        if (!diretorio.containsDiretorio(nome)){
+            diretorio.getSubDiretorios().add(new Diretorio(nome, diretorio.getCaminho()+"/"+nome));
         }
         else{
             boolean adicionado = false;
             int count = 1;
             while (!adicionado){
                 String novoNome = nome + "(" + count + ")";
-                if (!pastaPessoal.containsDiretorio(novoNome)){
-                    pastaPessoal.getSubDiretorios().add(new Diretorio(novoNome));
+                if (!diretorio.containsDiretorio(novoNome)){
+                    diretorio.getSubDiretorios().add(new Diretorio(novoNome, diretorio.getCaminho()+"/"+novoNome));
                     adicionado = true;
                 }
                 count ++;

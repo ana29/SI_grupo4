@@ -1,7 +1,7 @@
-@(usuario: Usuario)
+@(usuario: Usuario, diretorio: Diretorio)
 
 @main("SIBox"){
-    <head>
+    <head xmlns="http://www.w3.org/1999/html">
         <meta charset="UTF-8">
         <title>SIBox - home</title>
 
@@ -35,12 +35,19 @@
         </header>
 
         <main id="main">
-            @for(diretorio <- usuario.getPastaPessoal.getSubDiretorios) {
+
+            @if(!diretorio.getNome.equals("root")){
                 <div class="thumbnail">
-                    <i class="material-icons">folder
-                        <span><a href="#">botao editar</a> / @diretorio.getArquivos.size() folders / @diretorio.getSubDiretorios.size() files</span>
-                    </i>
-                    <h1>@diretorio.getNome</h1>
+                    <a href="/abrePasta/@diretorio.getRaiz"><i class="material-icons">keyboard_backspace</i></a>
+                </div>
+            }
+
+            @for(subDiretorio <- diretorio.getSubDiretorios()) {
+                <div class="thumbnail">
+                    <a href="/abrePasta/@subDiretorio.caminho"><i class="material-icons">folder
+                        <span> @subDiretorio.getArquivos.size() folders / @subDiretorio.getSubDiretorios.size() files</span>
+                    </i></a>
+                    <h1>@subDiretorio.getNome</h1>
                 </div>
             }
 
@@ -60,7 +67,8 @@
 
 
 
-            @for(arquivo <- usuario.getPastaPessoal.getArquivos) {
+
+            @for(arquivo <- diretorio.getArquivos) {
                 <div class="thumbnail">
                     <i class="material-icons">description
                         @*<span>@pasta.getArquivos.size() folders / @pasta.getA.size() files</span>*@
@@ -71,7 +79,7 @@
         </main>
 
         <div id="boxes">
-            <form id="dialog" class="window" action="@routes.HomeController.criaPasta()">
+            <form id="dialog" class="window" action="/criaPasta/@diretorio.caminho">
                 @*<a href="#" class="close"> Fechar [X]</a>*@
                 <h3>Nova Pasta</h3>
                 <p>

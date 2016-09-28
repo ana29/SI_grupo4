@@ -22,7 +22,7 @@ public class ArquivoMd implements Arquivo {
     public ArquivoMd(String nome, String conteudo){
         this.nomeArquivo = nome;
         this.conteudoFile = conteudo;
-        this.pastaPessoal = new Diretorio("root");
+        this.pastaPessoal = new Diretorio("root", "/root");
         this.compartilhadosEdicao = new ArrayList<>();
         this.compartilhadosLeitura = new ArrayList<>();
         criarArquivo();

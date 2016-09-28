@@ -14,6 +14,7 @@ import java.security.SecureRandom;
 import javax.inject.Inject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
@@ -160,7 +161,7 @@ public class HomeController extends Controller {
     }
 
     public Result chamarHome() {
-        return ok(home.render(usuarioLogado));
+        return ok(home.render(usuarioLogado, usuarioLogado.getPastaPessoal()));
     }
 
     public Result chamarCaixa() {return ok(caixaNotificacoes.render(usuarioLogado)); }
@@ -176,16 +177,17 @@ public class HomeController extends Controller {
 
         return redirect(routes.HomeController.chamarHome());}
 */
-    public Result criaPasta(){
+    public Result criaPasta(String caminhoDiretorioAtual){
         if (isAutenticate()) {
             LOGGER.info("ENTROU NO CONTROLLER");
+            Diretorio diretorioAtual = findPathFromList(caminhoDiretorioAtual);
             Diretorio dir = formFactory.form(Diretorio.class).bindFromRequest().get();
 
             if (dir.getNome() == null || dir.getNome().isEmpty()) {
-                return ok(home.render(usuarioLogado));
+                return ok(home.render(usuarioLogado, diretorioAtual));
             } else {
-                usuarioLogado.criaSubDiretorio(dir.getNome());
-                return ok(home.render(usuarioLogado));
+                usuarioLogado.criaSubDiretorio(dir.getNome(), diretorioAtual);
+                return ok(home.render(usuarioLogado, diretorioAtual));
             }
         } else {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
@@ -208,13 +210,20 @@ public class HomeController extends Controller {
             }
             listaDeArquivos.add(arquivo);
             usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), extensao);
-            return ok(home.render(usuarioLogado));
+            return ok(home.render(usuarioLogado, usuarioLogado.getPastaPessoal()));
         } else {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
             return redirect(routes.HomeController.index());
         }
     }
-
+    public Result abrePasta(String diretorio){
+        if (isAutenticate()){
+            return ok(home.render(usuarioLogado, findPathFromList(diretorio)));
+        } else {
+            flash("tokenExpirado", "Você não está autenticado! Realize o login.");
+            return redirect(routes.HomeController.index());
+        }
+    }
 
     public Result abreArquivo(String nomeArquivo){
         if (isAutenticate()) {
@@ -247,7 +256,7 @@ public class HomeController extends Controller {
 
             usuarioLogado.excluirArquivo(nomeArquivo);
 
-            return ok(home.render(usuarioLogado));
+            return ok(home.render(usuarioLogado, usuarioLogado.getPastaPessoal()));
         } else {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
             return redirect(routes.HomeController.index());
@@ -282,7 +291,7 @@ public class HomeController extends Controller {
             listaDeArquivos.add(arquivo);
             usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), extensao);
 
-            return ok(home.render(usuarioLogado));
+            return ok(home.render(usuarioLogado, usuarioLogado.getPastaPessoal()));
         } else {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
             return redirect(routes.HomeController.index());
@@ -308,6 +317,16 @@ public class HomeController extends Controller {
                 arquivo =  listaDeArquivos.get(i);
         }
         return arquivo;
+    }
+
+    private Diretorio findPathFromList(String caminhoDiretorio) {
+        String[] array = caminhoDiretorio.split("/");
+        if (array.length == 2){
+            return usuarioLogado.getPastaPessoal();
+        }
+        else {
+            return usuarioLogado.getPastaPessoal().buscaPorCaminho(Arrays.copyOfRange(array, 1, array.length));
+        }
     }
     //_____________________________________________________
     //GETs and SETs
@@ -335,7 +354,7 @@ public class HomeController extends Controller {
             else
                 compartilhaLeitura(emailUsuario, nomeArquivo);
 
-            return ok(home.render(usuarioLogado));
+            return ok(home.render(usuarioLogado, usuarioLogado.getPastaPessoal()));
         } else {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
             return redirect(routes.HomeController.index());
