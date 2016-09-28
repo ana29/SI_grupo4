@@ -68,13 +68,7 @@
 
             @for(arquivo <- usuario.getPastaPessoal.getArquivos) {
                 <div class="thumbnail">
-                    <i class="material-icons">description
-                        <span>
-                            <div>
-                                <button type="button" class="botaoED">Editar Nome</button>
-                            </div>
-                        </span>
-                    </i>
+                    <i class="material-icons">description</i>
                     <a href="/abreArquivo/@arquivo.getNomeArquivo">@arquivo.getNomeArquivo</a>
                 </div>
             }

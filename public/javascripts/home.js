@@ -27,6 +27,7 @@ var addFolder = function (folder) {
 
 $(document).ready(function() {
     console.log("Document.ready executado");
+
     var $dialog = $('#dialog');
 
     var maskHeight = $(window).height();
@@ -55,6 +56,8 @@ $(document).ready(function() {
         $("#mask").fadeOut();
         $('.window').fadeOut();
     });
+
+    //boxes 2
 
     var $dialog2 = $('#dialog2');
 
@@ -95,6 +98,22 @@ $(document).ready(function() {
         $("#mask2").fadeOut();
         $('.window2').fadeOut();
     });
+
+    //SHARE
+
+    var $dialog3 = $('#dialog3');
+
+    var maskHeight = $(window).height();
+    var maskWidth = $(window).width();
+
+    $('#mask3').css({'width': maskWidth, 'height': maskHeight});
+
+    //Get the window height and width
+    var winH = $(window).height();
+    var winW = $(window).width();
+
+    $dialog3.css('top', winH / 2 - $dialog3.height() / 2);
+    $dialog3.css('left', winW / 2 - $dialog3.width() / 2);
 
     $("#share").click(function (e) {
         e.preventDefault();

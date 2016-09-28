@@ -327,6 +327,14 @@ header i {
     margin: 8px;
 }
 
+#share #dialog3 {
+    vertical-align: middle;
+    width:270px;
+    height:200px;
+    padding:0;
+    background-color:#ffffff;
+}
+
 #share h3{
     height: 33px;
     color: white;
@@ -339,14 +347,7 @@ header i {
     background: -webkit-gradient(linear,left bottom,left top,color-stop(0, #1e3d47),color-stop(1, #2e5764));
 }
 
-#share #dialog3 {
-    width:270px;
-    height:200px;
-    padding:0;
-    background-color:#ffffff;
-}
-
-#share .window2 {
+#share .window3 {
     border-radius: 10px;
     position:absolute;
     left:0;
