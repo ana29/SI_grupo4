@@ -9,6 +9,7 @@ GET     /count                      controllers.CountController.count
 # An example controller showing how to write asynchronous code
 GET     /message                    controllers.AsyncController.message
 
+GET     /home/                      controllers.HomeController.chamarHome()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
@@ -24,6 +25,8 @@ GET /compartilha                    controllers.HomeController.compartilha()
 
 #POST /salvaArquivo                  controllers.HomeController.salvaArquivo()
 
+GET /criaArquivos/                  controllers.HomeController.criaArquivos()
+GET /chamaTexto/                    controllers.HomeController.chamaTexto()
 
 GET /abrePasta/*diretorio           controllers.HomeController.abrePasta(diretorio)
 GET /abreArquivo/:nomeArquivo       controllers.HomeController.abreArquivo(nomeArquivo: String)
