@@ -76,7 +76,7 @@ header i {
     color: #fff;
 }
 
-main {
+#main {
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -176,7 +176,6 @@ main {
     background: #000000;
 }
 
-
 #boxes .window {
     border-radius: 10px;
     position:absolute;
@@ -187,28 +186,10 @@ main {
     padding:20px;
     height: 120px;
 }
-#share .window2 {
-    border-radius: 10px;
-    position:absolute;
-    left:0;
-    top:0;
-    display:none;
-    z-index:9999;
-    padding:20px;
-    height: 120px;
-}
-
 
 #boxes #dialog {
-    width:250px;
-    height:130px;
-    padding:0;
-    background-color:#ffffff;
-}
-
-#share #dialog2 {
-    width:270px;
-    height:200px;
+    width:200px;
+    height:120px;
     padding:0;
     background-color:#ffffff;
 }
@@ -217,18 +198,6 @@ main {
     height: 33px;
     color: white;
     margin: 0px;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    padding-top: 8px;
-    text-align: center;
-    background: -moz-linear-gradient(top, #2e5764, #1e3d47);
-    background: -webkit-gradient(linear,left bottom,left top,color-stop(0, #1e3d47),color-stop(1, #2e5764));
-}
-#share h3{
-    height: 33px;
-    color: white;
-    margin: 0px;
-    padding-top: 8px;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     text-align: center;
@@ -241,34 +210,17 @@ main {
     border-bottom-right-radius: 10px;
 }
 
-#share p{
-    margin: 8px;
-
-}
-
 #input{
     border-radius: 3px;
-    width: 160px;
-    margin: 5px;
-}
-
-#radio{
-    margin-right: 4px;
-    margin-left: 7px;
+    width: 144px;
 }
 
 #buttom{
-    border-bottom-left-radius: 0px;
-    border-top-right-radius: 0px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
     cursor: pointer;
     margin-top: 18px;
     margin-left: 38%;
-}
-
-#button{
-    cursor: pointer;
-    margin-top: 18px;
-    margin-left: 25%;
 }
 
 #boxes #dialog1 {
@@ -288,10 +240,157 @@ main {
     border-radius: 50%;
     font-size: 16px;
     color: #000000;
-    /*cursor: pointer;*/
-    /*width: 10px;*/
-    /*height: 10px;*/
-    /*background: url("../images/botaox.png");*/
-    /*float: right;*/
-    /*text-align: right;*/
+}
+
+/*BOXES 2*/
+
+#mask2 {
+    position:absolute;
+    left:0;
+    top:0;
+    z-index:9000;
+    opacity: 0.5;
+    display:none;
+    background: #000000;
+}
+
+#boxes2 .window2 {
+    border-radius: 10px;
+    position:absolute;
+    left:0;
+    top:0;
+    display:none;
+    z-index:9999;
+    padding:20px;
+    height: 120px;
+}
+
+#boxes2 #dialog2 {
+    width:200px;
+    height:120px;
+    padding:0;
+    background-color:#ffffff;
+}
+
+#boxes2 h3{
+    height: 33px;
+    color: white;
+    margin: 0px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    text-align: center;
+    background: -moz-linear-gradient(top, #2e5764, #1e3d47);
+    background: -webkit-gradient(linear,left bottom,left top,color-stop(0, #1e3d47),color-stop(1, #2e5764));
+}
+
+#boxes2 p{
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#input2{
+    border-radius: 3px;
+    width: 144px;
+}
+
+#buttom2{
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    cursor: pointer;
+    margin-top: 18px;
+    margin-left: 38%;
+}
+
+#boxes2 #dialog1 {
+    width:375px;
+    height:203px;
+}
+
+.close2{
+    position: absolute;
+    width: 20px;
+    right: -7px;
+    top: -13px;
+    text-align: center;
+    line-height: 20px;
+    margin-top: 3px;
+    background: #ffffff;
+    border-radius: 50%;
+    font-size: 16px;
+    color: #000000;
+}
+
+
+/*SHARE*/
+
+#share p{
+    margin: 8px;
+}
+
+#share h3{
+    height: 33px;
+    color: white;
+    margin: 0px;
+    padding-top: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    text-align: center;
+    background: -moz-linear-gradient(top, #2e5764, #1e3d47);
+    background: -webkit-gradient(linear,left bottom,left top,color-stop(0, #1e3d47),color-stop(1, #2e5764));
+}
+
+#share #dialog3 {
+    width:270px;
+    height:200px;
+    padding:0;
+    background-color:#ffffff;
+}
+
+#share .window2 {
+    border-radius: 10px;
+    position:absolute;
+    left:0;
+    top:0;
+    display:none;
+    z-index:9999;
+    padding:20px;
+    height: 120px;
+}
+
+
+#mask3 {
+    position:absolute;
+    left:0;
+    top:0;
+    z-index:9000;
+    opacity: 0.5;
+    display:none;
+    background: #000000;
+}
+
+
+#share .window3 {
+    border-radius: 10px;
+    position:absolute;
+    left:0;
+    top:0;
+    display:none;
+    z-index:9999;
+    padding:20px;
+    height: 120px;
+}
+
+
+.close3{
+    position: absolute;
+    width: 20px;
+    right: -7px;
+    top: -13px;
+    text-align: center;
+    line-height: 20px;
+    margin-top: 3px;
+    background: #ffffff;
+    border-radius: 50%;
+    font-size: 16px;
+    color: #000000;
 }

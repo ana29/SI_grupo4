@@ -25,13 +25,12 @@ GET /compartilha                    controllers.HomeController.compartilha()
 
 GET /criaArquivos                   controllers.HomeController.criaArquivos()
 GET /chamaTexto                     controllers.HomeController.chamaTexto()
-
+GET /editaPasta/                    controllers.HomeController.editaNomePasta()
 
 GET /abreArquivo/:nomeArquivo       controllers.HomeController.abreArquivo(nomeArquivo: String)
 GET /leituraArquivo/:nomeArquivo    controllers.HomeController.leituraArquivo(nomeArquivo: String)
 GET /deletaArquivo/:nomeArquivo     controllers.HomeController.deletaArquivo(nomeArquivo: String)
 GET /modificaArquivo/:nomeArquivo   controllers.HomeController.chamaModificaArquivo(nomeArquivo: String)
 GET /editaArquivo/:nomeArquivo      controllers.HomeController.editaArquivo(nomeArquivo:String)
-
 
 
