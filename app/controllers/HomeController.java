@@ -11,7 +11,6 @@ import views.html.*;
 import javax.inject.Inject;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
@@ -165,8 +164,7 @@ public class HomeController extends Controller {
 
 
     public Result chamaTexto(String caminhoDiretorio){
-        Diretorio dir = findPathFromList(caminhoDiretorio);
-        return ok(texto.render(listaDeArquivos, dir));
+        return ok(texto.render(listaDeArquivos, usuarioLogado.buscaDiretorio(caminhoDiretorio)));
     }
 
 
@@ -180,13 +178,13 @@ public class HomeController extends Controller {
     public Result criaPasta(String caminhoDiretorioAtual){
         if (isAutenticate()) {
             LOGGER.info("ENTROU NO CONTROLLER");
-            Diretorio diretorioAtual = findPathFromList(caminhoDiretorioAtual);
+            Diretorio diretorioAtual = usuarioLogado.buscaDiretorio(caminhoDiretorioAtual);
             Diretorio dir = formFactory.form(Diretorio.class).bindFromRequest().get();
 
             if (dir.getNome() == null || dir.getNome().isEmpty()) {
                 return ok(home.render(usuarioLogado, diretorioAtual));
             } else {
-                usuarioLogado.criaSubDiretorio(dir.getNome(), diretorioAtual);
+                usuarioLogado.criaSubDiretorio(dir.getNome(), caminhoDiretorioAtual);
                 return ok(home.render(usuarioLogado, diretorioAtual));
             }
         } else {
@@ -209,8 +207,8 @@ public class HomeController extends Controller {
                 arquivo = new ArquivoMd(nomeArquivo, conteudoArquivo);
             }
             listaDeArquivos.add(arquivo);
-            Diretorio dir = findPathFromList(caminhoDiretorio);
-            usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), extensao, dir);
+            Diretorio dir = usuarioLogado.buscaDiretorio(caminhoDiretorio);
+            usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), extensao, caminhoDiretorio);
             return ok(home.render(usuarioLogado, dir));
         } else {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
@@ -219,7 +217,7 @@ public class HomeController extends Controller {
     }
     public Result abrePasta(String diretorio){
         if (isAutenticate()){
-            return ok(home.render(usuarioLogado, findPathFromList(diretorio)));
+            return ok(home.render(usuarioLogado, usuarioLogado.buscaDiretorio(diretorio)));
         } else {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
             return redirect(routes.HomeController.index());
@@ -230,8 +228,7 @@ public class HomeController extends Controller {
         if (isAutenticate()) {
             Arquivo arquivo = findFileFromList(nomeArquivo);
             String conteudo = arquivo.getConteudoArquivo();
-            Diretorio dir = findPathFromList(caminhoDiretorio);
-            return ok(arquivoConteudo.render(nomeArquivo, conteudo, dir));
+            return ok(arquivoConteudo.render(nomeArquivo, conteudo, usuarioLogado.buscaDiretorio(caminhoDiretorio)));
         } else {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
             return redirect(routes.HomeController.index());
@@ -254,10 +251,9 @@ public class HomeController extends Controller {
     public Result deletaArquivo(String nomeArquivo, String caminhoDiretorio){
         if (isAutenticate()) {
             deletFileFromList(nomeArquivo);
-            Diretorio dir = findPathFromList(caminhoDiretorio);
-            usuarioLogado.excluirArquivo(nomeArquivo, dir);
+            usuarioLogado.excluirArquivo(nomeArquivo, caminhoDiretorio);
 
-            return ok(home.render(usuarioLogado, dir));
+            return ok(home.render(usuarioLogado, usuarioLogado.buscaDiretorio(caminhoDiretorio)));
         } else {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
             return redirect(routes.HomeController.index());
@@ -267,8 +263,7 @@ public class HomeController extends Controller {
     public Result chamaModificaArquivo(String nomeArquivo, String caminhoDiretorio){
         if (isAutenticate()) {
             Arquivo arquivo = findFileFromList(nomeArquivo);
-            Diretorio dir = findPathFromList(caminhoDiretorio);
-            return ok(modificaArquivo.render(nomeArquivo, arquivo.getConteudoArquivo(), dir));
+            return ok(modificaArquivo.render(nomeArquivo, arquivo.getConteudoArquivo(), usuarioLogado.buscaDiretorio(caminhoDiretorio)));
         } else {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
             return redirect(routes.HomeController.index());
@@ -290,10 +285,9 @@ public class HomeController extends Controller {
                 arquivo = new ArquivoMd(nomeArquivo, conteudoArquivo);
             }
             listaDeArquivos.add(arquivo);
-            Diretorio dir = findPathFromList(caminhoDiretorio);
-            usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), extensao, dir);
+            usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), extensao, caminhoDiretorio);
 
-            return ok(home.render(usuarioLogado, dir));
+            return ok(home.render(usuarioLogado, usuarioLogado.buscaDiretorio(caminhoDiretorio)));
         } else {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
             return redirect(routes.HomeController.index());
@@ -321,15 +315,7 @@ public class HomeController extends Controller {
         return arquivo;
     }
 
-    private Diretorio findPathFromList(String caminhoDiretorio) {
-        String[] array = caminhoDiretorio.split("/");
-        if (array.length == 2){
-            return usuarioLogado.getPastaPessoal();
-        }
-        else {
-            return usuarioLogado.getPastaPessoal().buscaPorCaminho(Arrays.copyOfRange(array, 1, array.length));
-        }
-    }
+
     //_____________________________________________________
     //GETs and SETs
     public List<Usuario> getListaDeUsuarios() {

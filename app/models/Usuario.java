@@ -1,6 +1,7 @@
 package models;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 public class Usuario {
@@ -30,8 +31,9 @@ public class Usuario {
 
     }
 
-    public void criaSubDiretorio(String nome, Diretorio diretorio){
+    public void criaSubDiretorio(String nome, String caminhoDiretorio){
         LOGGER.info("ENTROU NA CRIAÇÃO DO DIRETORIO");
+        Diretorio diretorio = buscaDiretorio(caminhoDiretorio);
         if (!diretorio.containsDiretorio(nome)){
             diretorio.getSubDiretorios().add(new Diretorio(nome, diretorio.getCaminho()+"/"+nome));
         }
@@ -49,7 +51,8 @@ public class Usuario {
         }
     }
 
-    public  void addArquivo(String nomeArquivo, String conteudoFile, String extensao, Diretorio diretorio){
+    public  void addArquivo(String nomeArquivo, String conteudoFile, String extensao, String caminhoDiretorio){
+        Diretorio diretorio = buscaDiretorio(caminhoDiretorio);
         if (!diretorio.containsArquivo(nomeArquivo, extensao)){
             auxExtensao(nomeArquivo, conteudoFile, extensao, diretorio);
         }
@@ -85,10 +88,19 @@ public class Usuario {
         }
     }
 
-    public void excluirArquivo(String nome, Diretorio diretorio){
+    public void excluirArquivo(String nome, String caminhoDiretorio){
+        Diretorio diretorio = buscaDiretorio(caminhoDiretorio);
         if (diretorio.containsArquivo(nome, ""))
             //String diferente de Objeto Arquivo!
                 diretorio.getArquivos().remove(nome);
+    }
+
+    public Diretorio buscaDiretorio(String caminhoDiretorio){
+        String[] caminho = caminhoDiretorio.split("/");
+        if (caminho.length == 2){
+            return getPastaPessoal();
+        }
+        return getPastaPessoal().buscaPorCaminho(Arrays.copyOfRange(caminho, 1, caminho.length));
     }
 
     public String getNome() {
