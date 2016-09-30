@@ -1,6 +1,5 @@
 package models;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.logging.Logger;
 
@@ -50,17 +49,17 @@ public class Usuario {
         }
     }
 
-    public  void addArquivo(String nomeArquivo, String conteudoFile, String extensao){
-        if (!pastaPessoal.containsArquivo(nomeArquivo, extensao)){
-            auxExtensao(nomeArquivo, conteudoFile, extensao);
+    public  void addArquivo(String nomeArquivo, String conteudoFile, String extensao, Diretorio diretorio){
+        if (!diretorio.containsArquivo(nomeArquivo, extensao)){
+            auxExtensao(nomeArquivo, conteudoFile, extensao, diretorio);
         }
         else{
             boolean adicionado = false;
             int count = 1;
             while (!adicionado){
                 String novoNome = nomeArquivo+ "(" + count + ")";
-                if (!pastaPessoal.containsArquivo(novoNome, extensao)){
-                    auxExtensao(novoNome, conteudoFile, extensao);
+                if (!diretorio.containsArquivo(novoNome, extensao)){
+                    auxExtensao(novoNome, conteudoFile, extensao, diretorio);
                     adicionado = true;
                 }
                 count ++;
@@ -68,12 +67,12 @@ public class Usuario {
         }
     }
 
-    private void auxExtensao(String nomeArquivo, String conteudoFile, String extensao) {
+    private void auxExtensao(String nomeArquivo, String conteudoFile, String extensao, Diretorio diretorio) {
         if (extensao.equals(".txt")){
-            pastaPessoal.getArquivos().add(new ArquivoTxt(nomeArquivo, conteudoFile));
+            diretorio.getArquivos().add(new ArquivoTxt(nomeArquivo, conteudoFile));
         }
         else{
-            pastaPessoal.getArquivos().add(new ArquivoMd(nomeArquivo, conteudoFile));
+            diretorio.getArquivos().add(new ArquivoMd(nomeArquivo, conteudoFile));
 
         }
     }
@@ -86,9 +85,10 @@ public class Usuario {
         }
     }
 
-    public void excluirArquivo(String nome){
-        if (pastaPessoal.containsArquivo(nome, ""))
-                pastaPessoal.getArquivos().remove(nome);
+    public void excluirArquivo(String nome, Diretorio diretorio){
+        if (diretorio.containsArquivo(nome, ""))
+            //String diferente de Objeto Arquivo!
+                diretorio.getArquivos().remove(nome);
     }
 
     public String getNome() {

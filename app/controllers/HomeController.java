@@ -4,15 +4,12 @@ import Util.EmailValidator;
 import models.*;
 import play.data.DynamicForm;
 import play.data.FormFactory;
-import play.mvc.*;
-
-
+import play.mvc.Controller;
+import play.mvc.Result;
 import views.html.*;
-import java.sql.Timestamp;
-import java.security.SecureRandom;
 
 import javax.inject.Inject;
-
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -167,7 +164,10 @@ public class HomeController extends Controller {
     public Result chamarCaixa() {return ok(caixaNotificacoes.render(usuarioLogado)); }
 
 
-    public Result chamaTexto(){return ok(texto.render(listaDeArquivos));}
+    public Result chamaTexto(String caminhoDiretorio){
+        Diretorio dir = findPathFromList(caminhoDiretorio);
+        return ok(texto.render(listaDeArquivos, dir));
+    }
 
 
     /*public  Result salvaArquivo(){
@@ -195,7 +195,7 @@ public class HomeController extends Controller {
         }
     }
 
-    public Result criaArquivos(){
+    public Result criaArquivos(String caminhoDiretorio){
         if (isAutenticate()) {
             DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
             String nomeArquivo = (String) form.getData().get("nomeArquivo");
@@ -209,8 +209,9 @@ public class HomeController extends Controller {
                 arquivo = new ArquivoMd(nomeArquivo, conteudoArquivo);
             }
             listaDeArquivos.add(arquivo);
-            usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), extensao);
-            return ok(home.render(usuarioLogado, usuarioLogado.getPastaPessoal()));
+            Diretorio dir = findPathFromList(caminhoDiretorio);
+            usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), extensao, dir);
+            return ok(home.render(usuarioLogado, dir));
         } else {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
             return redirect(routes.HomeController.index());
@@ -225,12 +226,12 @@ public class HomeController extends Controller {
         }
     }
 
-    public Result abreArquivo(String nomeArquivo){
+    public Result abreArquivo(String nomeArquivo, String caminhoDiretorio){
         if (isAutenticate()) {
             Arquivo arquivo = findFileFromList(nomeArquivo);
             String conteudo = arquivo.getConteudoArquivo();
-
-            return ok(arquivoConteudo.render(nomeArquivo, conteudo));
+            Diretorio dir = findPathFromList(caminhoDiretorio);
+            return ok(arquivoConteudo.render(nomeArquivo, conteudo, dir));
         } else {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
             return redirect(routes.HomeController.index());
@@ -250,24 +251,24 @@ public class HomeController extends Controller {
     }
 
 
-    public Result deletaArquivo(String nomeArquivo){
+    public Result deletaArquivo(String nomeArquivo, String caminhoDiretorio){
         if (isAutenticate()) {
             deletFileFromList(nomeArquivo);
+            Diretorio dir = findPathFromList(caminhoDiretorio);
+            usuarioLogado.excluirArquivo(nomeArquivo, dir);
 
-            usuarioLogado.excluirArquivo(nomeArquivo);
-
-            return ok(home.render(usuarioLogado, usuarioLogado.getPastaPessoal()));
+            return ok(home.render(usuarioLogado, dir));
         } else {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
             return redirect(routes.HomeController.index());
         }
     }
 
-    public Result chamaModificaArquivo(String nomeArquivo){
+    public Result chamaModificaArquivo(String nomeArquivo, String caminhoDiretorio){
         if (isAutenticate()) {
             Arquivo arquivo = findFileFromList(nomeArquivo);
-
-            return ok(modificaArquivo.render(nomeArquivo, arquivo.getConteudoArquivo()));
+            Diretorio dir = findPathFromList(caminhoDiretorio);
+            return ok(modificaArquivo.render(nomeArquivo, arquivo.getConteudoArquivo(), dir));
         } else {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
             return redirect(routes.HomeController.index());
@@ -275,7 +276,7 @@ public class HomeController extends Controller {
     }
 
     //__________________________________________________________
-    public Result editaArquivo(String nomeArquivoASerEditado){
+    public Result editaArquivo(String nomeArquivoASerEditado, String caminhoDiretorio){
         if (isAutenticate()) {
             DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
             String nomeArquivo = (String) form.getData().get("nomeArquivo");
@@ -289,9 +290,10 @@ public class HomeController extends Controller {
                 arquivo = new ArquivoMd(nomeArquivo, conteudoArquivo);
             }
             listaDeArquivos.add(arquivo);
-            usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), extensao);
+            Diretorio dir = findPathFromList(caminhoDiretorio);
+            usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), extensao, dir);
 
-            return ok(home.render(usuarioLogado, usuarioLogado.getPastaPessoal()));
+            return ok(home.render(usuarioLogado, dir));
         } else {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
             return redirect(routes.HomeController.index());

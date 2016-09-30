@@ -1,4 +1,4 @@
-@(nomeArquivo: String, conteudoArquivo: String)
+@(nomeArquivo: String, conteudoArquivo: String, diretorio: Diretorio)
 
 @main("SIBox"){
     <head>
@@ -25,7 +25,7 @@
 
         <div id="mostraConteudoFile">
             <center>
-                <form action="/modificaArquivo/@nomeArquivo">
+                <form action="@routes.HomeController.chamaModificaArquivo(nomeArquivo.toString, diretorio.getCaminho)">
                     <br>
                     <div class="field-wrap">
                         <label>
@@ -43,7 +43,7 @@
                     </div>
                 </form>
 
-                <form  action="/deletaArquivo/@nomeArquivo">
+                <form  action="@routes.HomeController.deletaArquivo(nomeArquivo.toString, diretorio.getCaminho)">
                     <br>
                     <div id="texto_html_form_buttons">
 
