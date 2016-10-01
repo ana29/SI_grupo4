@@ -161,6 +161,7 @@ public class HomeController extends Controller {
     }
 
     public Result chamarCaixa() {return ok(caixaNotificacoes.render(usuarioLogado)); }
+    public Result chamarLixeira() {return ok(lixeira.render());}
 
 
     public Result chamaTexto(String caminhoDiretorio){

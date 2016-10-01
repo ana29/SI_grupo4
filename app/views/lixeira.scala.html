@@ -1,0 +1,28 @@
+
+
+@main("SIBox"){
+    <head>
+        <meta charset="UTF-8">
+
+        <link href="@routes.Assets.at("stylesheets/pastas.css")" rel="stylesheet">
+        <link href='@routes.Assets.at("stylesheets/fonte-login.css")' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/normalize-home.css")">
+        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/home.css")">
+    </head>
+    <body>
+
+        <header>
+            <script src="@routes.Assets.at("javascripts/jquery.min.js")"></script>
+            <script src="@routes.Assets.at("javascripts/home.js")"></script>
+
+            <div class="actions">
+                <a href="@routes.HomeController.chamarHome()"><i style="margin-right: 8px" class="material-icons">assignment_return</i></a>
+                <i style="margin-right: 15px"></i>
+                <a href="@routes.HomeController.logOut()"><i class="material-icons">power_settings_new</i></a>
+            </div>
+        </header>
+
+
+    </body>
+}

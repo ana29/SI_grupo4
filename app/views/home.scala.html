@@ -20,12 +20,11 @@
             <i style="font-size: 60px" class="material-icons">face</i><h1>@usuario.getNome, <br> Essa é a sua Home</h1>
             <span></span>
             <div class="actions">
-                    <!-- Aqui, para criar uma nova pasta ou um novo arquivo, basta colocar como eu fiz no ultimo:
-                    <a href=" routes.HomeController.metodoquefazaatividade()"> !-->
                 <a href="@routes.HomeController.chamarCaixa()"><i style="margin-right: 8px" class="material-icons">notifications</i></a>
                 <a id="boxes"><i style="margin-bottom: 8px" class="material-icons">create_new_folder</i></a>
                 <a id="share"><i style="margin-bottom: 8px" class="material-icons">link</i></a>
                 <a href="/chamaTexto/@diretorio.getCaminho"><i style="margin-right: 8px" class="material-icons">note_add</i> </a>
+                <a href="@routes.HomeController.chamarLixeira()"><i style="margin-right: 8px" class="material-icons">delete</i></a>
                 <i style="margin-right: 15px"></i>
                 <span>@session().get("login")</span>
                 <i style="margin-right: 15px"></i>
