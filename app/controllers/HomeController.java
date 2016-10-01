@@ -1,19 +1,18 @@
 package controllers;
 
+import Util.EmailValidator;
 import models.*;
 import play.data.DynamicForm;
 import play.data.FormFactory;
-import play.mvc.*;
-
-import play.mvc.*;
-
-
+import play.mvc.Controller;
+import play.mvc.Result;
 import views.html.*;
 
 import javax.inject.Inject;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Random;
 import java.util.logging.Logger;
 
 
@@ -25,7 +24,6 @@ public class HomeController extends Controller {
 
     @Inject
     private FormFactory formFactory;
-    private Util util = new Util();
     private List<Usuario> listaDeUsuarios = new ArrayList<>();
     private List<Arquivo> listaDeArquivos = new ArrayList<>();
     private Usuario usuarioLogado = null;
@@ -38,10 +36,20 @@ public class HomeController extends Controller {
     public Result cadastrarUsuario(){
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
 
-        if (verificaCredenciais(usuario.getNome(), usuario.getEmail(), usuario.getSenha())) {
-            listaDeUsuarios.add(usuario);
-            flash("sucesso", "Cadastrado com sucesso.");
+        try{
+            if (verificaCredenciais(usuario.getNome(), usuario.getEmail(), usuario.getSenha())) {
+                listaDeUsuarios.add(usuario);
+                flash("sucesso", "Usuario cadastrado com sucesso.");
+            }
+        }catch (Exception e){
+            flash("erro", "O usuario não foi cadastrado: " + e.getMessage());
         }
+//        if (verificaCredenciais(usuario.getNome(), usuario.getEmail(), usuario.getSenha())) {
+//            listaDeUsuarios.add(usuario);
+//            flash("sucesso", "Cadastrado com sucesso.");
+//        }else{
+//            flash("erro", "O usuario não foi cadastrado.");
+//        }
         return redirect(routes.HomeController.index());
     }
 
@@ -88,13 +96,35 @@ public class HomeController extends Controller {
     }
 
     //Validacao
+
+    private boolean verificaTimeStampDoToken(){
+
+        //horaAtual -> pega a hora da realizacao de determinada requisição
+        Timestamp horaAtual = new Timestamp(System.currentTimeMillis());
+        //diasLong -> será a diferenca entra a hr que logou e a hora da requisição
+        Long diasLong = horaAtual.getTime() - usuarioLogado.getHoraDoLogin().getTime();
+        //dias -> converte diasLong para a quantidade de dias
+        long dias = diasLong/(1000*60*60*24);
+
+        if(dias > 1){
+            return false;
+        }
+        return true;
+    }
+
+
     private boolean validarLogin(String email, String senha) throws Exception {
 
         for (Usuario usuario : listaDeUsuarios) {
             if (usuario.getEmail().equals(email)) {
                 if (usuario.getSenha().equals(senha)) {
+                    Timestamp horaDoLogin = new Timestamp(System.currentTimeMillis());
+                    usuario.setHoraDoLogin(horaDoLogin);
                     usuarioLogado = usuario;
+
                     session("login", usuario.getEmail());
+                    session("token", geraToken());
+
                     return true;
                 } else {
                     throw new Exception("Login ou senha incorretos.");
@@ -104,8 +134,21 @@ public class HomeController extends Controller {
         throw new Exception("Usuario inexistente");
     }
 
-    private Boolean verificaCredenciais(String nome, String email, String senha){
-        return util.validaCredenciais(nome, email, senha);
+    private Boolean verificaCredenciais(String nome, String email, String senha) throws Exception{
+        EmailValidator userMail = new EmailValidator();
+        if (nome.length() > 2 && nome.length() < 21){
+            if (senha.length() > 7){
+                if (userMail.validate(email)){
+                    return true;
+                }else{
+                    throw new Exception("Email inválido.");
+                }
+            }else{
+                throw new Exception("Senha inválida.");
+            }
+        }else {
+            throw new Exception("Nome inválido");
+        }
     }
 
     //Renders
@@ -114,13 +157,15 @@ public class HomeController extends Controller {
     }
 
     public Result chamarHome() {
-        return ok(home.render(usuarioLogado));
+        return ok(home.render(usuarioLogado, usuarioLogado.getPastaPessoal()));
     }
 
     public Result chamarCaixa() {return ok(caixaNotificacoes.render(usuarioLogado)); }
 
 
-    public Result chamaTexto(){return ok(texto.render(listaDeArquivos));}
+    public Result chamaTexto(String caminhoDiretorio){
+        return ok(texto.render(listaDeArquivos, usuarioLogado.buscaDiretorio(caminhoDiretorio)));
+    }
 
 
     /*public  Result salvaArquivo(){
@@ -130,100 +175,123 @@ public class HomeController extends Controller {
 
         return redirect(routes.HomeController.chamarHome());}
 */
+    public Result criaPasta(String caminhoDiretorioAtual){
+        if (isAutenticate()) {
+            LOGGER.info("ENTROU NO CONTROLLER");
+            Diretorio diretorioAtual = usuarioLogado.buscaDiretorio(caminhoDiretorioAtual);
+            Diretorio dir = formFactory.form(Diretorio.class).bindFromRequest().get();
 
-    public Result criaPasta(){
-        Diretorio dir = formFactory.form(Diretorio.class).bindFromRequest().get();
-        System.out.println("Executou o criaPasta");
-        if (dir.getNome() == null || dir.getNome().isEmpty()){
-            return ok(index.render());
-        }else {
-            usuarioLogado.criaSubDiretorio(dir.getNome());
-            return ok(home.render(usuarioLogado));
+            if (dir.getNome() == null || dir.getNome().isEmpty()) {
+                return ok(home.render(usuarioLogado, diretorioAtual));
+            } else {
+                usuarioLogado.criaSubDiretorio(dir.getNome(), caminhoDiretorioAtual);
+                return ok(home.render(usuarioLogado, diretorioAtual));
+            }
+        } else {
+            flash("tokenExpirado", "Você não está autenticado! Realize o login.");
+            return redirect(routes.HomeController.index());
         }
     }
 
-    public Result editaNomePasta() {
-        String nomeNovo = request().getQueryString("nome").trim();
-        String nomeAntigo = request().getQueryString("antigoNomePasta").trim();
-        Diretorio dir = usuarioLogado.getDiretorio(nomeAntigo);
-        dir.setNome(nomeNovo);
-        System.out.print(dir.getNome());
-        return ok(home.render(usuarioLogado));
-    }
+    public Result criaArquivos(String caminhoDiretorio){
+        if (isAutenticate()) {
+            DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
+            String nomeArquivo = (String) form.getData().get("nomeArquivo");
+            String conteudoArquivo = (String) form.getData().get("conteudoFile");
+            String extensao = (String) form.getData().get("extensao");
 
-    public Result editaNomeArquivo() {
-        String nomeNovo = request().getQueryString("nome").trim();
-        String nomeAntigo = request().getQueryString("antigoNome").trim();
-        return ok(home.render(usuarioLogado));
-    }
-
-    public Result criaArquivos(){
-        DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
-        String nomeArquivo = (String) form.getData().get("nomeArquivo");
-        String conteudoArquivo = (String) form.getData().get("conteudoFile");
-        String extensao = (String) form.getData().get("extensao");
-
-        Arquivo arquivo;
-        if (extensao.equals(".txt")){
-            arquivo = new ArquivoTxt(nomeArquivo, conteudoArquivo);
+            Arquivo arquivo;
+            if (extensao.equals(".txt")) {
+                arquivo = new ArquivoTxt(nomeArquivo, conteudoArquivo);
+            } else {
+                arquivo = new ArquivoMd(nomeArquivo, conteudoArquivo);
+            }
+            listaDeArquivos.add(arquivo);
+            Diretorio dir = usuarioLogado.buscaDiretorio(caminhoDiretorio);
+            usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), extensao, caminhoDiretorio);
+            return ok(home.render(usuarioLogado, dir));
+        } else {
+            flash("tokenExpirado", "Você não está autenticado! Realize o login.");
+            return redirect(routes.HomeController.index());
         }
-        else{
-            arquivo = new ArquivoMd(nomeArquivo, conteudoArquivo);
+    }
+    public Result abrePasta(String diretorio){
+        if (isAutenticate()){
+            return ok(home.render(usuarioLogado, usuarioLogado.buscaDiretorio(diretorio)));
+        } else {
+            flash("tokenExpirado", "Você não está autenticado! Realize o login.");
+            return redirect(routes.HomeController.index());
         }
-        listaDeArquivos.add(arquivo);
-        usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), extensao);
-        return ok(home.render(usuarioLogado));
     }
 
-
-    public Result abreArquivo(String nomeArquivo){
-
-        Arquivo arquivo = findFileFromList(nomeArquivo);
-        String conteudo = arquivo.getConteudoArquivo();
-
-        return ok(arquivoConteudo.render(nomeArquivo, conteudo));
+    public Result abreArquivo(String nomeArquivo, String caminhoDiretorio){
+        if (isAutenticate()) {
+            Arquivo arquivo = findFileFromList(nomeArquivo);
+            String conteudo = arquivo.getConteudoArquivo();
+            return ok(arquivoConteudo.render(nomeArquivo, conteudo, usuarioLogado.buscaDiretorio(caminhoDiretorio)));
+        } else {
+            flash("tokenExpirado", "Você não está autenticado! Realize o login.");
+            return redirect(routes.HomeController.index());
+        }
     }
 
     public Result leituraArquivo(String nomeArquivo){
+        if (isAutenticate()) {
+            Arquivo arquivo = findFileFromList(nomeArquivo);
+            String conteudo = arquivo.getConteudoArquivo();
 
-        Arquivo arquivo = findFileFromList(nomeArquivo);
-        String conteudo = arquivo.getConteudoArquivo();
-
-        return ok(leituraArquivo.render(nomeArquivo, conteudo));
+            return ok(leituraArquivo.render(nomeArquivo, conteudo));
+        } else {
+            flash("tokenExpirado", "Você não está autenticado! Realize o login.");
+            return redirect(routes.HomeController.index());
+        }
     }
 
 
-    public Result deletaArquivo(String nomeArquivo){
-        deletFileFromList(nomeArquivo);
-        usuarioLogado.excluirArquivo(nomeArquivo);
-        return ok(home.render(usuarioLogado));
+    public Result deletaArquivo(String nomeArquivo, String caminhoDiretorio){
+        if (isAutenticate()) {
+            deletFileFromList(nomeArquivo);
+            usuarioLogado.excluirArquivo(nomeArquivo, caminhoDiretorio);
+
+            return ok(home.render(usuarioLogado, usuarioLogado.buscaDiretorio(caminhoDiretorio)));
+        } else {
+            flash("tokenExpirado", "Você não está autenticado! Realize o login.");
+            return redirect(routes.HomeController.index());
+        }
     }
 
-    public Result chamaModificaArquivo(String nomeArquivo){
-        Arquivo arquivo=findFileFromList(nomeArquivo);
-
-        return ok(modificaArquivo.render(nomeArquivo, arquivo.getConteudoArquivo()));
+    public Result chamaModificaArquivo(String nomeArquivo, String caminhoDiretorio){
+        if (isAutenticate()) {
+            Arquivo arquivo = findFileFromList(nomeArquivo);
+            return ok(modificaArquivo.render(nomeArquivo, arquivo.getConteudoArquivo(), usuarioLogado.buscaDiretorio(caminhoDiretorio)));
+        } else {
+            flash("tokenExpirado", "Você não está autenticado! Realize o login.");
+            return redirect(routes.HomeController.index());
+        }
     }
 
     //__________________________________________________________
-    public Result editaArquivo(String nomeArquivoASerEditado){
+    public Result editaArquivo(String nomeArquivoASerEditado, String caminhoDiretorio){
+        if (isAutenticate()) {
+            DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
+            String nomeArquivo = (String) form.getData().get("nomeArquivo");
+            String conteudoArquivo = (String) form.getData().get("conteudoFile");
+            String extensao = (String) form.getData().get("extensao");
 
-        DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
-        String nomeArquivo = (String) form.getData().get("nomeArquivo");
-        String conteudoArquivo = (String) form.getData().get("conteudoFile");
-        String extensao = (String) form.getData().get("extensao");
+            Arquivo arquivo;
+            if (extensao.equals(".txt")) {
+                arquivo = new ArquivoTxt(nomeArquivo, conteudoArquivo);
+            } else {
+                arquivo = new ArquivoMd(nomeArquivo, conteudoArquivo);
+            }
+            listaDeArquivos.add(arquivo);
+            usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), extensao, caminhoDiretorio);
 
-        Arquivo arquivo;
-        if (extensao.equals(".txt")){
-            arquivo = new ArquivoTxt(nomeArquivo, conteudoArquivo);
+            return ok(home.render(usuarioLogado, usuarioLogado.buscaDiretorio(caminhoDiretorio)));
+        } else {
+            flash("tokenExpirado", "Você não está autenticado! Realize o login.");
+            return redirect(routes.HomeController.index());
         }
-        else{
-            arquivo = new ArquivoMd(nomeArquivo, conteudoArquivo);
-        }
-        listaDeArquivos.add(arquivo);
-        usuarioLogado.addArquivo(arquivo.getNomeArquivo(), arquivo.getConteudoArquivo(), extensao);
-
-        return ok(home.render(usuarioLogado));
 
     }
     //_____________________________________________________
@@ -246,6 +314,8 @@ public class HomeController extends Controller {
         }
         return arquivo;
     }
+
+
     //_____________________________________________________
     //GETs and SETs
     public List<Usuario> getListaDeUsuarios() {
@@ -261,18 +331,22 @@ public class HomeController extends Controller {
      */
 
     public Result compartilha(){
+        if (isAutenticate()) {
+            DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
+            String nomeArquivo = (String) form.getData().get("nomeArquivo");
+            String emailUsuario = (String) form.getData().get("emailUsuario");
+            String tipo = (String) form.getData().get("tipo");
 
-        DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
-        String nomeArquivo = (String) form.getData().get("nomeArquivo");
-        String emailUsuario = (String) form.getData().get("emailUsuario");
-        String tipo = (String) form.getData().get("tipo");
+            if (tipo.equals("edicao"))
+                compartilhaEdicao(emailUsuario, nomeArquivo);
+            else
+                compartilhaLeitura(emailUsuario, nomeArquivo);
 
-        if (tipo.equals("edicao"))
-            compartilhaEdicao(emailUsuario, nomeArquivo);
-        else
-            compartilhaLeitura(emailUsuario, nomeArquivo);
-
-        return ok(home.render(usuarioLogado));
+            return ok(home.render(usuarioLogado, usuarioLogado.getPastaPessoal()));
+        } else {
+            flash("tokenExpirado", "Você não está autenticado! Realize o login.");
+            return redirect(routes.HomeController.index());
+        }
     }
 
     public void compartilhaEdicao(String emailUsuario, String nomeArquivo){
@@ -298,4 +372,22 @@ public class HomeController extends Controller {
             }
         }
     }
+
+    private String geraToken(){
+        Random rand = new Random();
+        String token = Long.toHexString(rand.nextLong()) + Long.toHexString(rand.nextLong());
+        System.out.println(token);
+        return token;
+    }
+
+    private boolean isAutenticate(){
+
+        if(session("token") != null && verificaTimeStampDoToken()){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
 }
