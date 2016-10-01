@@ -11,6 +11,7 @@ import play.mvc.*;
 import views.html.*;
 
 import javax.inject.Inject;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -298,4 +299,45 @@ public class HomeController extends Controller {
             }
         }
     }
+
+    /*
+     * Compressão
+     */
+
+    public Result comprime(){
+        DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
+        String nomeObjeto = (String) form.getData().get("nomeObjeto");
+        String tipo = (String) form.getData().get("tipo");
+
+        for (Arquivo arquivo: listaDeArquivos) {
+            if (arquivo.getNomeArquivo().equals(nomeObjeto)) {
+                // vai precisar que o arquivo criado em ArquivoTxt e ArquivoMd
+                // seja salvo (declarado) fora do construtor e inicializado dentro dele
+                // vai precisar criar um método também que retorne esse arquivo pra poder
+                // enviar ele pra ser zipado.
+                // O método abaixo não vai receber o nome do arquivo e sim o próprio.
+                comprimeArquivo(arquivo.getFile(), tipo);
+            }
+            // faz um else
+                // faz um for pra pegar o nome dos diretórios
+                    // faz um if comparando o nome da pasta com o nome do objeto
+        }
+
+        return ok(home.render(usuarioLogado));
+    }
+
+    private void comprimeArquivo(File arquivo, String tipo) {
+        if (tipo.equals("zip"))
+            util.comprimeZip(arquivo);
+        else
+            util.comprimeGzip(arquivo);
+    }
+
+    private void comprimePasta(String nomeObjeto, String tipo) {
+//        if (tipo.equals("zip"))
+//            util.comprimeZip(nomeObjeto);
+//        else
+//            util.comprimeGzip(nomeObjeto);
+    }
+
 }

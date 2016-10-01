@@ -20,6 +20,7 @@ GET /criaPasta                      controllers.HomeController.criaPasta()
 GET /Caixa                          controllers.HomeController.chamarCaixa()
 
 GET /compartilha                    controllers.HomeController.compartilha()
+GET /comprime                    controllers.HomeController.comprime()
 
 #POST /salvaArquivo                  controllers.HomeController.salvaArquivo()
 

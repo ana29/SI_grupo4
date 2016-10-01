@@ -60,6 +60,11 @@ public class ArquivoMd implements Arquivo {
     public String getExtensao(){return EXTENSAO;}
 
     @Override
+    public File getFile() {
+        return null;
+    }
+
+    @Override
     public List<String> getCompartilhadosEdicao() {
         return compartilhadosEdicao;
     }
