@@ -69,7 +69,7 @@ public class ArquivoTxt implements Arquivo{
 
             }
             catch(Exception erro){
-            erro.getCause();
+                erro.getCause();
             }
 
         }

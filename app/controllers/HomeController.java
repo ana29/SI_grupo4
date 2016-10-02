@@ -311,26 +311,25 @@ public class HomeController extends Controller {
 
         for (Arquivo arquivo: listaDeArquivos) {
             if (arquivo.getNomeArquivo().equals(nomeObjeto)) {
-                // vai precisar que o arquivo criado em ArquivoTxt e ArquivoMd
-                // seja salvo (declarado) fora do construtor e inicializado dentro dele
-                // vai precisar criar um método também que retorne esse arquivo pra poder
-                // enviar ele pra ser zipado.
-                // O método abaixo não vai receber o nome do arquivo e sim o próprio.
                 comprimeArquivo(arquivo.getFile(), tipo);
             }
             // faz um else
                 // faz um for pra pegar o nome dos diretórios
                     // faz um if comparando o nome da pasta com o nome do objeto
         }
-
         return ok(home.render(usuarioLogado));
     }
 
     private void comprimeArquivo(File arquivo, String tipo) {
-        if (tipo.equals("zip"))
-            util.comprimeZip(arquivo);
-        else
-            util.comprimeGzip(arquivo);
+        try{
+            if (tipo.equals("zip"))
+                util.comprimeZip(arquivo);
+            else
+                util.comprimeGzip(arquivo);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void comprimePasta(String nomeObjeto, String tipo) {

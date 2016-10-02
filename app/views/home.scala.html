@@ -125,21 +125,23 @@
 
 
         <div id="compress">
-            <a href="#" class="close"> X</a>
             <form id="dialogCompress" class="windowCompress" action="@routes.HomeController.comprime()">
+                <a href="#" class="closeCompress"> x</a>
                 <h3>Comprimir</h3>
                 <p>
-                    Objeto: <input id="input" name="nomeObejto" type="text" required autocomplete="off"/><br/>
+                    Objeto: <input id="input" name="nomeObjeto" type="text" required autocomplete="off"/><br/>
 
+                        <br>
                         <input id="radio" type="radio" name="tipo" value="zip" required/>zip
 
                         <input id="radio" type="radio" name="tipo" value="gzip" required/>gzip
+
 
                     <input id="button" type="submit" value="Comprimir"/>
                 </p>
             </form>
                 <!-- Máscara para cobrir a tela -->
-            <div id="mask"> </div>
+            <div id="maskCompress"> </div>
         </div>
 
         <script src="@routes.Assets.at("javascripts/home.js")" type="text/javascript"></script>

@@ -16,6 +16,7 @@ public class ArquivoMd implements Arquivo {
     private Diretorio pastaPessoal;
     private List<String> compartilhadosEdicao;
     private List<String> compartilhadosLeitura;
+    private File arquivo = null;
 
     public ArquivoMd(){}
 
@@ -30,7 +31,7 @@ public class ArquivoMd implements Arquivo {
     @Override
     public void criarArquivo() {
 
-        File arquivo = new File(nomeArquivo+EXTENSAO);
+        arquivo = new File(nomeArquivo+EXTENSAO);
         try(FileWriter escrever = new FileWriter(arquivo)){
             escrever.write((String) conteudoFile);
             escrever.close();
@@ -61,7 +62,7 @@ public class ArquivoMd implements Arquivo {
 
     @Override
     public File getFile() {
-        return null;
+        return arquivo;
     }
 
     @Override
