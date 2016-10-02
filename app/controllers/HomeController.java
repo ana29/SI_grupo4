@@ -53,7 +53,6 @@ public class HomeController extends Controller {
         return redirect(routes.HomeController.index());
     }
 
-
     public Result logar(){
 
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
@@ -93,7 +92,6 @@ public class HomeController extends Controller {
         }
         return true;
     }
-
 
     private boolean validarLogin(String email, String senha) throws Exception {
 
@@ -150,7 +148,17 @@ public class HomeController extends Controller {
         return ok(texto.render(listaDeArquivos, usuarioLogado.buscaDiretorio(caminhoDiretorio)));
     }
 
-    //_________________________________________________________
+    public Result chamaModificaArquivo(String nomeArquivo, String caminhoDiretorio){
+        if (isAutenticate()) {
+            Arquivo arquivo = findFileFromList(nomeArquivo);
+            return ok(modificaArquivo.render(nomeArquivo, arquivo.getConteudoArquivo(), usuarioLogado.buscaDiretorio(caminhoDiretorio)));
+        } else {
+            flash("tokenExpirado", "Você não está autenticado! Realize o login.");
+            return redirect(routes.HomeController.index());
+        }
+    }
+
+    //Acoes
 
     public Result criaPasta(String caminhoDiretorioAtual){
         if (isAutenticate()) {
@@ -229,18 +237,6 @@ public class HomeController extends Controller {
         }
     }
 
-
-    public Result chamaModificaArquivo(String nomeArquivo, String caminhoDiretorio){
-        if (isAutenticate()) {
-            Arquivo arquivo = findFileFromList(nomeArquivo);
-            return ok(modificaArquivo.render(nomeArquivo, arquivo.getConteudoArquivo(), usuarioLogado.buscaDiretorio(caminhoDiretorio)));
-        } else {
-            flash("tokenExpirado", "Você não está autenticado! Realize o login.");
-            return redirect(routes.HomeController.index());
-        }
-    }
-
-    //__________________________________________________________
     public Result editaArquivo(String nomeArquivoASerEditado, String caminhoDiretorio){
         if (isAutenticate()) {
             DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
@@ -265,18 +261,6 @@ public class HomeController extends Controller {
 
     }
 
-
-
-    public Arquivo findFileFromList(String nomeArquivo){
-        Arquivo arquivo = null ;
-        for (int i=0; i< listaDeArquivos.size();i++){
-            if (nomeArquivo.equals(listaDeArquivos.get(i).getNomeArquivo()))
-                arquivo =  listaDeArquivos.get(i);
-        }
-        return arquivo;
-    }
-
-    //_____________________________________________________
     public Result moveArquivoParaLixeira(String nomeArquivo, String caminhoDiretorio){
 
         if (isAutenticate()) {
@@ -289,7 +273,7 @@ public class HomeController extends Controller {
             usuarioLogado.excluirArquivo(nome,extensao,caminhoDiretorio);
 
             listaDeArquivos.remove(arquivo);
-            arquivo.deletaArquivoSistema(nomeArquivo);
+           // arquivo.deletaArquivoSistema((File) arquivo);
 
             if (extensao.equals(".txt")) {
                 arquivo = new ArquivoTxt(nomeArquivo, conteudo);
@@ -313,15 +297,45 @@ public class HomeController extends Controller {
 
 }
 
-    //_____________________________________________________
-    //GETs and SETs
-    public List<Usuario> getListaDeUsuarios() {
-        return listaDeUsuarios;
-    }
-    public List<Arquivo> getListaDeArquivos() {
-        return listaDeArquivos;
+    public Result deletaTudoParaSempre(){
+
+        if (isAutenticate()) {
+            Diretorio dir = usuarioLogado.getLixeira();
+
+            while (usuarioLogado.lixeira.getArquivos().size()>0){
+            for (int i = 0; i <dir.getArquivos().size() ; i++) {
+                Arquivo arq = dir.getArquivos().get(i);
+                usuarioLogado.excluirArquivo(arq.getNomeArquivo(),arq.getExtensao(), usuarioLogado.getCaminhoLixeira());
+                listaDeArquivos.remove(arq);
+                //arq.deletaArquivoSistema((File) arq);
+
+            }
+            //Aqui ainda n foi testado pq n existe uma forma de enviar a pasta para a lixeira
+            for (int i = 0; i < dir.getSubDiretorios().size() ; i++) {
+                dir.getSubDiretorios().remove(i);
+
+            }
+            }
+            return ok(lixeira.render(usuarioLogado,usuarioLogado.getLixeira()));
+
+
+
+        } else {
+            flash("tokenExpirado", "Você não está autenticado! Realize o login.");
+            return redirect(routes.HomeController.index());
+        }
+
+
     }
 
+    public Arquivo findFileFromList(String nomeArquivo){
+        Arquivo arquivo = null ;
+        for (int i=0; i< listaDeArquivos.size();i++){
+            if (nomeArquivo.equals(listaDeArquivos.get(i).getNomeArquivo()))
+                arquivo =  listaDeArquivos.get(i);
+        }
+        return arquivo;
+    }
 
     /*
      * Compartilhamento
@@ -387,4 +401,12 @@ public class HomeController extends Controller {
 
     }
 
+
+    //GETs and SETs------------------------------------------------------
+    public List<Usuario> getListaDeUsuarios() {
+        return listaDeUsuarios;
+    }
+    public List<Arquivo> getListaDeArquivos() {
+        return listaDeArquivos;
+    }
 }

@@ -28,6 +28,7 @@ GET /moveArquivoParaLixeira/:nomeArquivo/*caminhoDiretorio     controllers.HomeC
 GET /chamaTexto/*diretorio                    controllers.HomeController.chamaTexto(diretorio)
 
 GET /chamaLixeira                              controllers.HomeController.chamarLixeira()
+GET /deletaTudoParaSempre                      controllers.HomeController.deletaTudoParaSempre()
 
 GET /abrePasta/*diretorio                     controllers.HomeController.abrePasta(diretorio)
 GET /abreArquivo/                             controllers.HomeController.abreArquivo(nomeArquivo, diretorio)

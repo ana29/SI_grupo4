@@ -51,9 +51,8 @@ public class ArquivoMd implements Arquivo {
     }
 
     @Override
-    public void deletaArquivoSistema(String nomeArquivo) {
-        File arquivo = new File(nomeArquivo);
-        arquivo.delete();
+    public void deletaArquivoSistema(File arq) {
+       arq.delete();
     }
 
     @Override
