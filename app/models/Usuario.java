@@ -97,11 +97,15 @@ public class Usuario {
         }
     }
 
-    public void excluirArquivo(String nome, String caminhoDiretorio){
+    public void excluirArquivo(String nome,String extensao ,String caminhoDiretorio){
         Diretorio diretorio = buscaDiretorio(caminhoDiretorio);
 
-        if (diretorio.containsArquivo(nome, ""))
-                diretorio.getArquivos().remove(nome);
+        if (diretorio.containsArquivo(nome, extensao))
+            for (int i = 0; i <diretorio.getArquivos().size() ; i++) {
+                Arquivo arq = diretorio.getArquivos().get(i);
+                if (arq.getNomeArquivo().equals(nome)&&arq.getExtensao().equals(extensao))
+                    diretorio.getArquivos().remove(i);
+            }
     }
 
     public Diretorio buscaDiretorio(String caminhoDiretorio){

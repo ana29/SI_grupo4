@@ -264,7 +264,7 @@ public class HomeController extends Controller {
         }
 
     }
-    //_____________________________________________________
+
 
 
     public Arquivo findFileFromList(String nomeArquivo){
@@ -276,8 +276,8 @@ public class HomeController extends Controller {
         return arquivo;
     }
 
-
-    public Result moveArquivoParaLixeira(String nomeArquivo){
+    //_____________________________________________________
+    public Result moveArquivoParaLixeira(String nomeArquivo, String caminhoDiretorio){
 
         if (isAutenticate()) {
             Arquivo arquivo = findFileFromList(nomeArquivo);
@@ -285,10 +285,11 @@ public class HomeController extends Controller {
             String conteudo = arquivo.getConteudoArquivo();
             String extensao = arquivo.getExtensao();
 
-            //usuarioLogado.excluirArquivo(nome,usuarioLogado.getCaminhoLixeira());
+
+            usuarioLogado.excluirArquivo(nome,extensao,caminhoDiretorio);
+
             listaDeArquivos.remove(arquivo);
-
-
+            arquivo.deletaArquivoSistema(nomeArquivo);
 
             if (extensao.equals(".txt")) {
                 arquivo = new ArquivoTxt(nomeArquivo, conteudo);

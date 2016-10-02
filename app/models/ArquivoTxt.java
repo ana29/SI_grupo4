@@ -72,7 +72,7 @@ public class ArquivoTxt implements Arquivo{
         }
 
     public void deletaArquivoSistema(String nomeArquivo){
-        File arquivo = new File(nomeArquivo);
+        File arquivo = new File(nomeArquivo+EXTENSAO);
         arquivo.delete();
 
     }

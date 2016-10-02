@@ -24,7 +24,7 @@ GET /Caixa                                    controllers.HomeController.chamarC
 GET /compartilha                              controllers.HomeController.compartilha()
 
 GET /criaArquivos/*diretorio                  controllers.HomeController.criaArquivos(diretorio)
-GET /moveArquivoParaLixeira/:nomeArquivo/     controllers.HomeController.moveArquivoParaLixeira(nomeArquivo)
+GET /moveArquivoParaLixeira/:nomeArquivo/*caminhoDiretorio     controllers.HomeController.moveArquivoParaLixeira(nomeArquivo,caminhoDiretorio)
 GET /chamaTexto/*diretorio                    controllers.HomeController.chamaTexto(diretorio)
 
 GET /chamaLixeira                              controllers.HomeController.chamarLixeira()
