@@ -53,25 +53,7 @@ public class HomeController extends Controller {
         return redirect(routes.HomeController.index());
     }
 
-//    public Result escreverTexto(){
-//        Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
-//        listaDeUsuarios.add(usuario);
-//
-//        try {
-//            if (validarLogin(usuario.getEmail(), usuario.getSenha())){
-//                return redirect(routes.HomeController.chamarHome());
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return redirect(routes.HomeController.index());
-//    }
 
-     //   if (validarLogin(usuario.getEmail(), usuario.getSenha())){
-     //       return redirect(routes.HomeController.chamarHome());
-     //   }
-   //     return redirect(routes.HomeController.index());
-  //  }
     public Result logar(){
 
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
@@ -161,21 +143,15 @@ public class HomeController extends Controller {
     }
 
     public Result chamarCaixa() {return ok(caixaNotificacoes.render(usuarioLogado)); }
-    public Result chamarLixeira() {return ok(lixeira.render());}
 
+    public Result chamarLixeira() {return ok(lixeira.render(usuarioLogado, usuarioLogado.getLixeira()));}
 
     public Result chamaTexto(String caminhoDiretorio){
         return ok(texto.render(listaDeArquivos, usuarioLogado.buscaDiretorio(caminhoDiretorio)));
     }
 
+    //_________________________________________________________
 
-    /*public  Result salvaArquivo(){
-
-        Arquivo arquivo = formFactory.form(ArquivoTxt.class).bindFromRequest().get();
-        listaDeArquivos.add(arquivo);
-
-        return redirect(routes.HomeController.chamarHome());}
-*/
     public Result criaPasta(String caminhoDiretorioAtual){
         if (isAutenticate()) {
             LOGGER.info("ENTROU NO CONTROLLER");
@@ -216,6 +192,7 @@ public class HomeController extends Controller {
             return redirect(routes.HomeController.index());
         }
     }
+
     public Result abrePasta(String diretorio){
         if (isAutenticate()){
             return ok(home.render(usuarioLogado, usuarioLogado.buscaDiretorio(diretorio)));
@@ -229,7 +206,11 @@ public class HomeController extends Controller {
         if (isAutenticate()) {
             Arquivo arquivo = findFileFromList(nomeArquivo);
             String conteudo = arquivo.getConteudoArquivo();
-            return ok(arquivoConteudo.render(nomeArquivo, conteudo, usuarioLogado.buscaDiretorio(caminhoDiretorio)));
+            if (caminhoDiretorio.equals(usuarioLogado.getCaminhoLixeira())){
+                return ok(lixeiraArquivoConteudo.render(nomeArquivo,conteudo,usuarioLogado.getLixeira()));
+            }else{
+                return ok(arquivoConteudo.render(nomeArquivo, conteudo, usuarioLogado.buscaDiretorio(caminhoDiretorio)));
+            }
         } else {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
             return redirect(routes.HomeController.index());
@@ -248,18 +229,6 @@ public class HomeController extends Controller {
         }
     }
 
-
-    public Result deletaArquivo(String nomeArquivo, String caminhoDiretorio){
-        if (isAutenticate()) {
-            deletFileFromList(nomeArquivo);
-            usuarioLogado.excluirArquivo(nomeArquivo, caminhoDiretorio);
-
-            return ok(home.render(usuarioLogado, usuarioLogado.buscaDiretorio(caminhoDiretorio)));
-        } else {
-            flash("tokenExpirado", "Você não está autenticado! Realize o login.");
-            return redirect(routes.HomeController.index());
-        }
-    }
 
     public Result chamaModificaArquivo(String nomeArquivo, String caminhoDiretorio){
         if (isAutenticate()) {
@@ -297,15 +266,6 @@ public class HomeController extends Controller {
     }
     //_____________________________________________________
 
-    public void deletFileFromList(String nameOfFile){
-        Arquivo arquivo=null;
-        for (int i=0; i< listaDeArquivos.size();i++){
-            if (nameOfFile.equals(listaDeArquivos.get(i).getNomeArquivo()))
-                 arquivo = listaDeArquivos.get(i);
-                listaDeArquivos.remove(i);
-        }
-        arquivo.deletaArquivoSistema(nameOfFile);
-    }
 
     public Arquivo findFileFromList(String nomeArquivo){
         Arquivo arquivo = null ;
@@ -316,6 +276,41 @@ public class HomeController extends Controller {
         return arquivo;
     }
 
+
+    public Result moveArquivoParaLixeira(String nomeArquivo){
+
+        if (isAutenticate()) {
+            Arquivo arquivo = findFileFromList(nomeArquivo);
+            String nome = arquivo.getNomeArquivo();
+            String conteudo = arquivo.getConteudoArquivo();
+            String extensao = arquivo.getExtensao();
+
+            //usuarioLogado.excluirArquivo(nome,usuarioLogado.getCaminhoLixeira());
+            listaDeArquivos.remove(arquivo);
+
+
+
+            if (extensao.equals(".txt")) {
+                arquivo = new ArquivoTxt(nomeArquivo, conteudo);
+            } else {
+                arquivo = new ArquivoMd(nomeArquivo, conteudo);
+            }
+            listaDeArquivos.add(arquivo);
+
+            usuarioLogado.addArquivo(nome, conteudo, extensao, usuarioLogado.getCaminhoLixeira());
+
+            return ok(lixeira.render(usuarioLogado,usuarioLogado.getLixeira()));
+
+
+
+        } else {
+        flash("tokenExpirado", "Você não está autenticado! Realize o login.");
+        return redirect(routes.HomeController.index());
+    }
+
+
+
+}
 
     //_____________________________________________________
     //GETs and SETs

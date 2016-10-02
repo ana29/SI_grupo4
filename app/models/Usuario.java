@@ -10,6 +10,7 @@ public class Usuario {
     public String email;
     public String senha;
     public Diretorio pastaPessoal;
+    public Diretorio lixeira;
     public Diretorio compartilhados;
     public CaixaDeNotificacao caixaDeNotificacao;
     private static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
@@ -18,13 +19,16 @@ public class Usuario {
     public Usuario(){
         this.pastaPessoal = new Diretorio("root", "/root");
         this.compartilhados = new Diretorio("Compartilhados", "/root/Compartilhados");
+        this.lixeira = new Diretorio("Lixeira", "/root/Lixeira");
         this.caixaDeNotificacao = new CaixaDeNotificacao();
+
     }
 
     public Usuario(String nome, String email, String senha){
         this.caixaDeNotificacao = new CaixaDeNotificacao();
         this.pastaPessoal = new Diretorio("root", "/root");
         this.compartilhados = new Diretorio("Compartilhados", "/root/Compartilhados");
+        this.lixeira= new Diretorio("Lixeira", "/root/Lixeira");
         this.nome = nome;
         this.email = email;
         this.senha = senha;
@@ -51,8 +55,13 @@ public class Usuario {
         }
     }
 
-    public  void addArquivo(String nomeArquivo, String conteudoFile, String extensao, String caminhoDiretorio){
-        Diretorio diretorio = buscaDiretorio(caminhoDiretorio);
+    public  void addArquivo(String nomeArquivo, String conteudoFile, String extensao, String caminhoDiretorio) {
+        Diretorio diretorio;
+        if (caminhoDiretorio.equals("/root/Lixeira")){
+            diretorio = getLixeira();
+         }else{
+            diretorio= buscaDiretorio(caminhoDiretorio);
+         }
         if (!diretorio.containsArquivo(nomeArquivo, extensao)){
             auxExtensao(nomeArquivo, conteudoFile, extensao, diretorio);
         }
@@ -90,8 +99,8 @@ public class Usuario {
 
     public void excluirArquivo(String nome, String caminhoDiretorio){
         Diretorio diretorio = buscaDiretorio(caminhoDiretorio);
+
         if (diretorio.containsArquivo(nome, ""))
-            //String diferente de Objeto Arquivo!
                 diretorio.getArquivos().remove(nome);
     }
 
@@ -131,6 +140,8 @@ public class Usuario {
         return pastaPessoal;
     }
 
+    public Diretorio getLixeira() { return lixeira;}
+
     public Diretorio getCompartilhados(){ return compartilhados;}
 
     public CaixaDeNotificacao getCaixaDeNotificacao() {
@@ -144,5 +155,10 @@ public class Usuario {
     public void setHoraDoLogin(Timestamp horaDoLogin){
         this.horaDoLogin = horaDoLogin;
     }
+
+    public String getCaminhoLixeira() {
+        return "/root/Lixeira";
+    }
+
 }
 

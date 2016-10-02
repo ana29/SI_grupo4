@@ -23,9 +23,8 @@ GET /Caixa                                    controllers.HomeController.chamarC
 
 GET /compartilha                              controllers.HomeController.compartilha()
 
-#POST /salvaArquivo                  controllers.HomeController.salvaArquivo()
-
 GET /criaArquivos/*diretorio                  controllers.HomeController.criaArquivos(diretorio)
+GET /moveArquivoParaLixeira/:nomeArquivo/     controllers.HomeController.moveArquivoParaLixeira(nomeArquivo)
 GET /chamaTexto/*diretorio                    controllers.HomeController.chamaTexto(diretorio)
 
 GET /chamaLixeira                              controllers.HomeController.chamarLixeira()
@@ -33,8 +32,7 @@ GET /chamaLixeira                              controllers.HomeController.chamar
 GET /abrePasta/*diretorio                     controllers.HomeController.abrePasta(diretorio)
 GET /abreArquivo/                             controllers.HomeController.abreArquivo(nomeArquivo, diretorio)
 GET /leituraArquivo/:nomeArquivo              controllers.HomeController.leituraArquivo(nomeArquivo: String)
-GET /deletaArquivo/:nomeArquivo/:diretorio    controllers.HomeController.deletaArquivo(nomeArquivo, diretorio)
-GET /modificaArquivo/:nomeArquivo/:diretorio  controllers.HomeController.chamaModificaArquivo(nomeArquivo: String, diretorio: String)
+GET /modificaArquivo/:nomeArquivo/:diretorio  controllers.HomeController.chamaModificaArquivo(nomeArquivo, diretorio)
 GET /editaArquivo/:nomeArquivo/:diretorio     controllers.HomeController.editaArquivo(nomeArquivo, diretorio)
 
 

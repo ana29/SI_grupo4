@@ -43,11 +43,11 @@
                     </div>
                 </form>
 
-                <form  action="@routes.HomeController.deletaArquivo(nomeArquivo.toString, diretorio.getCaminho)">
+                <form  action="@routes.HomeController.moveArquivoParaLixeira(nomeArquivo.toString)">
                     <br>
                     <div id="texto_html_form_buttons">
 
-                        <button name="DeletFile" type="submit"  class="button button-block" >Deletar</button>
+                        <button name="DeletFile" type="submit"  class="button button-block" >Enviar para a Lixeira</button>
                     </div>
                 </form>
 

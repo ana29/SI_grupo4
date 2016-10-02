@@ -1,4 +1,4 @@
-@(usuario: Usuario, diretorio: Diretorio)
+@(nomeArquivo: String, conteudoArquivo: String, diretorio: Diretorio)
 
 @main("SIBox"){
     <head>
@@ -17,24 +17,30 @@
             <script src="@routes.Assets.at("javascripts/home.js")"></script>
 
             <div class="actions">
-                <a href="@routes.HomeController.chamarHome()"><i style="margin-right: 8px" class="material-icons">assignment_return</i></a>
+                <a href="@routes.HomeController.chamarLixeira()"><i style="margin-right: 8px" class="material-icons">assignment_return</i></a>
                 <i style="margin-right: 15px"></i>
                 <a href="@routes.HomeController.logOut()"><i class="material-icons">power_settings_new</i></a>
             </div>
         </header>
 
+        <div id="mostraConteudoFile">
+            <center>
+                <form>
+                    <br>
+                    <div class="field-wrap">
+                        <label>
+                            @nomeArquivo<span class="req"></span>
+                        </label>
 
-    </body>
+                    </div>
+                    <br>
+                    <textarea style="border: solid 1px;" name="conteudoFile" scrolling="yes" cols="100" rows="20" readonly>@conteudoArquivo</textarea>
+                    <br>
+                </form>
 
-    <main id="main">
 
-    @for(arquivo <- diretorio.getArquivos) {
-        <div class="thumbnail">
-            <i class="material-icons">description
-            </i>
-            <a href="@routes.HomeController.abreArquivo(arquivo.getNomeArquivo, diretorio.getCaminho)">@arquivo.getNomeArquivo</a>
+
+            </center>
         </div>
-    }
-    </main>
-
+    </body>
 }
