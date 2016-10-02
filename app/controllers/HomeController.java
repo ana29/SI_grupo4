@@ -302,19 +302,19 @@ public class HomeController extends Controller {
         if (isAutenticate()) {
             Diretorio dir = usuarioLogado.getLixeira();
 
-            while (usuarioLogado.lixeira.getArquivos().size()>0){
+            while (usuarioLogado.lixeira.getArquivos().size()>0 /*&& usuarioLogado.lixeira.getSubDiretorios().size()>0*/){
             for (int i = 0; i <dir.getArquivos().size() ; i++) {
                 Arquivo arq = dir.getArquivos().get(i);
                 usuarioLogado.excluirArquivo(arq.getNomeArquivo(),arq.getExtensao(), usuarioLogado.getCaminhoLixeira());
                 listaDeArquivos.remove(arq);
-                //arq.deletaArquivoSistema((File) arq);
+                arq.deletaArquivoSistema(arq.getNomeArquivo());
 
             }
             //Aqui ainda n foi testado pq n existe uma forma de enviar a pasta para a lixeira
-            for (int i = 0; i < dir.getSubDiretorios().size() ; i++) {
-                dir.getSubDiretorios().remove(i);
-
-            }
+//            for (int i = 0; i < dir.getSubDiretorios().size() ; i++) {
+//                dir.getSubDiretorios().remove(i);
+//
+//            }
             }
             return ok(lixeira.render(usuarioLogado,usuarioLogado.getLixeira()));
 

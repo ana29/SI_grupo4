@@ -29,7 +29,6 @@ public class ArquivoMd implements Arquivo {
     }
     @Override
     public void criarArquivo() {
-
         File arquivo = new File(nomeArquivo+EXTENSAO);
         try(FileWriter escrever = new FileWriter(arquivo)){
             escrever.write((String) conteudoFile);
@@ -51,8 +50,11 @@ public class ArquivoMd implements Arquivo {
     }
 
     @Override
-    public void deletaArquivoSistema(File arq) {
-       arq.delete();
+    public void deletaArquivoSistema(String nome) {
+
+        File arquivo = new File(nome+EXTENSAO);
+        arquivo.delete();
+
     }
 
     @Override
