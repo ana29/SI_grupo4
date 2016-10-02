@@ -21,7 +21,6 @@ public class Usuario {
         this.compartilhados = new Diretorio("Compartilhados", "/root/Compartilhados");
         this.lixeira = new Diretorio("Lixeira", "/root/Lixeira");
         this.caixaDeNotificacao = new CaixaDeNotificacao();
-
     }
 
     public Usuario(String nome, String email, String senha){
@@ -55,7 +54,13 @@ public class Usuario {
         }
     }
 
-    public  void addArquivo(String nomeArquivo, String conteudoFile, String extensao, String caminhoDiretorio) {
+   // public void addDiretorios(Diretorio diretorio){
+     //   if(diretorio.getCaminho().equals("/root/Lixeira")){
+
+       // }
+    //}
+
+    public void addArquivo(String nomeArquivo, String conteudoFile, String extensao, String caminhoDiretorio) {
         Diretorio diretorio;
         if (caminhoDiretorio.equals("/root/Lixeira")){
             diretorio = getLixeira();

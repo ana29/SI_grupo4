@@ -17,7 +17,7 @@
             <script src="@routes.Assets.at("javascripts/jquery.min.js")"></script>
             <script src="@routes.Assets.at("javascripts/home.js")"></script>
 
-            <i style="font-size: 60px" class="material-icons">face</i><h1>@usuario.getNome, <br> Essa é a sua Home</h1>
+            <a href="@routes.HomeController.chamarHome()"><i style="font-size: 60px" class="material-icons">face</i></a> <h1>Bem vindo @usuario.getNome, <br> Essa é a sua Home</h1>
             <span></span>
             <div class="actions">
                 <a href="@routes.HomeController.chamarCaixa()"><i style="margin-right: 8px" class="material-icons">notifications</i></a>
@@ -44,7 +44,7 @@
             @for(subDiretorio <- diretorio.getSubDiretorios()) {
                 <div class="thumbnail">
                     <a href="/abrePasta/@subDiretorio.caminho"><i class="material-icons">folder
-                        <span> @subDiretorio.getArquivos.size() folders / @subDiretorio.getSubDiretorios.size() files</span>
+                        <span> @subDiretorio.getSubDiretorios.size() folders / @subDiretorio.getArquivos.size() files</span>
                     </i></a>
                     <h1>@subDiretorio.getNome</h1>
                 </div>

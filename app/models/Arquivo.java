@@ -1,6 +1,5 @@
 package models;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -15,9 +14,8 @@ public interface Arquivo {
     void criarArquivo();
     String getNomeArquivo();
     String getConteudoArquivo();
-    void deletaArquivoSistema(File arquivo);
+    void deletaArquivoSistema(String nomeArquivo);
     String getExtensao();
-
 
     List<String> getCompartilhadosEdicao();
 

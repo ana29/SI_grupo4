@@ -12,7 +12,7 @@ import java.util.List;
 public class Diretorio {
 
     @Constraints.Required
-    public  String nome;
+    public String nome;
     public String caminho;
     public List<Diretorio> subDiretorios;
     public List<Arquivo> arquivos;
@@ -61,7 +61,6 @@ public class Diretorio {
         }
         return false;
     }
-
 
     public boolean containsArquivo(String nome, String extensao){
         for (Arquivo a: this.getArquivos()){

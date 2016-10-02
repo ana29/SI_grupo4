@@ -19,8 +19,6 @@ public class ArquivoTxt implements Arquivo{
     private List<String> compartilhadosLeitura;
 
     public  ArquivoTxt(){
-
-
     }
 
     public  ArquivoTxt(String nomeArquivo, String conteudoFile){
@@ -70,9 +68,11 @@ public class ArquivoTxt implements Arquivo{
             }
 
         }
+// tem q ver como ele ta salvando p eu consegir deletar ...
+    public void deletaArquivoSistema(String nome){;
 
-    public void deletaArquivoSistema(File arq){
-        arq.delete();
+        File arquivo = new File(nome+EXTENSAO);
+        arquivo.delete();
 
     }
     @Override
