@@ -53,14 +53,21 @@
 
             @for(arquivo <- usuario.getCompartilhados.getArquivos) {
                 <div class="thumbnail">
-                    <i class="material-icons">description
-                        @*<span>@pasta.getArquivos.size() folders / @pasta.getA.size() files</span>*@
-                    </i>
-                    @if(arquivo.getCompartilhadosEdicao.contains(usuario.getEmail)) {
-                        <a href="/abreArquivo/@arquivo.getNomeArquivo">@arquivo.getNomeArquivo</a>
-                    }
-                    @if(arquivo.getCompartilhadosLeitura.contains(usuario.getEmail)){
-                        <a href="/leituraArquivo/@arquivo.getNomeArquivo">@arquivo.getNomeArquivo</a>
+                    @if(arquivo.getExtensao == ".zip" || arquivo.getExtensao == ".gz") {
+                        <i class="material-icons">archive</i>
+                        @if(arquivo.getCompartilhadosEdicao.contains(usuario.getEmail) || arquivo.getCompartilhadosLeitura.contains(usuario.getEmail)) {
+                            @arquivo.getNomeArquivo@arquivo.getExtensao
+                        }
+                    } else{
+                        <i class="material-icons">description
+                            @*<span>@pasta.getArquivos.size() folders / @pasta.getA.size() files</span>*@
+                        </i>
+                        @if(arquivo.getCompartilhadosEdicao.contains(usuario.getEmail)) {
+                            <a href="/abreArquivo/@arquivo.getNomeArquivo">@arquivo.getNomeArquivo</a>
+                        }
+                        @if(arquivo.getCompartilhadosLeitura.contains(usuario.getEmail)) {
+                            <a href="/leituraArquivo/@arquivo.getNomeArquivo">@arquivo.getNomeArquivo</a>
+                        }
                     }
                 </div>
             }
