@@ -16,7 +16,7 @@ public class ArquivoMd implements Arquivo {
     private Diretorio pastaPessoal;
     private List<String> compartilhadosEdicao;
     private List<String> compartilhadosLeitura;
-    private File arquivo = null;
+    private File arquivo;
 
     public ArquivoMd(){}
 

@@ -73,6 +73,14 @@
                     <a href="/abreArquivo/@arquivo.getNomeArquivo">@arquivo.getNomeArquivo</a>
                 </div>
             }
+
+            @for(arquivo <- usuario.getComprimidos.getArquivos) {
+                <div class="thumbnail">
+                   <!-- <i class="material-icons">work</i> !-->
+                    <i class="material-icons">archive</i>
+                    @arquivo.getNomeArquivo@arquivo.getExtensao
+                </div>
+            }
         </div>
 
         @*modal para criar as pastas*@

@@ -308,10 +308,17 @@ public class HomeController extends Controller {
         DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
         String nomeObjeto = (String) form.getData().get("nomeObjeto");
         String tipo = (String) form.getData().get("tipo");
-
+        Arquivo arquivoC;
         for (Arquivo arquivo: listaDeArquivos) {
             if (arquivo.getNomeArquivo().equals(nomeObjeto)) {
-                comprimeArquivo(arquivo.getFile(), tipo);
+                if (tipo.equals("zip")) {
+                    arquivoC = new ArquivoZip(arquivo.getFile());
+                }else {
+                    arquivoC = new ArquivoGzip(arquivo.getFile());
+                }
+            listaDeArquivos.add(arquivoC);
+            usuarioLogado.addComprimidos(arquivoC);
+            return ok(home.render(usuarioLogado));
             }
             // faz um else
                 // faz um for pra pegar o nome dos diretórios
@@ -320,17 +327,17 @@ public class HomeController extends Controller {
         return ok(home.render(usuarioLogado));
     }
 
-    private void comprimeArquivo(File arquivo, String tipo) {
-        try{
-            if (tipo.equals("zip"))
-                util.comprimeZip(arquivo);
-            else
-                util.comprimeGzip(arquivo);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-    }
+//    private void comprimeArquivo(File arquivo, String tipo) {
+//        try{
+//            if (tipo.equals("zip"))
+//                util.comprimeZip(arquivo);
+//            else
+//                util.comprimeGzip(arquivo);
+//        }
+//        catch (Exception e){
+//            e.printStackTrace();
+//        }
+//    }
 
     private void comprimePasta(String nomeObjeto, String tipo) {
 //        if (tipo.equals("zip"))

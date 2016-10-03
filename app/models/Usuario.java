@@ -8,6 +8,7 @@ public class Usuario {
     public String email;
     public String senha;
     public Diretorio pastaPessoal;
+    public Diretorio comprimidos;
     public Diretorio compartilhados;
     public CaixaDeNotificacao caixaDeNotificacao;
     private static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
@@ -15,6 +16,7 @@ public class Usuario {
     public Usuario(){
         this.pastaPessoal = new Diretorio("root");
         this.compartilhados = new Diretorio("Compartilhados");
+        this.comprimidos = new Diretorio("Comprimidos");
         this.caixaDeNotificacao = new CaixaDeNotificacao();
     }
 
@@ -22,6 +24,7 @@ public class Usuario {
         this.caixaDeNotificacao = new CaixaDeNotificacao();
         this.pastaPessoal = new Diretorio("root");
         this.compartilhados = new Diretorio("Compartilhados");
+        this.comprimidos = new Diretorio("Comprimidos");
         this.nome = nome;
         this.email = email;
         this.senha = senha;
@@ -73,6 +76,14 @@ public class Usuario {
             pastaPessoal.getArquivos().add(new ArquivoMd(nomeArquivo, conteudoFile));
 
         }
+    }
+
+    public void addComprimidos(Arquivo arquivo){
+        comprimidos.getArquivos().add(arquivo);
+    }
+
+    public Diretorio getComprimidos(){
+        return comprimidos;
     }
 
     public void excluirSubDiretorio(String nome){
