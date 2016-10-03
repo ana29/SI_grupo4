@@ -418,30 +418,8 @@ public class HomeController extends Controller {
                 usuarioLogado.addComprimidos(arquivoC);
                 return ok(home.render(usuarioLogado, usuarioLogado.getPastaPessoal()));
             }
-            // faz um else
-            // faz um for pra pegar o nome dos diretórios
-            // faz um if comparando o nome da pasta com o nome do objeto
         }
         return ok(home.render(usuarioLogado, usuarioLogado.getPastaPessoal()));
-    }
-
-//    private void comprimeArquivo(File arquivo, String tipo) {
-//        try{
-//            if (tipo.equals("zip"))
-//                util.comprimeZip(arquivo);
-//            else
-//                util.comprimeGzip(arquivo);
-//        }
-//        catch (Exception e){
-//            e.printStackTrace();
-//        }
-//    }
-
-    private void comprimePasta(String nomeObjeto, String tipo) {
-//        if (tipo.equals("zip"))
-//            util.comprimeZip(nomeObjeto);
-//        else
-//            util.comprimeGzip(nomeObjeto);
     }
 
     //GETs and SETs------------------------------------------------------
