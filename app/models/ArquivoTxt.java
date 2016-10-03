@@ -1,9 +1,7 @@
 package models;
 
-import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Formatter;
 import java.util.List;
 
 
@@ -29,7 +27,7 @@ public class ArquivoTxt implements Arquivo{
     public  ArquivoTxt(String nomeArquivo, String conteudoFile){
         this.nomeArquivo = nomeArquivo;
         this.conteudoFile = conteudoFile;
-        this.pastaPessoal = new Diretorio("root");
+        this.pastaPessoal = new Diretorio("root", "/root");
         this.compartilhadosEdicao = new ArrayList<>();
         this.compartilhadosLeitura = new ArrayList<>();
         criarArquivo();
@@ -73,9 +71,10 @@ public class ArquivoTxt implements Arquivo{
             }
 
         }
+// tem q ver como ele ta salvando p eu consegir deletar ...
+    public void deletaArquivoSistema(String nome){;
 
-    public void deletaArquivoSistema(String nomeArquivo){
-        File arquivo = new File(nomeArquivo);
+        File arquivo = new File(nome+EXTENSAO);
         arquivo.delete();
 
     }

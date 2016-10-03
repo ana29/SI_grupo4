@@ -1,6 +1,6 @@
-@(usuario: Usuario)
+@(usuario: Usuario, diretorio: Diretorio)
 
-@main("SIBox") {
+@main("SIBox"){
     <head>
         <meta charset="UTF-8">
 
@@ -18,19 +18,24 @@
 
             <div class="actions">
                 <a href="@routes.HomeController.chamarHome()"><i style="margin-right: 8px" class="material-icons">assignment_return</i></a>
+                <a href="@routes.HomeController.deletaTudoParaSempre()"><i style="margin-right: 8px" class="material-icons">delete_forever</i></a>
                 <i style="margin-right: 15px"></i>
                 <a href="@routes.HomeController.logOut()"><i class="material-icons">power_settings_new</i></a>
             </div>
-            <h1 style="margin-left: 80%">Caixa de Notificações</h1>
         </header>
 
-        <main id="main">
-            @for(mensagem <- usuario.getCaixaDeNotificacao.getCaixaDeNotificacao) {
-                <div>
-                    <h1>@mensagem.getMensagem</h1>
-                </div>
-            }
-        </main>
 
     </body>
+
+    <main id="main">
+
+    @for(arquivo <- diretorio.getArquivos) {
+        <div class="thumbnail">
+            <i class="material-icons">description
+            </i>
+            <a href="@routes.HomeController.abreArquivo(arquivo.getNomeArquivo, diretorio.getCaminho)">@arquivo.getNomeArquivo</a>
+        </div>
+    }
+    </main>
+
 }

@@ -25,7 +25,7 @@ public class ArquivoZip implements Arquivo {
 
     public ArquivoZip(File arquivo) {
         this.nomeArquivo = arquivo.getName();
-        this.pastaPessoal = new Diretorio("root");
+        this.pastaPessoal = new Diretorio("root","/root");
         this.compartilhadosEdicao = new ArrayList<>();
         this.compartilhadosLeitura = new ArrayList<>();
         this.arquivo = arquivo;

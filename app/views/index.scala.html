@@ -84,6 +84,10 @@
             <p style="color: green;">@flash.get("sucesso")</p>
         }
 
+        @if(flash.contains("tokenExpirado")){
+            <p style="color: red;">@flash.get("tokenExpirado")</p>
+        }
+
         <script src="@routes.Assets.at("javascripts/jquery.min.js")"></script>
         <script src="@routes.Assets.at("javascripts/index.js")"></script>
 

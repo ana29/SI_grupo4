@@ -23,7 +23,7 @@ public class ArquivoMd implements Arquivo {
     public ArquivoMd(String nome, String conteudo){
         this.nomeArquivo = nome;
         this.conteudoFile = conteudo;
-        this.pastaPessoal = new Diretorio("root");
+        this.pastaPessoal = new Diretorio("root", "/root");
         this.compartilhadosEdicao = new ArrayList<>();
         this.compartilhadosLeitura = new ArrayList<>();
         criarArquivo();
@@ -52,9 +52,11 @@ public class ArquivoMd implements Arquivo {
     }
 
     @Override
-    public void deletaArquivoSistema(String nomeArquivo) {
-        File arquivo = new File(nomeArquivo);
+    public void deletaArquivoSistema(String nome) {
+
+        File arquivo = new File(nome+EXTENSAO);
         arquivo.delete();
+
     }
 
     @Override

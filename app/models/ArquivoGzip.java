@@ -25,7 +25,7 @@ public class ArquivoGzip implements Arquivo {
 
     public ArquivoGzip(File arquivo) {
         this.nomeArquivo = arquivo.getName();
-        this.pastaPessoal = new Diretorio("root");
+        this.pastaPessoal = new Diretorio("root","/root");
         this.compartilhadosEdicao = new ArrayList<>();
         this.compartilhadosLeitura = new ArrayList<>();
         this.arquivo = arquivo;
