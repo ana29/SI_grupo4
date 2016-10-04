@@ -416,10 +416,34 @@ public class HomeController extends Controller {
                 }
                 listaDeArquivos.add(arquivoC);
                 usuarioLogado.addComprimidos(arquivoC);
+                removeOriginal(arquivo);
                 return ok(home.render(usuarioLogado, usuarioLogado.getPastaPessoal()));
             }
         }
         return ok(home.render(usuarioLogado, usuarioLogado.getPastaPessoal()));
+    }
+
+    private void removeOriginal(Arquivo arquivo){
+        System.out.println("CHAMOU PRA REMOVER");
+        usuarioLogado.excluirArquivo(arquivo.getNomeArquivo(), arquivo.getExtensao(), pegaCaminho(usuarioLogado.getPastaPessoal(), arquivo));
+        listaDeArquivos.remove(arquivo);
+        arquivo.deletaArquivoSistema(arquivo.getNomeArquivo());
+    }
+
+    private String pegaCaminho(Diretorio diretorio, Arquivo arquivo){
+        if(!diretorio.containsArquivo(arquivo.getNomeArquivo(), arquivo.getExtensao())) {
+            System.out.println("O ROOT NAO TEM");
+            if (!diretorio.getSubDiretorios().isEmpty()) {
+                System.out.println("TEM SUBDIRETORIO");
+                for (Diretorio dir : diretorio.getSubDiretorios()) {
+                    if (dir.containsArquivo(arquivo.getNomeArquivo(), arquivo.getExtensao())) {
+                        System.out.println("ESPERO QUE ACHE");
+                        return dir.getRaiz();
+                    }
+                }
+            }
+        }
+    return diretorio.getRaiz();
     }
 
     //GETs and SETs------------------------------------------------------
