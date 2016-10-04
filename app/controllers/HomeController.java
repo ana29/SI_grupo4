@@ -25,6 +25,7 @@ public class HomeController extends Controller {
     @Inject
     private FormFactory formFactory;
     private List<Usuario> listaDeUsuarios = new ArrayList<>();
+    private List<Diretorio> listaDeDiretorios = new ArrayList<>();
     private List<Arquivo> listaDeArquivos = new ArrayList<>();
     private Usuario usuarioLogado = null;
     private static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
@@ -260,6 +261,15 @@ public class HomeController extends Controller {
         }
     }
 
+    private Arquivo findFileFromList(String nomeArquivo){
+        Arquivo arquivo = null ;
+        for (int i=0; i< listaDeArquivos.size();i++){
+            if (nomeArquivo.equals(listaDeArquivos.get(i).getNomeArquivo()))
+                arquivo =  listaDeArquivos.get(i);
+        }
+        return arquivo;
+    }
+
     public Result moveArquivoParaLixeira(String nomeArquivo, String caminhoDiretorio){
 
         if (isAutenticate()) {
@@ -271,7 +281,6 @@ public class HomeController extends Controller {
             usuarioLogado.excluirArquivo(nome,extensao,caminhoDiretorio);
 
             listaDeArquivos.remove(arquivo);
-           // arquivo.deletaArquivoSistema((File) arquivo);
 
             if (extensao.equals(".txt")) {
                 arquivo = new ArquivoTxt(nomeArquivo, conteudo);
@@ -283,20 +292,12 @@ public class HomeController extends Controller {
             usuarioLogado.addArquivo(nome, conteudo, extensao, usuarioLogado.getCaminhoLixeira());
 
             return ok(lixeira.render(usuarioLogado,usuarioLogado.getLixeira()));
+
         } else {
         flash("tokenExpirado", "Você não está autenticado! Realize o login.");
         return redirect(routes.HomeController.index());
     }
 }
-
-    public Arquivo findFileFromList(String nomeArquivo){
-        Arquivo arquivo = null ;
-        for (int i=0; i< listaDeArquivos.size();i++){
-            if (nomeArquivo.equals(listaDeArquivos.get(i).getNomeArquivo()))
-                arquivo =  listaDeArquivos.get(i);
-        }
-        return arquivo;
-    }
 
     public Result moveDiretorioParaLixeira(String caminhoDiretorio){
         if(isAutenticate()){
@@ -306,10 +307,16 @@ public class HomeController extends Controller {
             String nomeDiretorio = dir.getNome();
 
             Diretorio auxDiretorio = new Diretorio(nomeDiretorio, usuarioLogado.getCaminhoLixeira());
-            //adiciona na lixeira os dados do diretorio atual
-            usuarioLogado.excluirSubDiretorio(nomeDiretorio);
 
-            return ok(lixeira.render(usuarioLogado,usuarioLogado.getLixeira()));
+//            usuarioLogado.excluirSubDiretorio(nomeDiretorio);
+
+            usuarioLogado.getPastaPessoal().getSubDiretorios().remove(dir);
+
+            //usuarioLogado.getLixeira().
+
+           // usuarioLogado.criaSubDiretorio(nomeDiretorio, usuarioLogado.getCaminhoLixeira());
+
+            return ok(lixeira.render(usuarioLogado, usuarioLogado.getLixeira()));
         }else {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
             return redirect(routes.HomeController.index());
@@ -322,7 +329,7 @@ public class HomeController extends Controller {
             Diretorio dir = usuarioLogado.getLixeira();
 
             while (usuarioLogado.lixeira.getArquivos().size()>0 /*&& usuarioLogado.lixeira.getSubDiretorios().size()>0*/){
-            for (int i = 0; i <dir.getArquivos().size() ; i++) {
+            for (int i = 0; i <dir.getArquivos().size() ; i++){
                 Arquivo arq = dir.getArquivos().get(i);
                 usuarioLogado.excluirArquivo(arq.getNomeArquivo(),arq.getExtensao(), usuarioLogado.getCaminhoLixeira());
                 listaDeArquivos.remove(arq);
@@ -407,6 +414,9 @@ public class HomeController extends Controller {
     //GETs and SETs------------------------------------------------------
     public List<Usuario> getListaDeUsuarios() {
         return listaDeUsuarios;
+    }
+    public List<Diretorio> getListaDeDiretorios() {
+        return listaDeDiretorios;
     }
     public List<Arquivo> getListaDeArquivos() {
         return listaDeArquivos;

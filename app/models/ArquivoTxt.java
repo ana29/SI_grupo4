@@ -19,6 +19,8 @@ public class ArquivoTxt implements Arquivo{
     private List<String> compartilhadosLeitura;
 
     public  ArquivoTxt(){
+
+
     }
 
     public  ArquivoTxt(String nomeArquivo, String conteudoFile){

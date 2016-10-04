@@ -35,9 +35,23 @@
 
         <main id="main">
 
+            @if(diretorio.getNome.equals("lixeira")){
+                <div class="thumbnail">
+                    <a href="/abrePasta/@diretorio.getRaiz"><i class="material-icons">keyboard_backspace</i></a>
+                </div>
+            }
+
             @if(!diretorio.getNome.equals("root")){
                 <div class="thumbnail">
                     <a href="/abrePasta/@diretorio.getRaiz"><i class="material-icons">keyboard_backspace</i></a>
+                </div>
+                <div class="thumbnail">
+                    <form  action="@routes.HomeController.moveDiretorioParaLixeira(diretorio.caminho)">
+                        <br>
+                        <div id="texto_html_form_buttons">
+                            <button name="DeletFile" type="submit"  class="button button-block" >Enviar para a Lixeira</button>
+                        </div>
+                    </form>
                 </div>
             }
 
@@ -45,8 +59,9 @@
                 <div class="thumbnail">
                     <a href="/abrePasta/@subDiretorio.caminho"><i class="material-icons">folder
                         <span> @subDiretorio.getSubDiretorios.size() folders / @subDiretorio.getArquivos.size() files</span>
+                        <a href="@routes.HomeController.abrePasta(diretorio.getCaminho)"></a>
+                        <h1>@subDiretorio.getNome</h1>
                     </i></a>
-                    <h1>@subDiretorio.getNome</h1>
                 </div>
             }
 

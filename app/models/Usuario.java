@@ -6,6 +6,8 @@ import java.util.logging.Logger;
 
 public class Usuario {
 
+    private final String LIXEIRA = "/root/Lixeira";
+
     public String nome;
     public String email;
     public String senha;
@@ -19,7 +21,7 @@ public class Usuario {
     public Usuario(){
         this.pastaPessoal = new Diretorio("root", "/root");
         this.compartilhados = new Diretorio("Compartilhados", "/root/Compartilhados");
-        this.lixeira = new Diretorio("Lixeira", "/root/Lixeira");
+        this.lixeira = new Diretorio("Lixeira", LIXEIRA);
         this.caixaDeNotificacao = new CaixaDeNotificacao();
     }
 
@@ -27,11 +29,10 @@ public class Usuario {
         this.caixaDeNotificacao = new CaixaDeNotificacao();
         this.pastaPessoal = new Diretorio("root", "/root");
         this.compartilhados = new Diretorio("Compartilhados", "/root/Compartilhados");
-        this.lixeira= new Diretorio("Lixeira", "/root/Lixeira");
+        this.lixeira= new Diretorio("Lixeira", LIXEIRA);
         this.nome = nome;
         this.email = email;
         this.senha = senha;
-
     }
 
     public void criaSubDiretorio(String nome, String caminhoDiretorio){
@@ -60,9 +61,22 @@ public class Usuario {
        // }
     //}
 
+    //public void addDiretoriosLixeira(Diretorio diretorio) {
+      //  if(diretorio.getCaminho().equals(LIXEIRA)){
+       //     diretorio.
+        //}
+
+        //if (caminhoDiretorio.equals(LIXEIRA)){
+          //  diretorio = getLixeira();
+        //}else{
+         //   diretorio = buscaDiretorio(caminhoDiretorio);
+       // }
+    //}
+
+
     public void addArquivo(String nomeArquivo, String conteudoFile, String extensao, String caminhoDiretorio) {
         Diretorio diretorio;
-        if (caminhoDiretorio.equals("/root/Lixeira")){
+        if (caminhoDiretorio.equals(LIXEIRA)){
             diretorio = getLixeira();
          }else{
             diretorio= buscaDiretorio(caminhoDiretorio);
@@ -96,7 +110,7 @@ public class Usuario {
 
     public void excluirSubDiretorio(String nome){
         for (Diretorio d: pastaPessoal.getSubDiretorios()) {
-            if (d.getNome().equals(nome)){
+            if (d != null && d.getNome().equals(nome)){
                 pastaPessoal.getSubDiretorios().remove(d);
             }
         }
@@ -105,13 +119,12 @@ public class Usuario {
     public void excluirArquivo(String nome,String extensao ,String caminhoDiretorio){
        if (caminhoDiretorio.equals(getCaminhoLixeira())){
            auxDeletaArquivosDaLista(lixeira, nome, extensao);
-
        }else{
         Diretorio diretorio = buscaDiretorio(caminhoDiretorio);
          auxDeletaArquivosDaLista(diretorio, nome, extensao);
-
         }
     }
+
     private void auxDeletaArquivosDaLista(Diretorio dir, String nome, String extensao){
         if (dir.containsArquivo(nome, extensao))
             for (int i = 0; i <dir.getArquivos().size() ; i++) {
@@ -119,7 +132,6 @@ public class Usuario {
                 if (arq.getNomeArquivo().equals(nome)&&arq.getExtensao().equals(extensao))
                     dir.getArquivos().remove(i);
             }
-
     }
 
     public Diretorio buscaDiretorio(String caminhoDiretorio){
