@@ -4,14 +4,15 @@ import Util.EmailValidator;
 import models.*;
 import play.data.DynamicForm;
 import play.data.FormFactory;
-import play.mvc.Controller;
-import play.mvc.Result;
+import play.mvc.*;
 import views.html.*;
 
 import javax.inject.Inject;
+import java.io.File;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -230,6 +231,7 @@ public class HomeController extends Controller {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
             return redirect(routes.HomeController.index());
         }
+        
     }
 
     public Result editaArquivo(String nomeArquivoASerEditado, String caminhoDiretorio){
@@ -272,9 +274,11 @@ public class HomeController extends Controller {
             String conteudo = arquivo.getConteudoArquivo();
             String extensao = arquivo.getExtensao();
 
+
             usuarioLogado.excluirArquivo(nome,extensao,caminhoDiretorio);
 
             listaDeArquivos.remove(arquivo);
+           // arquivo.deletaArquivoSistema((File) arquivo);
 
             if (extensao.equals(".txt")) {
                 arquivo = new ArquivoTxt(nomeArquivo, conteudo);
@@ -287,11 +291,13 @@ public class HomeController extends Controller {
 
             return ok(lixeira.render(usuarioLogado,usuarioLogado.getLixeira()));
 
+
+
         } else {
         flash("tokenExpirado", "Você não está autenticado! Realize o login.");
         return redirect(routes.HomeController.index());
+        }
     }
-}
 
     public Result moveDiretorioParaLixeira(String caminhoDiretorio){
         if(isAutenticate()){
@@ -334,10 +340,15 @@ public class HomeController extends Controller {
                 }
             }
             return ok(lixeira.render(usuarioLogado,usuarioLogado.getLixeira()));
+
+
+
         } else {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
             return redirect(routes.HomeController.index());
         }
+
+
     }
 
     /*
@@ -394,18 +405,67 @@ public class HomeController extends Controller {
         return token;
     }
 
-    private boolean isAutenticate(){
-        if(session("token") != null && verificaTimeStampDoToken()){
+    private boolean isAutenticate() {
+
+        if (session("token") != null && verificaTimeStampDoToken()) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
+    /*
+     * Compressão
+     */
+
+    public Result comprime(){
+        DynamicForm.Dynamic form = formFactory.form().bindFromRequest().get();
+        String nomeObjeto = (String) form.getData().get("nomeObjeto");
+        String tipo = (String) form.getData().get("tipo");
+        Arquivo arquivoC;
+        for (Arquivo arquivo : listaDeArquivos) {
+            if (arquivo.getNomeArquivo().equals(nomeObjeto)) {
+                if (tipo.equals("zip")) {
+                    arquivoC = new ArquivoZip(arquivo.getFile());
+                } else {
+                    arquivoC = new ArquivoGzip(arquivo.getFile());
+                }
+                listaDeArquivos.add(arquivoC);
+                usuarioLogado.addComprimidos(arquivoC);
+                removeOriginal(arquivo);
+                return ok(home.render(usuarioLogado, usuarioLogado.getPastaPessoal()));
+            }
+        }
+        return ok(home.render(usuarioLogado, usuarioLogado.getPastaPessoal()));
+    }
+
+    private void removeOriginal(Arquivo arquivo){
+        System.out.println("CHAMOU PRA REMOVER");
+        usuarioLogado.excluirArquivo(arquivo.getNomeArquivo(), arquivo.getExtensao(), pegaCaminho(usuarioLogado.getPastaPessoal(), arquivo));
+        listaDeArquivos.remove(arquivo);
+        arquivo.deletaArquivoSistema(arquivo.getNomeArquivo());
+    }
+
+    private String pegaCaminho(Diretorio diretorio, Arquivo arquivo){
+        if(!diretorio.containsArquivo(arquivo.getNomeArquivo(), arquivo.getExtensao())) {
+            System.out.println("O ROOT NAO TEM");
+            if (!diretorio.getSubDiretorios().isEmpty()) {
+                System.out.println("TEM SUBDIRETORIO");
+                for (Diretorio dir : diretorio.getSubDiretorios()) {
+                    if (dir.containsArquivo(arquivo.getNomeArquivo(), arquivo.getExtensao())) {
+                        System.out.println("ESPERO QUE ACHE");
+                        return dir.getRaiz();
+                    }
+                }
+            }
+        }
+    return diretorio.getRaiz();
+    }
+
     //GETs and SETs------------------------------------------------------
-    public List<Usuario> getListaDeUsuarios() {
+    public List<Usuario> getListaDeUsuarios () {
         return listaDeUsuarios;
     }
-    public List<Arquivo> getListaDeArquivos() {
+    public List<Arquivo> getListaDeArquivos () {
         return listaDeArquivos;
     }
 }

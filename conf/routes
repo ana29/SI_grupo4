@@ -14,14 +14,15 @@ GET     /home/                                controllers.HomeController.chamarH
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                         controllers.Assets.at(path="/public", file)
 
-POST /cadastraUsuario                         controllers.HomeController.cadastrarUsuario()
-POST /logar                                   controllers.HomeController.logar()
+POST /cadastraUsuario               controllers.HomeController.cadastrarUsuario()
+POST /logar                         controllers.HomeController.logar()
 
 GET /logOut                                   controllers.HomeController.logOut()
 GET /criaPasta/*caminhoDiretorioAtual         controllers.HomeController.criaPasta(caminhoDiretorioAtual)
 GET /Caixa                                    controllers.HomeController.chamarCaixa()
 
 GET /compartilha                              controllers.HomeController.compartilha()
+GET /comprime                                 controllers.HomeController.comprime()
 
 GET /criaArquivos/*diretorio                  controllers.HomeController.criaArquivos(diretorio)
 GET /moveArquivoParaLixeira/:nomeArquivo/*caminhoDiretorio     controllers.HomeController.moveArquivoParaLixeira(nomeArquivo,caminhoDiretorio)

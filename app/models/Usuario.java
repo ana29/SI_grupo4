@@ -12,6 +12,7 @@ public class Usuario {
     public String email;
     public String senha;
     public Diretorio pastaPessoal;
+    public Diretorio comprimidos;
     public Diretorio lixeira;
     public Diretorio compartilhados;
     public CaixaDeNotificacao caixaDeNotificacao;
@@ -22,7 +23,9 @@ public class Usuario {
         this.pastaPessoal = new Diretorio("root", "/root");
         this.compartilhados = new Diretorio("Compartilhados", "/root/Compartilhados");
         this.lixeira = new Diretorio("Lixeira", LIXEIRA);
+this.comprimidos = new Diretorio("Comprimidos", "/root");
         this.caixaDeNotificacao = new CaixaDeNotificacao();
+
     }
 
     public Usuario(String nome, String email, String senha){
@@ -30,9 +33,11 @@ public class Usuario {
         this.pastaPessoal = new Diretorio("root", "/root");
         this.compartilhados = new Diretorio("Compartilhados", "/root/Compartilhados");
         this.lixeira= new Diretorio("Lixeira", LIXEIRA);
+        this.comprimidos = new Diretorio("Comprimidos", "/root");
         this.nome = nome;
         this.email = email;
         this.senha = senha;
+
     }
 
     public void criaSubDiretorio(String nome, String caminhoDiretorio){
@@ -88,7 +93,16 @@ public class Usuario {
         }
         else{
             diretorio.getArquivos().add(new ArquivoMd(nomeArquivo, conteudoFile));
+
         }
+    }
+
+    public void addComprimidos(Arquivo arquivo){
+        comprimidos.getArquivos().add(arquivo);
+    }
+
+    public Diretorio getComprimidos(){
+        return comprimidos;
     }
 
     public void excluirSubDiretorio(String nome, Diretorio dir){
@@ -102,9 +116,11 @@ public class Usuario {
     public void excluirArquivo(String nome,String extensao ,String caminhoDiretorio){
        if (caminhoDiretorio.equals(getCaminhoLixeira())){
            auxDeletaArquivosDaLista(lixeira, nome, extensao);
+
        }else{
         Diretorio diretorio = buscaDiretorio(caminhoDiretorio);
          auxDeletaArquivosDaLista(diretorio, nome, extensao);
+
         }
     }
 
@@ -115,6 +131,7 @@ public class Usuario {
                 if (arq.getNomeArquivo().equals(nome)&&arq.getExtensao().equals(extensao))
                     dir.getArquivos().remove(i);
             }
+
     }
 
     public Diretorio buscaDiretorio(String caminhoDiretorio){

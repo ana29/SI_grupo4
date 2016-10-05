@@ -17,6 +17,7 @@ public class ArquivoTxt implements Arquivo{
     public Diretorio pastaPessoal;
     private List<String> compartilhadosEdicao;
     private List<String> compartilhadosLeitura;
+    private File arquivo;
 
     public  ArquivoTxt(){
 
@@ -59,14 +60,14 @@ public class ArquivoTxt implements Arquivo{
     @Override
     public void criarArquivo() {
 
-            File arquivo = new File(getNomeArquivo()+EXTENSAO);
+            arquivo = new File(getNomeArquivo()+EXTENSAO);
             try(FileWriter escrever = new FileWriter(arquivo)){
                 escrever.write((String) getConteudoArquivo());
                 escrever.close();
 
             }
             catch(Exception erro){
-            erro.getCause();
+                erro.getCause();
             }
 
         }
@@ -94,5 +95,10 @@ public class ArquivoTxt implements Arquivo{
     @Override
     public List<String> getCompartilhadosLeitura() {
         return compartilhadosLeitura;
+    }
+
+    @Override
+    public File getFile(){
+        return arquivo;
     }
 }

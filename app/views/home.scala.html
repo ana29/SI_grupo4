@@ -23,6 +23,7 @@
                 <a href="@routes.HomeController.chamarCaixa()"><i style=" margin-right: 8px" class="material-icons" title="notificações">notifications</i></a>
                 <a id="boxes"><i style="margin-bottom: 8px" class="material-icons" title="nova pasta">create_new_folder</i></a>
                 <a id="share"><i style="margin-bottom: 8px" class="material-icons" title="compartilhar">link</i></a>
+		<a id="compress"><i style="margin-bottom: 8px" class="material-icons">archive</i></a>
                 <a href="/chamaTexto/@diretorio.getCaminho"><i style="margin-right: 8px" class="material-icons" title="criar arquivo">note_add</i> </a>
                 <a href="@routes.HomeController.chamarLixeira()"><i style="margin-right: 8px " class="material-icons" title="ir pra lixeira">delete</i></a>
                 <i style="margin-right: 15px"></i>
@@ -53,19 +54,27 @@
                         <a href="@routes.HomeController.abrePasta(diretorio.getCaminho)"></a>
                         <h1>@subDiretorio.getNome</h1>
                     </i></a>
+                    <h1>@subDiretorio.getNome</h1>
                 </div>
             }
 
             @for(arquivo <- usuario.getCompartilhados.getArquivos) {
                 <div class="thumbnail">
-                    <i class="material-icons">description
-                        @*<span>@pasta.getArquivos.size() folders / @pasta.getA.size() files</span>*@
-                    </i>
-                    @if(arquivo.getCompartilhadosEdicao.contains(usuario.getEmail)) {
-                        <a href="/abreArquivo/@arquivo.getNomeArquivo@diretorio.getCaminho">@arquivo.getNomeArquivo</a>
-                    }
-                    @if(arquivo.getCompartilhadosLeitura.contains(usuario.getEmail)){
-                        <a href="/leituraArquivo/@arquivo.getNomeArquivo@diretorio.getCaminho">@arquivo.getNomeArquivo</a>
+                    @if(arquivo.getExtensao == ".zip" || arquivo.getExtensao == ".gz") {
+                        <i class="material-icons">archive</i>
+                        @if(arquivo.getCompartilhadosEdicao.contains(usuario.getEmail) || arquivo.getCompartilhadosLeitura.contains(usuario.getEmail)) {
+                            @arquivo.getNomeArquivo@arquivo.getExtensao
+                        }
+                    } else{
+                        <i class="material-icons">description
+                            @*<span>@pasta.getArquivos.size() folders / @pasta.getA.size() files</span>*@
+                        </i>
+                        @if(arquivo.getCompartilhadosEdicao.contains(usuario.getEmail)) {
+                            <a href="/abreArquivo/@arquivo.getNomeArquivo">@arquivo.getNomeArquivo</a>
+                        }
+                        @if(arquivo.getCompartilhadosLeitura.contains(usuario.getEmail)) {
+                            <a href="/leituraArquivo/@arquivo.getNomeArquivo">@arquivo.getNomeArquivo</a>
+                        }
                     }
                 </div>
             }
@@ -74,12 +83,19 @@
                     <i class="material-icons">description
                         @*<span>@pasta.getArquivos.size() folders / @pasta.getA.size() files</span>*@
                     </i>
-                    <a href="@routes.HomeController.abreArquivo(arquivo.getNomeArquivo, diretorio.getCaminho)">
-                    @arquivo.getNomeArquivo</a>
+                    <a href="@routes.HomeController.abreArquivo(arquivo.getNomeArquivo, diretorio.getCaminho)">@arquivo.getNomeArquivo</a>
+                </div>
+            }
+            @for(arquivo <- usuario.getComprimidos.getArquivos) {
+                <div class="thumbnail">
+                   <!-- <i class="material-icons">work</i> !-->
+                    <i class="material-icons">archive</i>
+                    @arquivo.getNomeArquivo@arquivo.getExtensao
                 </div>
             }
         </main>
 
+ 
         <div id="boxes">
             <form id="dialog" class="window" action="/criaPasta/@diretorio.caminho">
                 @*<a href="#" class="close"> Fechar [X]</a>*@
@@ -94,8 +110,8 @@
         </div><!-- /boxes -->
 
         <div id="share">
-            <a href="#" class="close"> X</a>
-            <form id="dialog2" class="window2" action="@routes.HomeController.compartilha()">
+            <form id="dialog3" class="window3" action="@routes.HomeController.compartilha()">
+                <a href="#" class="close3">x</a>
                 <h3>Compartilhar</h3>
                 <p>
                     Arquivo: <input id="input" name="nomeArquivo" type="text" required autocomplete="off"/><br/>
@@ -109,9 +125,31 @@
                 </p>
             </form>
                 <!-- Máscara para cobrir a tela -->
-            <div id="mask"> </div>
+            <div id="mask3"> </div>
+        </div>
+
+
+        <div id="compress">
+            <form id="dialogCompress" class="windowCompress" action="@routes.HomeController.comprime()">
+                <a href="#" class="closeCompress"> x</a>
+                <h3>Comprimir</h3>
+                <p>
+                    Objeto: <input id="input" name="nomeObjeto" type="text" required autocomplete="off"/><br/>
+
+                        <br>
+                        <input id="radio" type="radio" name="tipo" value="zip" required/>zip
+
+                        <input id="radio" type="radio" name="tipo" value="gzip" required/>gzip
+
+
+                    <input id="button" type="submit" value="Comprimir"/>
+                </p>
+            </form>
+                <!-- Máscara para cobrir a tela -->
+            <div id="maskCompress"> </div>
         </div>
 
         <script src="@routes.Assets.at("javascripts/home.js")" type="text/javascript"></script>
+
     </body>
 }
