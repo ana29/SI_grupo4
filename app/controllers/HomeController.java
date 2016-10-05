@@ -258,7 +258,15 @@ public class HomeController extends Controller {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
             return redirect(routes.HomeController.index());
         }
+    }
 
+    private Arquivo findFileFromList(String nomeArquivo){
+        Arquivo arquivo = null ;
+        for (int i=0; i< listaDeArquivos.size();i++){
+            if (nomeArquivo.equals(listaDeArquivos.get(i).getNomeArquivo()))
+                arquivo =  listaDeArquivos.get(i);
+        }
+        return arquivo;
     }
 
     public Result moveArquivoParaLixeira(String nomeArquivo, String caminhoDiretorio){
@@ -269,11 +277,9 @@ public class HomeController extends Controller {
             String conteudo = arquivo.getConteudoArquivo();
             String extensao = arquivo.getExtensao();
 
-
             usuarioLogado.excluirArquivo(nome,extensao,caminhoDiretorio);
 
             listaDeArquivos.remove(arquivo);
-           // arquivo.deletaArquivoSistema((File) arquivo);
 
             if (extensao.equals(".txt")) {
                 arquivo = new ArquivoTxt(nomeArquivo, conteudo);
@@ -286,55 +292,57 @@ public class HomeController extends Controller {
 
             return ok(lixeira.render(usuarioLogado,usuarioLogado.getLixeira()));
 
-
-
         } else {
         flash("tokenExpirado", "Você não está autenticado! Realize o login.");
         return redirect(routes.HomeController.index());
     }
-
-
-
 }
+
+    public Result moveDiretorioParaLixeira(String caminhoDiretorio){
+        if(isAutenticate()){
+
+            Diretorio dir = usuarioLogado.buscaDiretorio(caminhoDiretorio);
+
+            String nomeDiretorio = dir.getNome();
+
+
+
+            usuarioLogado.excluirSubDiretorio(nomeDiretorio, usuarioLogado.getPastaPessoal());
+            usuarioLogado.getPastaPessoal().getSubDiretorios().remove(dir);
+
+            usuarioLogado.criaSubDiretorio(nomeDiretorio, usuarioLogado.getCaminhoLixeira());
+
+            return ok(lixeira.render(usuarioLogado, usuarioLogado.getLixeira()));
+        }else {
+            flash("tokenExpirado", "Você não está autenticado! Realize o login.");
+            return redirect(routes.HomeController.index());
+        }
+    }
 
     public Result deletaTudoParaSempre(){
 
-        if (isAutenticate()) {
+        if (isAutenticate()){
             Diretorio dir = usuarioLogado.getLixeira();
 
             while (usuarioLogado.lixeira.getArquivos().size()>0 /*&& usuarioLogado.lixeira.getSubDiretorios().size()>0*/){
-            for (int i = 0; i <dir.getArquivos().size() ; i++) {
+            for (int i = 0; i <dir.getArquivos().size() ; i++){
                 Arquivo arq = dir.getArquivos().get(i);
                 usuarioLogado.excluirArquivo(arq.getNomeArquivo(),arq.getExtensao(), usuarioLogado.getCaminhoLixeira());
                 listaDeArquivos.remove(arq);
                 arq.deletaArquivoSistema(arq.getNomeArquivo());
-
             }
+
             //Aqui ainda n foi testado pq n existe uma forma de enviar a pasta para a lixeira
-//            for (int i = 0; i < dir.getSubDiretorios().size() ; i++) {
-//                dir.getSubDiretorios().remove(i);
-//
-//            }
+            for (int i = 0; i < dir.getSubDiretorios().size() ; i++) {
+                dir.getSubDiretorios().remove(i);
+                }
             }
+
             return ok(lixeira.render(usuarioLogado,usuarioLogado.getLixeira()));
-
-
-
         } else {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
             return redirect(routes.HomeController.index());
         }
-
-
-    }
-
-    public Arquivo findFileFromList(String nomeArquivo){
-        Arquivo arquivo = null ;
-        for (int i=0; i< listaDeArquivos.size();i++){
-            if (nomeArquivo.equals(listaDeArquivos.get(i).getNomeArquivo()))
-                arquivo =  listaDeArquivos.get(i);
-        }
-        return arquivo;
     }
 
     /*
@@ -392,16 +400,12 @@ public class HomeController extends Controller {
     }
 
     private boolean isAutenticate(){
-
         if(session("token") != null && verificaTimeStampDoToken()){
             return true;
         }else{
             return false;
         }
-
     }
-
-
     //GETs and SETs------------------------------------------------------
     public List<Usuario> getListaDeUsuarios() {
         return listaDeUsuarios;

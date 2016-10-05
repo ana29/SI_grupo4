@@ -27,6 +27,7 @@ public class ArquivoMd implements Arquivo {
         this.compartilhadosLeitura = new ArrayList<>();
         criarArquivo();
     }
+
     @Override
     public void criarArquivo() {
         File arquivo = new File(nomeArquivo+EXTENSAO);

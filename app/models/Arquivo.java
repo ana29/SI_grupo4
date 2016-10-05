@@ -17,7 +17,6 @@ public interface Arquivo {
     void deletaArquivoSistema(String nomeArquivo);
     String getExtensao();
 
-
     List<String> getCompartilhadosEdicao();
 
     List<String> getCompartilhadosLeitura();
