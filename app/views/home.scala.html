@@ -20,38 +20,29 @@
             <a href="@routes.HomeController.chamarHome()"><i style="font-size: 60px" class="material-icons">face</i></a> <h1>Bem vindo @usuario.getNome, <br> Essa é a sua Home</h1>
             <span></span>
             <div class="actions">
-                <a href="@routes.HomeController.chamarCaixa()"><i style="margin-right: 8px" class="material-icons">notifications</i></a>
-                <a id="boxes"><i style="margin-bottom: 8px" class="material-icons">create_new_folder</i></a>
-                <a id="share"><i style="margin-bottom: 8px" class="material-icons">link</i></a>
-                <a href="/chamaTexto/@diretorio.getCaminho"><i style="margin-right: 8px" class="material-icons">note_add</i> </a>
-                <a href="@routes.HomeController.chamarLixeira()"><i style="margin-right: 8px" class="material-icons">delete</i></a>
+                <a href="@routes.HomeController.chamarCaixa()"><i style=" margin-right: 8px" class="material-icons" title="notificações">notifications</i></a>
+                <a id="boxes"><i style="margin-bottom: 8px" class="material-icons" title="nova pasta">create_new_folder</i></a>
+                <a id="share"><i style="margin-bottom: 8px" class="material-icons" title="compartilhar">link</i></a>
+                <a href="/chamaTexto/@diretorio.getCaminho"><i style="margin-right: 8px" class="material-icons" title="criar arquivo">note_add</i> </a>
+                <a href="@routes.HomeController.chamarLixeira()"><i style="margin-right: 8px " class="material-icons" title="ir pra lixeira">delete</i></a>
                 <i style="margin-right: 15px"></i>
                 <span>@session().get("login")</span>
                 <i style="margin-right: 15px"></i>
-                <a href="@routes.HomeController.logOut()"><i class="material-icons">power_settings_new</i></a>
+                <a href="@routes.HomeController.logOut()"><i class="material-icons" title="sair da conta">power_settings_new</i></a>
 
             </div>
         </header>
 
         <main id="main">
 
-            @if(diretorio.getNome.equals("lixeira")){
-                <div class="thumbnail">
-                    <a href="/abrePasta/@diretorio.getRaiz"><i class="material-icons">keyboard_backspace</i></a>
-                </div>
-            }
-
             @if(!diretorio.getNome.equals("root")){
                 <div class="thumbnail">
-                    <a href="/abrePasta/@diretorio.getRaiz"><i class="material-icons">keyboard_backspace</i></a>
+                    <a href="/abrePasta/@diretorio.getRaiz"><i class="material-icons" title="voltar">keyboard_backspace</i></a>
                 </div>
                 <div class="thumbnail">
-                    <form  action="@routes.HomeController.moveDiretorioParaLixeira(diretorio.caminho)">
+                    <a href="@routes.HomeController.moveDiretorioParaLixeira(diretorio.caminho)">
                         <br>
-                        <div id="texto_html_form_buttons">
-                            <button name="DeletFile" type="submit"  class="button button-block" >Enviar para a Lixeira</button>
-                        </div>
-                    </form>
+                        <i class="material-icons" title="enviar para lixeira">delete_sweep</i></a>
                 </div>
             }
 
@@ -83,7 +74,8 @@
                     <i class="material-icons">description
                         @*<span>@pasta.getArquivos.size() folders / @pasta.getA.size() files</span>*@
                     </i>
-                    <a href="@routes.HomeController.abreArquivo(arquivo.getNomeArquivo, diretorio.getCaminho)">@arquivo.getNomeArquivo</a>
+                    <a href="@routes.HomeController.abreArquivo(arquivo.getNomeArquivo, diretorio.getCaminho)">
+                    @arquivo.getNomeArquivo</a>
                 </div>
             }
         </main>
