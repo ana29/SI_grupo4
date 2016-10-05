@@ -1,9 +1,7 @@
 package models;
 
-import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Formatter;
 import java.util.List;
 
 
@@ -19,6 +17,7 @@ public class ArquivoTxt implements Arquivo{
     public Diretorio pastaPessoal;
     private List<String> compartilhadosEdicao;
     private List<String> compartilhadosLeitura;
+    private File arquivo;
 
     public  ArquivoTxt(){
 
@@ -28,7 +27,7 @@ public class ArquivoTxt implements Arquivo{
     public  ArquivoTxt(String nomeArquivo, String conteudoFile){
         this.nomeArquivo = nomeArquivo;
         this.conteudoFile = conteudoFile;
-        this.pastaPessoal = new Diretorio("root");
+        this.pastaPessoal = new Diretorio("root", "/root");
         this.compartilhadosEdicao = new ArrayList<>();
         this.compartilhadosLeitura = new ArrayList<>();
         criarArquivo();
@@ -61,20 +60,21 @@ public class ArquivoTxt implements Arquivo{
     @Override
     public void criarArquivo() {
 
-            File arquivo = new File(getNomeArquivo()+EXTENSAO);
+            arquivo = new File(getNomeArquivo()+EXTENSAO);
             try(FileWriter escrever = new FileWriter(arquivo)){
                 escrever.write((String) getConteudoArquivo());
                 escrever.close();
 
             }
             catch(Exception erro){
-            erro.getCause();
+                erro.getCause();
             }
 
         }
+// tem q ver como ele ta salvando p eu consegir deletar ...
+    public void deletaArquivoSistema(String nome){;
 
-    public void deletaArquivoSistema(String nomeArquivo){
-        File arquivo = new File(nomeArquivo);
+        File arquivo = new File(nome+EXTENSAO);
         arquivo.delete();
 
     }
@@ -95,5 +95,10 @@ public class ArquivoTxt implements Arquivo{
     @Override
     public List<String> getCompartilhadosLeitura() {
         return compartilhadosLeitura;
+    }
+
+    @Override
+    public File getFile(){
+        return arquivo;
     }
 }

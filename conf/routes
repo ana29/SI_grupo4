@@ -3,34 +3,41 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                           controllers.HomeController.index
+GET     /                                     controllers.HomeController.index
+# An example controller showing how to use dependency injection
+#GET     /count                                controllers.CountController.count
 # An example controller showing how to write asynchronous code
-GET     /message                    controllers.AsyncController.message
+GET     /message                              controllers.AsyncController.message
 
-GET     /home                       controllers.HomeController.chamarHome
+GET     /home/                                controllers.HomeController.chamarHome()
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET     /assets/*file                         controllers.Assets.at(path="/public", file)
 
 POST /cadastraUsuario               controllers.HomeController.cadastrarUsuario()
 POST /logar                         controllers.HomeController.logar()
 
-GET /logOut                         controllers.HomeController.logOut()
-GET /criaPasta                      controllers.HomeController.criaPasta()
-GET /Caixa                          controllers.HomeController.chamarCaixa()
+GET /logOut                                   controllers.HomeController.logOut()
+GET /criaPasta/*caminhoDiretorioAtual         controllers.HomeController.criaPasta(caminhoDiretorioAtual)
+GET /Caixa                                    controllers.HomeController.chamarCaixa()
 
-GET /compartilha                    controllers.HomeController.compartilha()
+GET /compartilha                              controllers.HomeController.compartilha()
+GET /comprime                                 controllers.HomeController.comprime()
 
-#POST /salvaArquivo                  controllers.HomeController.salvaArquivo()
+GET /criaArquivos/*diretorio                  controllers.HomeController.criaArquivos(diretorio)
+GET /moveArquivoParaLixeira/:nomeArquivo/*caminhoDiretorio     controllers.HomeController.moveArquivoParaLixeira(nomeArquivo,caminhoDiretorio)
+GET /chamaTexto/*diretorio                    controllers.HomeController.chamaTexto(diretorio)
 
-GET /criaArquivos                   controllers.HomeController.criaArquivos()
-GET /chamaTexto                     controllers.HomeController.chamaTexto()
-GET /editaPasta/                    controllers.HomeController.editaNomePasta()
+GET /moveDiretorioParaLixeira/*caminhoDiretorio     controllers.HomeController.moveDiretorioParaLixeira(caminhoDiretorio)
 
-GET /abreArquivo/:nomeArquivo       controllers.HomeController.abreArquivo(nomeArquivo: String)
-GET /leituraArquivo/:nomeArquivo    controllers.HomeController.leituraArquivo(nomeArquivo: String)
-GET /deletaArquivo/:nomeArquivo     controllers.HomeController.deletaArquivo(nomeArquivo: String)
-GET /modificaArquivo/:nomeArquivo   controllers.HomeController.chamaModificaArquivo(nomeArquivo: String)
-GET /editaArquivo/:nomeArquivo      controllers.HomeController.editaArquivo(nomeArquivo:String)
+GET /chamaLixeira                              controllers.HomeController.chamarLixeira()
+GET /limpaLixeira                              controllers.HomeController.limpaLixeira()
+
+GET /abrePasta/*diretorio                     controllers.HomeController.abrePasta(diretorio)
+GET /abreArquivo/                             controllers.HomeController.abreArquivo(nomeArquivo, diretorio)
+GET /leituraArquivo/:nomeArquivo              controllers.HomeController.leituraArquivo(nomeArquivo: String)
+GET /modificaArquivo/:nomeArquivo/:diretorio  controllers.HomeController.chamaModificaArquivo(nomeArquivo, diretorio)
+GET /editaArquivo/:nomeArquivo/:diretorio     controllers.HomeController.editaArquivo(nomeArquivo, diretorio)
+
 
 

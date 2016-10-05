@@ -395,3 +395,101 @@ header i {
     font-size: 16px;
     color: #000000;
 }
+#share p{
+    margin: 8px;
+}
+
+#share #dialog3 {
+    vertical-align: middle;
+    width:320px;
+    height:160px;
+    padding:0;
+    background-color:#ffffff;
+}
+
+#share h3{
+    height: 33px;
+    color: white;
+    margin: 0px;
+    padding-top: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    text-align: center;
+    background: -moz-linear-gradient(top, #2e5764, #1e3d47);
+    background: -webkit-gradient(linear,left bottom,left top,color-stop(0, #1e3d47),color-stop(1, #2e5764));
+}
+
+/*COMPRESS*/
+
+#compress .windowCompress {
+    border-radius: 10px;
+    position:absolute;
+    left:0;
+    top:0;
+    display:none;
+    z-index:9999;
+    padding:20px;
+    height: 120px;
+}
+
+
+#maskCompress {
+    position:absolute;
+    left:0;
+    top:0;
+    z-index:9000;
+    opacity: 0.5;
+    display:none;
+    background: #000000;
+}
+
+
+#compress .windowCompress {
+    border-radius: 10px;
+    position:absolute;
+    left:0;
+    top:0;
+    display:none;
+    z-index:9999;
+    padding:20px;
+    height: 120px;
+}
+
+
+.closeCompress{
+    position: absolute;
+    width: 20px;
+    right: -7px;
+    top: -13px;
+    text-align: center;
+    line-height: 20px;
+    margin-top: 3px;
+    background: #ffffff;
+    border-radius: 50%;
+    font-size: 16px;
+    color: #000000;
+}
+
+#compress p{
+    margin: 8px;
+}
+
+#compress #dialogCompress {
+    vertical-align: middle;
+    width:270px;
+    height:150px;
+    padding:0;
+    background-color:#ffffff;
+}
+
+#compress h3{
+    height: 33px;
+    color: white;
+    margin: 0px;
+    padding-top: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    text-align: center;
+    background: -moz-linear-gradient(top, #2e5764, #1e3d47);
+    background: -webkit-gradient(linear,left bottom,left top,color-stop(0, #1e3d47),color-stop(1, #2e5764));
+}
