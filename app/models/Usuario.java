@@ -38,7 +38,10 @@ public class Usuario {
     public void criaSubDiretorio(String nome, String caminhoDiretorio){
         LOGGER.info("ENTROU NA CRIAÇÃO DO DIRETORIO");
         Diretorio diretorio = buscaDiretorio(caminhoDiretorio);
-        if (!diretorio.containsDiretorio(nome)){
+        if (caminhoDiretorio.equals(LIXEIRA)){
+            Diretorio dir = new Diretorio(nome, caminhoDiretorio);
+            lixeira.subDiretorios.add(dir);
+        }else if(!diretorio.containsDiretorio(nome)){
             diretorio.getSubDiretorios().add(new Diretorio(nome, diretorio.getCaminho()+"/"+nome));
         }
         else{
@@ -54,25 +57,6 @@ public class Usuario {
             }
         }
     }
-
-   // public void addDiretorios(Diretorio diretorio){
-     //   if(diretorio.getCaminho().equals("/root/Lixeira")){
-
-       // }
-    //}
-
-    //public void addDiretoriosLixeira(Diretorio diretorio) {
-      //  if(diretorio.getCaminho().equals(LIXEIRA)){
-       //     diretorio.
-        //}
-
-        //if (caminhoDiretorio.equals(LIXEIRA)){
-          //  diretorio = getLixeira();
-        //}else{
-         //   diretorio = buscaDiretorio(caminhoDiretorio);
-       // }
-    //}
-
 
     public void addArquivo(String nomeArquivo, String conteudoFile, String extensao, String caminhoDiretorio) {
         Diretorio diretorio;
@@ -104,14 +88,13 @@ public class Usuario {
         }
         else{
             diretorio.getArquivos().add(new ArquivoMd(nomeArquivo, conteudoFile));
-
         }
     }
 
-    public void excluirSubDiretorio(String nome){
-        for (Diretorio d: pastaPessoal.getSubDiretorios()) {
-            if (d != null && d.getNome().equals(nome)){
-                pastaPessoal.getSubDiretorios().remove(d);
+    public void excluirSubDiretorio(String nome, Diretorio dir){
+        for (int i = 0; i < dir.getSubDiretorios().size(); i++) {
+            if (dir.getSubDiretorios().get(i).getNome().equals(nome)){
+                dir.getSubDiretorios().remove(dir.getSubDiretorios().get(i));
             }
         }
     }

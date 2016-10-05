@@ -36,6 +36,16 @@
             <a href="@routes.HomeController.abreArquivo(arquivo.getNomeArquivo, diretorio.getCaminho)">@arquivo.getNomeArquivo</a>
         </div>
     }
+
+    @for(subDiretorio <- diretorio.getSubDiretorios()) {
+        <div class="thumbnail">
+            <i class="material-icons">folder
+                <span> @subDiretorio.getSubDiretorios.size() folders / @subDiretorio.getArquivos.size() files</span>
+                <a href="@routes.HomeController.abrePasta(diretorio.getCaminho)"></a>
+                <h1>@subDiretorio.getNome</h1>
+            </i>
+        </div>
+        }
     </main>
 
 }

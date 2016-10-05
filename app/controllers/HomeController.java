@@ -25,7 +25,6 @@ public class HomeController extends Controller {
     @Inject
     private FormFactory formFactory;
     private List<Usuario> listaDeUsuarios = new ArrayList<>();
-    private List<Diretorio> listaDeDiretorios = new ArrayList<>();
     private List<Arquivo> listaDeArquivos = new ArrayList<>();
     private Usuario usuarioLogado = null;
     private static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
@@ -301,20 +300,17 @@ public class HomeController extends Controller {
 
     public Result moveDiretorioParaLixeira(String caminhoDiretorio){
         if(isAutenticate()){
-            //cria um diretorio com os dados do diretorio atual
+
             Diretorio dir = usuarioLogado.buscaDiretorio(caminhoDiretorio);
 
             String nomeDiretorio = dir.getNome();
 
-            Diretorio auxDiretorio = new Diretorio(nomeDiretorio, usuarioLogado.getCaminhoLixeira());
 
-//            usuarioLogado.excluirSubDiretorio(nomeDiretorio);
 
+            usuarioLogado.excluirSubDiretorio(nomeDiretorio, usuarioLogado.getPastaPessoal());
             usuarioLogado.getPastaPessoal().getSubDiretorios().remove(dir);
 
-            //usuarioLogado.getLixeira().
-
-           // usuarioLogado.criaSubDiretorio(nomeDiretorio, usuarioLogado.getCaminhoLixeira());
+            usuarioLogado.criaSubDiretorio(nomeDiretorio, usuarioLogado.getCaminhoLixeira());
 
             return ok(lixeira.render(usuarioLogado, usuarioLogado.getLixeira()));
         }else {
@@ -325,7 +321,7 @@ public class HomeController extends Controller {
 
     public Result deletaTudoParaSempre(){
 
-        if (isAutenticate()) {
+        if (isAutenticate()){
             Diretorio dir = usuarioLogado.getLixeira();
 
             while (usuarioLogado.lixeira.getArquivos().size()>0 /*&& usuarioLogado.lixeira.getSubDiretorios().size()>0*/){
@@ -334,21 +330,20 @@ public class HomeController extends Controller {
                 usuarioLogado.excluirArquivo(arq.getNomeArquivo(),arq.getExtensao(), usuarioLogado.getCaminhoLixeira());
                 listaDeArquivos.remove(arq);
                 arq.deletaArquivoSistema(arq.getNomeArquivo());
+            }
 
-            }
             //Aqui ainda n foi testado pq n existe uma forma de enviar a pasta para a lixeira
-//            for (int i = 0; i < dir.getSubDiretorios().size() ; i++) {
-//                dir.getSubDiretorios().remove(i);
-//
-//            }
+            for (int i = 0; i < dir.getSubDiretorios().size() ; i++) {
+                dir.getSubDiretorios().remove(i);
+                }
             }
+
             return ok(lixeira.render(usuarioLogado,usuarioLogado.getLixeira()));
         } else {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
             return redirect(routes.HomeController.index());
         }
     }
-
 
     /*
      * Compartilhamento
@@ -414,9 +409,6 @@ public class HomeController extends Controller {
     //GETs and SETs------------------------------------------------------
     public List<Usuario> getListaDeUsuarios() {
         return listaDeUsuarios;
-    }
-    public List<Diretorio> getListaDeDiretorios() {
-        return listaDeDiretorios;
     }
     public List<Arquivo> getListaDeArquivos() {
         return listaDeArquivos;
