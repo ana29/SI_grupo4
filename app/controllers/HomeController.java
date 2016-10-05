@@ -44,12 +44,7 @@ public class HomeController extends Controller {
         }catch (Exception e){
             flash("erro", "O usuario não foi cadastrado: " + e.getMessage());
         }
-//        if (verificaCredenciais(usuario.getNome(), usuario.getEmail(), usuario.getSenha())) {
-//            listaDeUsuarios.add(usuario);
-//            flash("sucesso", "Cadastrado com sucesso.");
-//        }else{
-//            flash("erro", "O usuario não foi cadastrado.");
-//        }
+
         return redirect(routes.HomeController.index());
     }
 
@@ -319,25 +314,25 @@ public class HomeController extends Controller {
         }
     }
 
-    public Result deletaTudoParaSempre(){
+    public Result limpaLixeira(){
 
-        if (isAutenticate()){
+        if (isAutenticate()) {
             Diretorio dir = usuarioLogado.getLixeira();
 
-            while (usuarioLogado.lixeira.getArquivos().size()>0 /*&& usuarioLogado.lixeira.getSubDiretorios().size()>0*/){
-            for (int i = 0; i <dir.getArquivos().size() ; i++){
-                Arquivo arq = dir.getArquivos().get(i);
-                usuarioLogado.excluirArquivo(arq.getNomeArquivo(),arq.getExtensao(), usuarioLogado.getCaminhoLixeira());
-                listaDeArquivos.remove(arq);
-                arq.deletaArquivoSistema(arq.getNomeArquivo());
-            }
+            while (usuarioLogado.lixeira.getArquivos().size()>0 || usuarioLogado.lixeira.getSubDiretorios().size()>0){
+                for (int i = 0; i <dir.getArquivos().size() ; i++){
+                    Arquivo arq = dir.getArquivos().get(i);
+                    usuarioLogado.excluirArquivo(arq.getNomeArquivo(),arq.getExtensao(), usuarioLogado.getCaminhoLixeira());
+                    listaDeArquivos.remove(arq);
+                    arq.deletaArquivoSistema(arq.getNomeArquivo());
 
-            //Aqui ainda n foi testado pq n existe uma forma de enviar a pasta para a lixeira
-            for (int i = 0; i < dir.getSubDiretorios().size() ; i++) {
-                dir.getSubDiretorios().remove(i);
+                }
+
+                for (int i = 0; i < dir.getSubDiretorios().size() ; i++) {
+                    usuarioLogado.lixeira.getSubDiretorios().remove(dir.subDiretorios.get(i));
+                    usuarioLogado.excluirSubDiretorio(dir.getNome(), usuarioLogado.getLixeira());
                 }
             }
-
             return ok(lixeira.render(usuarioLogado,usuarioLogado.getLixeira()));
         } else {
             flash("tokenExpirado", "Você não está autenticado! Realize o login.");
