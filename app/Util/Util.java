@@ -1,4 +1,7 @@
-package models;
+package Util;
+
+import models.Diretorio;
+import models.Usuario;
 
 public class Util {
 
@@ -23,7 +26,6 @@ public class Util {
 
     public static void saveDiretorio(Diretorio dir){
         dir.save();
-        System.out.print("Salvou o dir");
     }
 
     public static void updateDiretorio(Diretorio dir){

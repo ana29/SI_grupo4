@@ -1,6 +1,6 @@
-@(usuario: Usuario)
+@(nomeArquivo: String, conteudoArquivo: String, diretorio: Diretorio)
 
-@main("SIBox") {
+@main("SIBox"){
     <head>
         <meta charset="UTF-8">
 
@@ -17,20 +17,28 @@
             <script src="@routes.Assets.at("javascripts/home.js")"></script>
 
             <div class="actions">
-                <a href="@routes.HomeController.chamarHome()"><i style="margin-right: 8px" class="material-icons">assignment_return</i></a>
+                <a href="@routes.HomeController.chamarLixeira()"><i style="margin-right: 8px" class="material-icons">assignment_return</i></a>
                 <i style="margin-right: 15px"></i>
                 <a href="@routes.HomeController.logOut()"><i class="material-icons">power_settings_new</i></a>
             </div>
-            <h1 style="margin-left: 80%">Caixa de Notificações</h1>
         </header>
 
-        <main id="main">
-            @for(mensagem <- usuario.getCaixaDeNotificacao.getCaixaDeNotificacao) {
-                <div>
-                    <h1>@mensagem.getMensagem</h1>
-                </div>
-            }
-        </main>
+        <div id="mostraConteudoFile">
+            <center>
+                <form>
+                    <br>
+                    <div class="field-wrap">
+                        <label>
+                            @nomeArquivo<span class="req"></span>
+                        </label>
 
+                    </div>
+                    <br>
+                    <textarea style="border: solid 1px;" name="conteudoFile" scrolling="yes" cols="100" rows="20" readonly>
+                    @conteudoArquivo</textarea>
+                    <br>
+                </form>
+            </center>
+        </div>
     </body>
 }

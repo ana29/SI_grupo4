@@ -1,6 +1,7 @@
 package models;
 
 import com.avaje.ebean.Model;
+import java.io.File;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -22,8 +23,11 @@ public interface Arquivo {
     void deletaArquivoSistema(String nomeArquivo);
     String getExtensao();
 
+    File getFile();
+
 
     List<String> getCompartilhadosEdicao();
 
     List<String> getCompartilhadosLeitura();
+
 }

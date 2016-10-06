@@ -3,7 +3,6 @@ window.addEventListener('scroll', function () {
     if (window.scrollY == 0) {
         document.body.classList.remove('scrolled');
     }
-    ;
 });
 
 var addFolder = function (folder) {
@@ -87,7 +86,7 @@ $(document).ready(function() {
     });
 
     $('#buttom2').click(function () {
-        console.log("ENTROU AQUI")
+        console.log("ENTROU AQUI");
         var antigoNome = $('#'+IdDaPasta).text();
         console.log(antigoNome);
         var antigo = $('#antigoNomePasta').val(antigoNome);
@@ -102,11 +101,13 @@ $(document).ready(function() {
     //SHARE
 
     var $dialog3 = $('#dialog3');
+    var $dialogCompress = $('#dialogCompress');
 
     var maskHeight = $(window).height();
     var maskWidth = $(window).width();
 
     $('#mask3').css({'width': maskWidth, 'height': maskHeight});
+    $('#maskCompress').css({'width': maskWidth, 'height': maskHeight});
 
     //Get the window height and width
     var winH = $(window).height();
@@ -114,6 +115,9 @@ $(document).ready(function() {
 
     $dialog3.css('top', winH / 2 - $dialog3.height() / 2);
     $dialog3.css('left', winW / 2 - $dialog3.width() / 2);
+
+    $dialogCompress.css('top', winH / 2 - $dialogCompress.height() / 2);
+    $dialogCompress.css('left', winW / 2 - $dialogCompress.width() / 2);
 
     $("#share").click(function (e) {
         e.preventDefault();
@@ -123,9 +127,21 @@ $(document).ready(function() {
         $('.close3').fadeIn();
     });
 
+    $("#compress").click(function (e) {
+        e.preventDefault();
+        $('#maskCompress').fadeIn();
+        $('.windowCompress').fadeIn();
+        $('.closeCompress').fadeIn();
+    });
+
     $(".close3").click(function () {
         $("#mask3").fadeOut();
         $('.window3').fadeOut();
+    });
+
+    $(".closeCompress").click(function () {
+        $("#maskCompress").fadeOut();
+        $('.windowCompress').fadeOut();
     });
 });
 
