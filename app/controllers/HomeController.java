@@ -1,44 +1,46 @@
 package controllers;
 
+import javax.inject.*;
 import models.*;
 import play.data.DynamicForm;
 import play.data.FormFactory;
 import play.mvc.*;
-
-import play.mvc.*;
-
-
 import views.html.*;
-
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
 
 
 /**
  * This controller contains an action to handle HTTP requests
  * to the application's home page.
  */
+
 public class HomeController extends Controller {
 
     @Inject
     private FormFactory formFactory;
-    private Util util = new Util();
+
     private List<Usuario> listaDeUsuarios = new ArrayList<>();
     private List<Arquivo> listaDeArquivos = new ArrayList<>();
     private Usuario usuarioLogado = null;
-    private static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
+
+
+//    private static HomeController instance = new HomeController();
+
+    public HomeController(){
+        listaDeUsuarios = Usuario.find.findList();
+    }
 
     /**
      * Cadastra um usuário no sistema
      * @return O redirecionamento para o login
      */
     public Result cadastrarUsuario(){
+
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
 
         if (verificaCredenciais(usuario.getNome(), usuario.getEmail(), usuario.getSenha())) {
+            Util.saveUsuario(usuario);
             listaDeUsuarios.add(usuario);
             flash("sucesso", "Cadastrado com sucesso.");
         }
@@ -65,9 +67,7 @@ public class HomeController extends Controller {
    //     return redirect(routes.HomeController.index());
   //  }
     public Result logar(){
-
         Usuario usuario = formFactory.form(Usuario.class).bindFromRequest().get();
-
         try {
             if (validarLogin(usuario.getEmail(), usuario.getSenha())){
                 return redirect(routes.HomeController.chamarHome());
@@ -83,7 +83,6 @@ public class HomeController extends Controller {
 
         usuarioLogado = null;
         session().clear();
-
         return redirect(routes.HomeController.index());
     }
 
@@ -105,7 +104,7 @@ public class HomeController extends Controller {
     }
 
     private Boolean verificaCredenciais(String nome, String email, String senha){
-        return util.validaCredenciais(nome, email, senha);
+        return Util.validaCredenciais(nome, email, senha);
     }
 
     //Renders
@@ -133,11 +132,14 @@ public class HomeController extends Controller {
 
     public Result criaPasta(){
         Diretorio dir = formFactory.form(Diretorio.class).bindFromRequest().get();
-        System.out.println("Executou o criaPasta");
         if (dir.getNome() == null || dir.getNome().isEmpty()){
             return ok(index.render());
         }else {
-            usuarioLogado.criaSubDiretorio(dir.getNome());
+            Util.saveDiretorio(dir);
+            usuarioLogado.addDir(dir);
+            for (Diretorio d: usuarioLogado.getPastaPessoal().getSubDiretorios()) {
+                System.out.println(d.getNome());
+            }
             return ok(home.render(usuarioLogado));
         }
     }
@@ -147,7 +149,8 @@ public class HomeController extends Controller {
         String nomeAntigo = request().getQueryString("antigoNomePasta").trim();
         Diretorio dir = usuarioLogado.getDiretorio(nomeAntigo);
         dir.setNome(nomeNovo);
-        System.out.print(dir.getNome());
+        Util.updateDiretorio(dir);
+        Util.updateUsuario(usuarioLogado);
         return ok(home.render(usuarioLogado));
     }
 
@@ -167,7 +170,7 @@ public class HomeController extends Controller {
         if (extensao.equals(".txt")){
             arquivo = new ArquivoTxt(nomeArquivo, conteudoArquivo);
         }
-        else{
+        else {
             arquivo = new ArquivoMd(nomeArquivo, conteudoArquivo);
         }
         listaDeArquivos.add(arquivo);
@@ -298,4 +301,8 @@ public class HomeController extends Controller {
             }
         }
     }
+//
+//    public static HomeController getInstance() {
+//        return instance;
+//    }
 }

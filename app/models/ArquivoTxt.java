@@ -1,5 +1,11 @@
 package models;
 
+import com.avaje.ebean.Model;
+import play.data.validation.Constraints;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -11,12 +17,16 @@ import java.util.List;
  * Created by AnaGodoy on 05/08/16.
  * Implementacao da interface Arquivo para a criacao de arquivos no formato .txt
  */
-public class ArquivoTxt implements Arquivo{
 
-    public String nomeArquivo;
-    private final String EXTENSAO = ".txt";
+
+public class ArquivoTxt extends Model implements Arquivo{
+
+    private String nomeArquivo;
     private String conteudoFile;
-    public Diretorio pastaPessoal;
+    private final String EXTENSAO = ".txt";
+
+    private Diretorio pastaPessoal;
+
     private List<String> compartilhadosEdicao;
     private List<String> compartilhadosLeitura;
 
@@ -96,4 +106,21 @@ public class ArquivoTxt implements Arquivo{
     public List<String> getCompartilhadosLeitura() {
         return compartilhadosLeitura;
     }
+
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return "ArquivoTxt{" +
+//                "id=" + id +
+//                ", nomeArquivo='" + nomeArquivo + '\'' +
+//                ", conteudoFile='" + conteudoFile + '\'' +
+//                ", EXTENSAO='" + EXTENSAO + '\'' +
+//                ", pastaPessoal=" + pastaPessoal +
+//                ", compartilhadosEdicao=" + compartilhadosEdicao +
+//                ", compartilhadosLeitura=" + compartilhadosLeitura +
+//                '}';
+//    }
 }

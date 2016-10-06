@@ -1,16 +1,17 @@
 package models;
 
+import com.avaje.ebean.Model;
 import play.data.validation.Constraints;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Manuel Neto on 19/08/2016.
  */
-public class CaixaDeNotificacao {
+public class CaixaDeNotificacao extends Model{
 
-    @Constraints.Required
     private List<Notificacao> caixaDeNotificacao;
 
     public CaixaDeNotificacao(){

@@ -1,5 +1,11 @@
 package models;
 
+import com.avaje.ebean.Model;
+import play.data.validation.Constraints;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
@@ -8,12 +14,16 @@ import java.util.List;
 /**
  * Created by marco on 10/09/2016.
  */
-public class ArquivoMd implements Arquivo {
 
-    public String nomeArquivo;
+//@Entity
+public class ArquivoMd extends Model implements Arquivo{
+
+    private String nomeArquivo;
     private String conteudoFile;
     private final String EXTENSAO = ".md";
     private Diretorio pastaPessoal;
+
+
     private List<String> compartilhadosEdicao;
     private List<String> compartilhadosLeitura;
 
@@ -69,4 +79,20 @@ public class ArquivoMd implements Arquivo {
         return compartilhadosLeitura;
     }
 
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return "ArquivoMd{" +
+//                "id=" + id +
+//                ", nomeArquivo='" + nomeArquivo + '\'' +
+//                ", conteudoFile='" + conteudoFile + '\'' +
+//                ", EXTENSAO='" + EXTENSAO + '\'' +
+//                ", pastaPessoal=" + pastaPessoal +
+//                ", compartilhadosEdicao=" + compartilhadosEdicao +
+//                ", compartilhadosLeitura=" + compartilhadosLeitura +
+//                '}';
+//    }
 }

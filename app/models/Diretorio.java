@@ -1,23 +1,28 @@
 package models;
 
+import com.avaje.ebean.Model;
 import play.data.validation.Constraints;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by marco on 02/08/2016.
  */
-public class Diretorio {
+@Entity
+public class Diretorio extends Model{
 
-    @Constraints.Required
-    public  String nome;
-    public List<Diretorio> subDiretorios;
-    public List<Arquivo> arquivos;
+    @Id @GeneratedValue
+    private Long id;
 
+
+    private String nome;
+    private List<Diretorio> subDiretorios;
+    private List<Arquivo> arquivos;
 
     public Diretorio(String nome){
-        this.nome = nome;
+        setNome(nome);
         this.subDiretorios = new ArrayList<>();
         this.arquivos = new ArrayList<>();
     }
@@ -25,18 +30,6 @@ public class Diretorio {
     public Diretorio(){
         this.subDiretorios = new ArrayList<>();
         this.arquivos = new ArrayList<>();
-    }
-
-    public String getNome(){
-        return this.nome;
-    }
-
-    public List<Diretorio> getSubDiretorios(){
-        return this.subDiretorios;
-    }
-
-    public List<Arquivo> getArquivos() {
-        return arquivos;
     }
 
     public boolean containsDiretorio(String nome){
@@ -57,7 +50,27 @@ public class Diretorio {
         return false;
     }
 
+    public String getNome(){
+        return this.nome;
+    }
+
+    public List<Diretorio> getSubDiretorios(){
+        return this.subDiretorios;
+    }
+
+    public void setSubDiretorios(List<Diretorio> subDiretorios) {
+        this.subDiretorios = subDiretorios;
+    }
+
+    public List<Arquivo> getArquivos() {
+        return arquivos;
+    }
+
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public void setArquivos(List<Arquivo> arquivos) {
+        this.arquivos = arquivos;
     }
 }

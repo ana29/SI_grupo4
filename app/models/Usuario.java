@@ -1,45 +1,66 @@
 package models;
+import com.avaje.ebean.Model;
+import play.data.validation.Constraints;
+import javax.persistence.*;
 
-import java.util.logging.Logger;
+@Entity
+@Table(name = "Usuarios")
+public class Usuario extends Model{
+//
+    public static Model.Finder<Long, Usuario> find = new Model.Finder<>(Usuario.class);
 
-public class Usuario {
+    @Id @GeneratedValue
+    private Long id;
 
-    public String nome;
-    public String email;
-    public String senha;
-    public Diretorio pastaPessoal;
-    public Diretorio compartilhados;
-    public CaixaDeNotificacao caixaDeNotificacao;
-    private static final Logger LOGGER = Logger.getLogger(Logger.class.getName());
+    @Column
+    private String nome;
+
+    @Column
+    @Constraints.Email
+    private String email;
+
+    @Column
+    @Constraints.Required
+    private String senha;
+
+//    @OneToOne
+    private Diretorio pastaPessoal;
+
+//    @OneToOne
+    private Diretorio compartilhados;
+
+//    @OneToOne
+    private CaixaDeNotificacao caixaDeNotificacao;
 
     public Usuario(){
         this.pastaPessoal = new Diretorio("root");
         this.compartilhados = new Diretorio("Compartilhados");
         this.caixaDeNotificacao = new CaixaDeNotificacao();
     }
+//
+//    public Usuario(String nome, String email, String senha){
+//        this.caixaDeNotificacao = new CaixaDeNotificacao();
+//        this.pastaPessoal = new Diretorio("root");
+////        this.compartilhados = new Diretorio("Compartilhados");
+//        setNome(nome);
+//        setEmail(email);
+//        setSenha(senha);
+//    }
 
-    public Usuario(String nome, String email, String senha){
-        this.caixaDeNotificacao = new CaixaDeNotificacao();
-        this.pastaPessoal = new Diretorio("root");
-        this.compartilhados = new Diretorio("Compartilhados");
-        this.nome = nome;
-        this.email = email;
-        this.senha = senha;
-
-    }
-
-    public void criaSubDiretorio(String nome){
-        LOGGER.info("ENTROU NA CRIAÇÃO DO DIRETORIO");
-        if (!pastaPessoal.containsDiretorio(nome)){
-            pastaPessoal.getSubDiretorios().add(new Diretorio(nome));
+    public void addDir(Diretorio diretorio){
+        if (!pastaPessoal.containsDiretorio(diretorio.getNome())){
+            pastaPessoal.getSubDiretorios().add(diretorio);
+            update();
         }
         else{
             boolean adicionado = false;
             int count = 1;
             while (!adicionado){
-                String novoNome = nome + "(" + count + ")";
+                String novoNome = diretorio.getNome() + "(" + count + ")";
+                diretorio.setNome(novoNome);
                 if (!pastaPessoal.containsDiretorio(novoNome)){
-                    pastaPessoal.getSubDiretorios().add(new Diretorio(novoNome));
+                    pastaPessoal.getSubDiretorios().add(diretorio);
+                    update();
                     adicionado = true;
                 }
                 count ++;
@@ -84,7 +105,7 @@ public class Usuario {
     }
 
     public Diretorio getDiretorio(String nome) {
-        for (Diretorio dir : pastaPessoal.subDiretorios) {
+        for (Diretorio dir : pastaPessoal.getSubDiretorios()) {
             if (dir.getNome().equals(nome)) {
                 return dir;
             }
@@ -118,18 +139,6 @@ public class Usuario {
         return email;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public Diretorio getPastaPessoal() {
         return pastaPessoal;
     }
@@ -138,6 +147,51 @@ public class Usuario {
 
     public CaixaDeNotificacao getCaixaDeNotificacao() {
         return caixaDeNotificacao;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public void setPastaPessoal(Diretorio pastaPessoal) {
+        this.pastaPessoal = pastaPessoal;
+    }
+
+    public void setCompartilhados(Diretorio compartilhados) {
+        this.compartilhados = compartilhados;
+    }
+
+    public void setCaixaDeNotificacao(CaixaDeNotificacao caixaDeNotificacao) {
+        this.caixaDeNotificacao = caixaDeNotificacao;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public static Finder<Long, Usuario> getFind() {
+        return find;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id + "\n" +
+                ", email='" + email + '\'' + "\n" +
+                ", nome='" + nome + '\'' + "\n" +
+                ", senha='" + senha + '\'' + "\n" +
+                ", pastaPessoal=" + this.pastaPessoal + " nome: " + this.pastaPessoal.getNome() + "\n" +
+                ", compartilhados=" + compartilhados + "\n" +
+                ", caixaDeNotificacao=" + caixaDeNotificacao +
+                '}';
     }
 }
 

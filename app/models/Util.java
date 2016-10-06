@@ -2,11 +2,36 @@ package models;
 
 public class Util {
 
-    public boolean validaCredenciais(String nome, String email, String senha){
+    public static boolean validaCredenciais(String nome, String email, String senha){
         EmailValidator userMail = new EmailValidator();
         if (nome.length() > 2)
             if (nome.length() < 21) if (senha.length() > 7) if (userMail.validate(email)) return true;
         return false;
+    }
+
+    public static void saveUsuario(Usuario usuario){
+        usuario.save();
+    }
+
+    public static void updateUsuario(Usuario usuario){
+        usuario.update();
+    }
+
+    public static void deleteUsuario(Usuario usuario){
+        usuario.delete();
+    }
+
+    public static void saveDiretorio(Diretorio dir){
+        dir.save();
+        System.out.print("Salvou o dir");
+    }
+
+    public static void updateDiretorio(Diretorio dir){
+        dir.update();
+    }
+
+    public static void deleteDiretorio(Diretorio dir){
+        dir.delete();
     }
 
 }
